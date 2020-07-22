@@ -1,0 +1,32 @@
+/*  sweetalert2.css  */
+
+.popup-class {
+    background-color:rgb(211, 229, 233);
+    border-radius: var(--border-radius) !important;
+    color: black ;
+    border: 0.2rem solid darkgray;
+}
+.title-class {
+    font-weight: 400;
+    font-size: 1.1rem; 
+}
+.text-class {
+    font-weight: 400;
+    font-size: 1.0rem; 
+    text-align: left;
+}
+.close-button-class {
+    font-size: 1.5rem;
+    border: 0.067rem solid gray;
+    margin: 0.2rem;
+    color: black;
+}
+.action-class {
+    display: flex;
+}
+.confirm-button-class, .cancel-button-class {
+    font-weight: 400;
+    font-size: 0.9rem !important; 
+    border-radius: var(--border-radius) !important;
+    padding: 0.357rem;    
+}
