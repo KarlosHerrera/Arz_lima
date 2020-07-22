@@ -121,8 +121,8 @@ export default new Vuex.Store({
     allAsignacionCargos: async function(){
       console.log('actions.allAsignacionCargos()')
       try {
-        let data = await fetch(this.host+'/asignacionCargos/all/');
-        let cargos = await data.json();
+// let data = await fetch(this.host+'/asignacionCargos/all/');
+// let cargos = await data.json();
         // commit('setReligiosos', cargos);   
       } catch (error) {
         console.log(error);          
