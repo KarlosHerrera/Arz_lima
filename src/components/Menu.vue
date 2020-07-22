@@ -19,7 +19,7 @@
               <div></div>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/consultas">Consultas</router-link>
+              <router-link class="nav-link" to="/Consultas">Consultas</router-link>
               <div></div>
             </li>            
             <li class="nav-item">
@@ -48,8 +48,8 @@
 
 <script>
 
-import Tablas from '@/components/Tablas';
-import Consultas from '@/components/Consultas';
+// import Tablas from '@/components/Tablas';
+// import Consultas from '@/components/Consultas';
 
 // import { pMixins } from '@/assets/js/phoenixMixins.js';
 import { mapState } from 'vuex';
@@ -57,8 +57,8 @@ import { mapState } from 'vuex';
 export default {
   name: 'Menu',
   components: {
-    Tablas,
-    Consultas
+    // Tablas,
+    // Consultas
   },
   data() {
       return {
