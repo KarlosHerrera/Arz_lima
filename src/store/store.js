@@ -24,9 +24,12 @@ export default new Vuex.Store({
     crud: '*',
     record: {},
     fechas_ingresadas: fechas_Doc,
-    host: 'http://localhost:3000'
+    host: ''
   },
   mutations: {
+    setHost: function(state, data){
+      state.host = data;
+    },
     setUser: function(state, data){
       state.User_Name = data;
     },
@@ -160,7 +163,14 @@ export default new Vuex.Store({
       }
 
     },
- 
+    // Configuracion de App
+    config_app: function(context){
+      // console.log('store.config_app()');
+      let app = require('./../assets/json/config_app.json');
+      // console.log('host: ', app.host)
+      context.commit('setHost', app.host);
+
+    }, 
     // usuarios
 
   },

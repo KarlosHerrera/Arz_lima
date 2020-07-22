@@ -181,7 +181,7 @@ export default {
       // console.log('codInstitucion = ', codInstitucion );
       let path = '/media/sellos/';
       let self = this;
-      let url = 'http://localhost:3000/instituciones/sello/'+codInstitucion;
+      let url = this.host+'/instituciones/sello/'+codInstitucion;
       axios.get(url)
       .then(function(response){ 
         let tmp = [];

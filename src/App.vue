@@ -18,12 +18,23 @@ import Menu from '@/components/Menu.vue';
 // import Swal from 'sweetalert2';
 // let optAlert = require('@/assets/json/opt_swal2.json');
 // const swal2 = Swal.mixin(optAlert);
+// import { mapActions } from 'vuex';
 
 export default {
   name: 'App',
   components: {
     Menu
-  }
+  },
+  methods: {
+    config_app(){
+      // console.log('app.config_app()');
+      this.$store.dispatch('config_app');
+
+    }
+  },
+  mounted: function(){
+  this.config_app();
+}  
 }
 </script>
 

@@ -195,7 +195,7 @@ export default {
     }
   },
   computed: { // Expone state al template
-    ...mapState(['Religiosos','Instituciones','record', 'fechas_ingresadas']),
+    ...mapState(['host','Religiosos','Instituciones','record', 'fechas_ingresadas']),
     crud: function(){
       return this.$store.state.crud;
     }
@@ -276,7 +276,7 @@ export default {
       // }else{
         // // Definir formato de fecha
         rec.fechaDoc = moment(rec.fechaDoc).format('YYYY-MM-DD');
-        let url = 'http://localhost:3000/movDocumentos/create';
+        let url = this.host+'/movDocumentos/create';
         let options = {
             method: 'POST',
             //headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -321,7 +321,7 @@ export default {
           modificado_usuario: this.$store.state.User_Name
       };  
       // console.log('data: ', data)
-      let url = 'http://localhost:3000/movDocumentos/update';
+      let url = this.host+'/movDocumentos/update';
       let options = {
           method: 'PUT',
           // headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -347,7 +347,7 @@ export default {
       this.rec.eliminado = new Date();
       this.rec.eliminado_usuario =  this.$store.state.User_Name;
       // console.log('data: ', rec)
-      let url = 'http://localhost:3000/movDocumentos/delete';
+      let url = this.host+'/movDocumentos/delete';
       let options = {
           method: 'DELETE',
           // headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -398,7 +398,7 @@ export default {
     loadSacramentos(){
       const self = this;
       let options = { headers: {'Access-Control-Allow-Origin' : '*'}, 'content-type': 'application/json', 'mode': 'cors'};
-      let url = 'http://localhost:3000/sacramentos/all/';
+      let url = this.host+'/sacramentos/all/';
       axios.get(url , options)
       .then(function(data){
         self.listSacramentos = data.data;
@@ -411,7 +411,7 @@ export default {
     existRecord: async function(doc){
       console.log(`existRecord(${doc})?`);
       let self = this;
-      let url = 'http://localhost:3000/movDocumentos/checkDoc';
+      let url = this.host+'/movDocumentos/checkDoc';
       let options = {
           method: 'POST',
           // headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -431,7 +431,7 @@ export default {
     generaDoc: function(){
       console.log('generaDoc()');
       let self = this;
-      let url = 'http://localhost:3000/movDocumentos/lastDoc';
+      let url = this.host+'/movDocumentos/lastDoc';
        axios.get(url)
       .then(function(response){ 
         // console.log(response.dasta);
