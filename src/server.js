@@ -1,7 +1,7 @@
 // server.js
 const express = require('express');
 
-
+const app = express();
 //      const sellosCtrl = require('./controllers/sellosCtrl');
 
 
@@ -19,7 +19,7 @@ app.set('port', process.env.PORT || 3000);  // Configuracion de puerto (variable
 //
 app.use('/', (req, res, next) => {
   let fechaHoy =new Date();
-  console.log('->', moment(fechaHoy).format('DD/MM/YYYY hh:mm:ss'));
+  console.log('->', fechaHoy );
   next();
 });
 
