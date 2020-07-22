@@ -1,7 +1,9 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <img alt="Vue logo" src="./assets/icons/heroku.png">
+    <HelloWorld msg="Welcome to Your Heroku - Vue.js App"/>
+    
+    <router-view/>    
   </div>
 </template>
 
@@ -17,6 +19,9 @@ export default {
 </script>
 
 <style>
+body {
+  background-color:gray;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -24,5 +29,6 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  background-color: lightgray;
 }
 </style>
