@@ -1,34 +1,37 @@
+// App.vue
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/icons/heroku.png">
-    <HelloWorld msg="Welcome to Your Heroku - Vue.js App"/>
-    
-    <router-view/>    
+  <div id="app" class='container'>
+    <!-- <b-alert show> Hello Boostrap-vue! </b-alert>   -->
+    <Menu></Menu>
+      <div id='main' class="main">
+        <router-view/>
+      </div>
+    <div></div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+console.log('<<< app.vue >>>');
+// import HelloWorld from '@/components/HelloWorld.vue';
+import Menu from '@/components/Menu.vue';
+
+// import Swal from 'sweetalert2';
+// let optAlert = require('@/assets/json/opt_swal2.json');
+// const swal2 = Swal.mixin(optAlert);
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Menu
   }
 }
 </script>
 
-<style>
-body {
-  background-color:gray;
-}
+<style scoped>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-  background-color: lightgray;
+  /* font-family: Avenir, Helvetica, Arial, sans-serif;
+  -moz-osx-font-smoothing: grayscale; */
+  /* text-align: center;
+  color: #2c3e50; */
 }
 </style>

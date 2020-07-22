@@ -137,7 +137,7 @@ export default new Vuex.Store({
     userAll: async function({ commit }){
       console.log('actions.userAll()')
       try {
-        let data = await fetch('http://localhost:5000/users/all/');
+        let data = await fetch(this.host+'/users/all/');
         let users = await data.json();
         commit('setUsers', users);   
       } catch (error) {
@@ -152,7 +152,7 @@ export default new Vuex.Store({
                         body: JSON.stringify(data)
                       };
       try {
-        let data = await fetch('http://localhost:3000/users/one', options);
+        let data = await fetch(this.host+'/users/one', options);
         let users = await data.json();
         commit('users', users);        
       } catch (error) {
@@ -160,7 +160,7 @@ export default new Vuex.Store({
       }
 
     },
-
+ 
     // usuarios
 
   },
