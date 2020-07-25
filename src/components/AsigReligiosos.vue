@@ -1,6 +1,6 @@
 // AsigReligiosos.vue
 <template>
-<div class="content ">
+<div class="content  d-flex flex-column">
   <div class='titulo_1'>
     <div class='align_center'>Asignaciones de Cargos</div>
   </div>
@@ -364,7 +364,7 @@ export default {
 }
 .content {
   border: none;
-   height: 98%;
+   height: 97%;
 
 }
 .content-body {
@@ -373,7 +373,7 @@ export default {
   padding: 3px;
 }
 .content-table {
-  height:88%;
+  height:85%;
   padding: 2px;
 }
 #areaInst, #areaRel, #areaCar {

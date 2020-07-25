@@ -9,6 +9,33 @@ const multer = require('multer');
 const moment = require('moment');
 const app = express();
 
+const s3 = require('./assets/js/aws_connection.js');
+let params = {
+  Bucket: 'arz-lima',
+  Key: 'sellos/I157-C02.jpg'
+};
+// ----- GetObject, DeleteObject, PutObject
+s3.getObject(params, function(err, data) {
+  if (err) {
+    console.log('----> Error:');
+    console.log(err, err.stack);
+  }else{     
+    console.log('data=', data); 
+    // let img = document.getElementById('sello');
+    // img.src = data.Body;
+  
+  } // successful response
+});
+      // s3.listObjects(params, function(err, data) {
+      //   if (err) {
+      //     console.log("Error", err);
+      //   } else {
+      //     console.log("Success", data);
+      //   }
+      // });
+
+
+// ------------ End Amazon
 // Controllers
 const religiososCtrl = require('./controllers/religiososCtrl');
 const institucionesCtrl = require('./controllers/institucionesCtrl');

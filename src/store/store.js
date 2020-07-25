@@ -76,6 +76,7 @@ export default new Vuex.Store({
     // allInstituciones: async function({ commit }){
     allInstituciones: async function({ commit }){
       // console.log('actions.allInstituciones()');
+      console.log('host: ', this.host);
       try {
         let data = await fetch(this.host+'/instituciones/all/');
         let instituciones = await data.json();
@@ -165,9 +166,9 @@ export default new Vuex.Store({
     },
     // Configuracion de App
     config_app: function(context){
-      // console.log('store.config_app()');
+      console.log('store.config_app()');
       let app = require('./../assets/json/config_app.json');
-      // console.log('host: ', app.host)
+      console.log('store.host: ', app.host)
       context.commit('setHost', app.host);
 
     }, 

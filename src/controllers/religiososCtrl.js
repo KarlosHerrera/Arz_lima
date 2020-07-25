@@ -49,6 +49,16 @@ router.get('/Religiosos_min', (req, res) => {
         // conn.end();
     });
 });
+router.get('/all_rel', async (req, res) => {
+    console.log('religiosos/all_rel');
+
+    let sql ='CALL Religiosos_all_rel()';
+    conn.query(sql, function(err, rows){
+        if(err) console.log('err => ', err);
+        res.status(200).json(rows)[0];
+    });
+
+});
 // User verify 
 router.post('/id', async (req, res) => {
     // let existUser = true;

@@ -1,14 +1,14 @@
 // Instituciones.vue
 <template>
-<div class="content">
+<div class="content d-flex flex-column">
   <div class="content-title">
     <div class="headerTitle">
-        <div class=''>
-          <div class='titulo_2 align_center'>Consulta Instituciones</div>
+
+          <div class='titulo_2 '>Consulta Instituciones</div>
           <div class='d-flex justify-content-end' >  
             <filtra-tabla v-if='view_content' :recordList="Instituciones_min" :colsSearch='searchInstituciones' @filter_Process="filterProcessInst" ></filtra-tabla>
           </div>
-        </div>
+
     </div>    
   </div>
   <!-- Lista -->
@@ -35,67 +35,68 @@
     </table>
   </div>
   <!-- Detalle -->
-  <div class='detailRecord justify-content-center' v-else>
+  <div class='detailRecord align-self-center' v-else>
     <div class='flex-column '>
-    <div class="fila">
-      <div class="columna-1">Codigo</div>
-      <div class="columna-2"><pre>{{ rec.codInstitucion | llenaLongMaxima(5) }}</pre></div>
+    <div class="fila"> 
+      <div class="col-2 columna-1">Codigo</div>
+      <div class="col-1 columna-2">{{ rec.codInstitucion }}</div>
     </div>
     <div class="fila">
-      <div class="columna-1">Nombre</div>
-      <div class="columna-2"><pre>{{ rec.nombreInstitucion | llenaLongMaxima(60) }}</pre></div>
+      <div class="col-2 columna-1">Nombre</div>
+      <div class="col-8 columna-2">{{ rec.nombreInstitucion }}</div>
     </div>
     <div class="fila">
-      <div class="columna-1">Tipo</div>
-      <div class="columna-2"><pre class='texto'>{{ rec.nombreTipo | llenaLongMaxima(20) }}</pre></div>
+      <div class="col-2 columna-1">Tipo</div>
+      <div class="col-3 columna-2">{{ rec.nombreTipo  }}</div>
     </div>
     <div class="fila">
-      <div class="columna-1">Direccion</div>
-      <div class="columna-2"><pre>{{ rec.direccion | llenaLongMaxima(100) }}</pre></div>
+      <div class="col-2 columna-1">Direccion</div>
+      <div class="col-10 columna-2">{{ rec.direccion }}</div>
     </div>
     <div class="fila">
-      <div class="columna-1">Departamento</div>
-      <div class="columna-2"><pre>{{ rec.nombreDepartamento | llenaLongMaxima(15) }}</pre></div>
+      <div class="col-2 columna-1">Departamento</div>
+      <div class="col-3 columna-2">{{ rec.nombreDepartamento }}</div>
     </div>
     <div class="fila">
-      <div class="columna-1">Provincia</div>
-      <div class="columna-2"><pre>{{ rec.nombreProvincia | llenaLongMaxima(25) }}</pre></div>
+      <div class="col-2 columna-1">Provincia</div>
+      <div class="col-4 columna-2">{{ rec.nombreProvincia  }}</div>
     </div>   
     <div class="fila">
-      <div class="columna-1">Distrito</div>
-      <div class="columna-2"><pre>{{ rec.nombreDistrito | llenaLongMaxima(50) }}</pre></div>
+      <div class="col-2 columna-1">Distrito</div>
+      <div class="col-5 columna-2">{{ rec.nombreDistrito }}</div>
     </div>  
     <div class="fila">
-      <div class="columna-1">Telefono 1</div>
-      <div class="columna-2"><pre class='texto'>{{ rec.telefono1 | llenaLongMaxima(10) }}</pre></div>
+      <div class="col-2 columna-1">Telefono 1</div>
+      <div class="col-2 columna-2">{{ rec.telefono1  }}</div>
     </div>
     <div class="fila">
-      <div class="columna-1">Telefono 2</div>
-      <div class="columna-2"><pre>{{ rec.telefono2 | llenaLongMaxima(10) }}</pre></div>
+      <div class="col-2 columna-1">Telefono 2</div>
+      <div class="col-2 columna-2">{{ rec.telefono2  }}</div>
     </div>  
     <div class="fila">
-      <div class="columna-1">Fax</div>
-      <div class="columna-2"><pre>{{ rec.Fax | llenaLongMaxima(10) }}</pre></div>
+      <div class="col-2 columna-1">Fax</div>
+      <div class="col-2 columna-2">{{ rec.Fax  }}</div>
     </div>  
     <div class="fila">
-      <div class="columna-1">Correo</div>
-      <div class="columna-2"><pre>{{ rec.email | llenaLongMaxima(60) }}</pre></div>
+      <div class="col-2 columna-1">Correo</div>
+      <div class="col-6 columna-2">{{ rec.email  }}</div>
     </div>
     <div class="fila">
-      <div class="columna-1">Pagina Web</div>
-      <div class="columna-2"><pre>{{ rec.web | llenaLongMaxima(60) }}</pre></div>
+      <div class="col-2 columna-1">Pagina Web</div>
+      <div class="col-6 columna-2">{{ rec.web }}</div>
     </div>
     <hr>
     <div class="botones d-flex justify-content-end">
       <button class='btn btn-sm btn_1 btn_detail' @click='imgSellos'>Sellos</button>
       <button class='btn btn-sm btn_1 btn_detail' @click='view_content = true'>Salir</button>
     </div>
+    </div>
   </div>
-  <modal-sellos :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></modal-sellos>  
+ 
+  <div class="content-footer align-items-end"  v-if='view_content'>
+    <div class='itemCurrent '>Items: {{ itemCurrent}}/{{tmpInstituciones.length}} </div>
   </div>
-  <div class="content-footer"  v-if='view_content'>
-    <div class='itemCurrent'>Items: {{itemCurrent}}/{{tmpInstituciones.length}} </div>
-  </div>
+ <modal-sellos :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></modal-sellos>  
 </div>
 </template>
 
@@ -200,27 +201,39 @@ export default {
 <style scoped src='@/assets/css/table.css'></style>
 <style scoped>
 @import url('./../assets/css/scroll_bar.css');
+.content {
+  height:100%;  
+}
 .content-title {
-  height: 6.6%;  
+  /* height: 7%;   */
+  padding: 2px;
 }
 .content-body {
-  height: 89%;
+  height: 84%;
   border: 1px solid gray;
     margin: 0.25rem 0.1rem;
 }
 .content-footer {
+    height: 5%;
 padding: 1px;
 }
 .itemCurrent {
-padding: 2px 4px;;  
+      height: 1.7rem;
+padding: 4px  ;
 }
-.filterInput {
+/* .filterInput {
    height: 1.5rem !important;
-}
+} */
+.content-search {
+ height: 1.5rem !important;
 
+}
 .detailRecord {
   border: 1px solid darkslategray;
   width: 90%;
+  padding-top: 4px;
+  padding-right: 4px;
+  padding-bottom: 4px;
 }
 .fila {
   display: flex;
@@ -252,4 +265,12 @@ padding: 2px 4px;;
   width: 5rem;
 
 }
+/* -------- -- Media Queries --------*/
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {  /* lg */
+}  /*  End lg */  
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {  /* xl */
+}   /*  End xl */
 </style>

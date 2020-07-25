@@ -78,6 +78,11 @@
 }
 * {
     font-family: 'Dosis', sans-serif;
+}    
+html, body{
+    margin:0px;
+    height: 99%;
+    /* height: 100vw; */
 }
 body {
     font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -98,7 +103,8 @@ body {
     align-items: center;
     /* max-width: 1024px;  */
     /* width: 100vw;
-	height: 100vh; */
+    height: 100vh; */
+
 }
 
 
@@ -108,7 +114,7 @@ body {
     align-items: center; */
     margin: 0.62rem;
     padding: 0.31rem; 
-    height: 96vh; 
+    height: 98.5%; 
     background-color: var(--background-main);
     /* height: 600px;      */
 } 
@@ -117,7 +123,7 @@ body {
     /* display: flex; */
     /* justify-content: center;
     align-items: center;*/
-    height: 96%; 
+    height: 94%; 
     /* height: 600px;      */
 }
 div, form, input, table, nav {
@@ -177,14 +183,14 @@ button, input, select {
     /* border: 0.066rem solid rgb(161, 158, 158) !important; */
 }
 /* -------- -- Media Queries --------*/
-@media (max-width: 575px) {   /* xs */
-    html{
+@media (min-width: 576px) {   /* xs */
+    /* html{
         font-size: 12px;
     }
     body {
         background-color: comflowerblue;
     
-    }
+    } */
     
 }  /*  End xs */
     
@@ -194,9 +200,10 @@ button, input, select {
         font-size: 13px; 
     }
     body {
-        /* background-color: khaki;   */
+
     }
-}  /*  End sm */
+}   End sm
+*/
    
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) { /* md */
@@ -218,21 +225,19 @@ button, input, select {
         font-size: 15px; 
     }
     body {
-        /* background-color: cadetblue;   */
-        
+        /* background-color: cadetblue;   */    
     }
 
-    
-}  /*  End lg */
-    
+}  /*  End lg */  
+
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {  /* xl */
-    html {
-        font-size: 16px; 
-    }
-    body {
-        /* background-color: silver;   */
-    
-    }
-    
+html {
+    font-size: 16px; 
+}
+body {
+    /* background-color: silver;   */
+
+}
+      
 }   /*  End xl */

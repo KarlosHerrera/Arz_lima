@@ -83,6 +83,7 @@ router.get('/sello/:codInstitucion', async (req, res) => {
     });
 
 });
+
 // Create document
 router.post('/create', async (req, res) => {
     console.log('/instituciones/create');

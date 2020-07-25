@@ -458,7 +458,7 @@ export default {
       let codInstitucion = value;
       // this.rec.codReligioso = '153';
       // console.log('Valor = ', value.srcElement.value);
-      console.log('codInstitucion = ', codInstitucion);
+      // console.log('codInstitucion = ', codInstitucion);
       // console.log('Religioso = ', this.Religiosos);
       this.tmpReligiosos = this.Religiosos.filter( ele => ele.codInstitucion == codInstitucion);
       console.log('tmpReligiosos => ', this.tmpReligiosos.length);

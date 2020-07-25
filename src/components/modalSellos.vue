@@ -18,6 +18,8 @@
         </b-carousel>
 
        </div>
+ <!-- <img src="./../../public/media/sellos/I131-C03.jpg">       -->
+ <img id='sello' src="">      
         <div class="modal-footer">
             <button class="btnExit btn btn-sm btn_1" @click="$emit('close')">Salir</button>
         </div>    
@@ -64,6 +66,8 @@ console.log('<< modal-sellos.vue >>');
 import axios from 'axios';
 import { mapState } from 'vuex';
 
+const s3 = require('@/assets/js/aws_connection.js');
+
 export default {
   name: 'modal-sellos',
   props: {
@@ -82,10 +86,12 @@ export default {
   },  
   methods: {
     cargaSellos: function(){
-      console.log('modalSellos.cargaSellos()');
+      // console.log('modalSellos.cargaSellos()');
       let codInstitucion = this.datosInstitucion.codInstitucion.trim();
       // console.log('codInstitucion = ', '>'+codInstitucion+'<' );
-      let path = '/media/sellos/';
+
+      let path = './../media/sellos/';
+      console.log('path: ', path);
       let self = this;
       let url = this.host+'/instituciones/sello/'+codInstitucion;
       axios.get(url)
@@ -105,10 +111,59 @@ export default {
         return '-1';
       }) 
 
+    },
+    sellos_aws: function(){
+      console.log('img_aws()');
+      let codInstitucion = this.datosInstitucion.codInstitucion.trim();
+      let self = this;
+      let url = this.host+'/instituciones/sello/'+codInstitucion;
+      axios.get(url)
+      .then(function(response){ 
+
+        let tmp = [];
+        // console.log('imagenes.sellos = ', response.data);
+        response.data.forEach(function(img){
+          img.sello = img.sello.trim();
+
+          tmp.push(img);
+        })
+        self.imagenes = tmp;
+      //  console.log('imagenes => ', self.imagenes);
+      })
+      .catch(function(error) {
+        console.log(error);
+        return '-1';
+      }) 
+// ------------------
+      let params = {
+        Bucket: 'arz-lima',
+        Key: 'sellos/I157-C02.jpg'
+      };
+      // ----- GetObject, DeleteObject, PutObject
+      s3.getObject(params, function(err, data) {
+        if (err) {
+          console.log('----> Error:');
+          console.log(err, err.stack);
+        }else{     
+          console.log('data.Body', data.Body); 
+          let img = document.getElementById('sello');
+          img.src = data.Body;
+        
+        } // successful response
+      });
+      // s3.listObjects(params, function(err, data) {
+      //   if (err) {
+      //     console.log("Error", err);
+      //   } else {
+      //     console.log("Success", data);
+      //   }
+      // });
+
     }
   },
   mounted: function(){
     this.cargaSellos();
+    this.sellos_aws();
   }  
 }
 </script>
