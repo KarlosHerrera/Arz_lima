@@ -10,7 +10,7 @@
 // <script src='@/assets/js/jquery-3.5.1.min.js'></script>
 <script>
 console.log('<< input-date.vue >>');
-request('@/assets/js/jquery-3.5.1.min.js');
+// request('@/assets/js/jquery-3.5.1.min.js');
 export default {
     name: 'input-fecha',
 

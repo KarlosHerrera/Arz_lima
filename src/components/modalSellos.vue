@@ -10,22 +10,18 @@
           <div class='align-items-end'></div> -->
         </div>      
        <div class="modal-body">
-
-        <b-carousel id="carousel-1" :interval="0" img-width="400" img-height="300"
-            controls indicators class="d-block img-fluid"> 
-          <b-carousel-slide  v-for="(itm, index) in imagenes" :key='index' :img-src="itm.sello" ></b-carousel-slide>
-        <!--   <b-carousel-slide img-src="/media/I107-C02.jpg"></b-carousel-slide>  -->
+        <b-carousel id="carousel-1" :interval="0" controls indicators class="d-block img-fluid"> 
+          <!-- img-width="400" img-height="300" -->
+          <b-carousel-slide  v-for="(itm, index) in imagenes" :key='index' :img-src="itm.sello"  img-width="400" img-height="300" background='red' ></b-carousel-slide>
         </b-carousel>
-
        </div>
- <!-- <img src="./../../public/media/sellos/I131-C03.jpg">       -->
- <img id='sello' src="">      
         <div class="modal-footer">
             <button class="btnExit btn btn-sm btn_1" @click="$emit('close')">Salir</button>
         </div>    
     </div>    
   </div>    
   </div>    
+
 </transition>    
 
 <!--  <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
@@ -66,6 +62,7 @@ console.log('<< modal-sellos.vue >>');
 import axios from 'axios';
 import { mapState } from 'vuex';
 
+// let optAlert = require('@/assets/json/opt_swal2.json');
 const s3 = require('@/assets/js/aws_connection.js');
 
 export default {
@@ -78,13 +75,18 @@ export default {
   data() {
     return {
       acepta: false,
+      pathImg: '',
       imagenes: [],
     }
   },
   computed: { // Expone state al template
-     ...mapState(['host', 'record']), 
+     ...mapState(['host', 'record']),
   },  
   methods: {
+    setComponent: function(){
+      let ruta = require('./../assets/json/config_img.json');
+      this.pathImg = ruta.pathSellos;
+    },
     cargaSellos: function(){
       // console.log('modalSellos.cargaSellos()');
       let codInstitucion = this.datosInstitucion.codInstitucion.trim();
@@ -99,11 +101,11 @@ export default {
         let tmp = [];
         // console.log('imagenes.sellos = ', response.data);
         response.data.forEach(function(img){
-          img.sello = path+img.sello.trim();
+          img.sello = path+img.sello.trim();  // Ruta de la imagen
           // img.sello = path+img.sello;
           tmp.push(img);
         })
-        self.imagenes = tmp;
+        self.imagenes = tmp;  // Array de rutas
       //  console.log('imagenes => ', self.imagenes);
       })
       .catch(function(error) {
@@ -113,57 +115,67 @@ export default {
 
     },
     sellos_aws: function(){
-      console.log('img_aws()');
+      console.log('sellos_aws()');
       let codInstitucion = this.datosInstitucion.codInstitucion.trim();
       let self = this;
       let url = this.host+'/instituciones/sello/'+codInstitucion;
       axios.get(url)
       .then(function(response){ 
-
-        let tmp = [];
-        // console.log('imagenes.sellos = ', response.data);
+        let params = {
+          Bucket: 'arz-lima',
+          Key: 'sellos/'
+        };  
         response.data.forEach(function(img){
-          img.sello = img.sello.trim();
-
-          tmp.push(img);
-        })
-        self.imagenes = tmp;
-      //  console.log('imagenes => ', self.imagenes);
+          params.Key = 'sellos/'+img.sello;
+          img.sello = self.loadImgS3_2(img.sello);
+          console.log(img.sello);
+        });
       })
       .catch(function(error) {
         console.log(error);
         return '-1';
       }) 
-// ------------------
+
+    },
+    loadImgS3_1: function(imgName){
+      console.log(`loadImgS3_1(${imgName})`);
       let params = {
         Bucket: 'arz-lima',
-        Key: 'sellos/I157-C02.jpg'
+        Key: 'sellos/'+imgName
       };
       // ----- GetObject, DeleteObject, PutObject
       s3.getObject(params, function(err, data) {
         if (err) {
-          console.log('----> Error:');
+          console.log('Error:');
           console.log(err, err.stack);
-        }else{     
-          console.log('data.Body', data.Body); 
+          return {};
+        }else{  // successful response   
+          console.log('data.Body', data); 
           let img = document.getElementById('sello');
-          img.src = data.Body;
-        
-        } // successful response
+          return img.src = data.Body;
+        } 
       });
-      // s3.listObjects(params, function(err, data) {
-      //   if (err) {
-      //     console.log("Error", err);
-      //   } else {
-      //     console.log("Success", data);
-      //   }
-      // });
-
+    },
+    loadImgS3_2: function(imgName){
+      console.log(`loadImgS3_2(${imgName})`);
+      let self = this;
+      let params = {
+        Bucket: 'arz-lima',
+        Key: 'sellos/'+imgName
+      };  
+      let promise = s3.getSignedUrlPromise('getObject', params);
+      promise.then(function(url) {
+        // console.log('The URL is: ', url);
+        self.imagenes.push({sello: url});
+      }, 
+      function(err) { console.log(err); }
+      );
     }
   },
   mounted: function(){
+    this.setComponent();
     this.cargaSellos();
-    this.sellos_aws();
+    // this.sellos_aws();
   }  
 }
 </script>
@@ -171,16 +183,24 @@ export default {
 <style scoped>
 .modal-container {
     width: 45rem;
-    height: 31rem;
+    height: 50%;
 } 
+.modal-header {
+    height: 10%;
+}
 .modal-body {
-  width: 100%;
-  height: 80%;
+  /* width: 100%; */
+  height: 75%;
   background-color: lightgray;
+  margin: 5px 0;
 
 }
+.modal-footer {
+    height: 10%;  
+}
 /*  */
-.carousel-control-next-icon, .carousel-control-prev-icon {
+.carousel-control-next, .carousel-control-prev {
+  background-color: red;
   color: blue !important;
 }
 </style>

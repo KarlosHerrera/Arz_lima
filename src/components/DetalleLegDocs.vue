@@ -496,11 +496,14 @@ export default {
    // Hooks
   created: function(){
     // console.log('hook.created()');
-    this.loadReligiosos();
-    this.loadInstituciones();
+    console.log('create host => ', this.host);
+
   },
   mounted: function(){
     // console.log('hook.mounted()')
+    console.log('mounted host => ', this.host);
+    this.loadInstituciones();
+    this.loadReligiosos();
     this.loadSacramentos();
     this.setComponent();
   }

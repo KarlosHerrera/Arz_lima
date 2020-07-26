@@ -96,7 +96,7 @@
   <div class="content-footer align-items-end"  v-if='view_content'>
     <div class='itemCurrent '>Items: {{ itemCurrent}}/{{tmpInstituciones.length}} </div>
   </div>
- <modal-sellos :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></modal-sellos>  
+  <modal-sellos :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></modal-sellos>  
 </div>
 </template>
 

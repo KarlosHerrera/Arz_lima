@@ -1,5 +1,6 @@
 // server.js
 const express = require('express');
+const mysql = require('mysql');
 const serveStatic = require('serve-static')
 const morgan = require('morgan');
 const bodyparser = require("body-parser");
@@ -9,23 +10,23 @@ const multer = require('multer');
 const moment = require('moment');
 const app = express();
 
-const s3 = require('./assets/js/aws_connection.js');
-let params = {
-  Bucket: 'arz-lima',
-  Key: 'sellos/I157-C02.jpg'
-};
+// const s3 = require('./assets/js/aws_connection.js');
+// let params = {
+//   Bucket: 'arz-lima',
+//   Key: 'sellos/I157-C02.jpg'
+// };
 // ----- GetObject, DeleteObject, PutObject
-s3.getObject(params, function(err, data) {
-  if (err) {
-    console.log('----> Error:');
-    console.log(err, err.stack);
-  }else{     
-    console.log('data=', data); 
-    // let img = document.getElementById('sello');
-    // img.src = data.Body;
+// s3.getObject(params, function(err, data) {
+//   if (err) {
+//     console.log('----> Error:');
+//     console.log(err, err.stack);
+//   }else{     
+//     console.log('data=', data); 
+//     // let img = document.getElementById('sello');
+//     // img.src = data.Body;
   
-  } // successful response
-});
+//   } // successful response
+// });
       // s3.listObjects(params, function(err, data) {
       //   if (err) {
       //     console.log("Error", err);
@@ -102,13 +103,26 @@ app.post('/sellos/upload/', upload.single('Img1') , function(req, res){
 //
 app.use('/', (req, res, next) => {
   let fechaHoy =new Date();
-  console.log('->', fechaHoy );
+  console.log('=>', fechaHoy );
   next();
 });
+
+const dbase = require('./assets/json/config_db.json');
+const db = mysql.createConnection(dbase);
+db.connect((err) => {
+    if(err){
+      console.log(err);
+      console.log('Error connecting to DataBase');
+      return;
+    }
+    console.log('host:', dbase.host);
+    console.log('Connection mySQL successfull!');
+    db.end();
+});    
 
 app.listen(app.get('port'), function(){
   console.log('->', moment().format('LLL') );
   console.log(`Server running at port: ${ app.get('port') } `);
-  console.log('----------------------------');
+  console.log('--------------------------->');
 }); // Listen on port defined in environment
 

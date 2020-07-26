@@ -60,9 +60,10 @@ export default new Vuex.Store({
   },
   actions: {
       // { commit, dispatch } = objetos contexto
-    /// Religiosos
+    /// --- Religiosos
     allReligiosos: async function({ commit }){
-      // console.log('actions.allReligiosos()')
+      console.log('actions.allReligiosos()');
+      console.log('religiosos host: ', this.host);
       try {
         let data = await fetch(this.host+'/religiosos/all/');
         let religiosos = await data.json();
@@ -72,13 +73,16 @@ export default new Vuex.Store({
       }
     },
     oneReligioso: function(){},
-    /// Instituciones
-    // allInstituciones: async function({ commit }){
+
+    /// ---Instituciones
+    // allInstituciones: async fu nction({ commit }){
     allInstituciones: async function({ commit }){
-      // console.log('actions.allInstituciones()');
-      console.log('host: ', this.host);
+      console.log('actions.allInstituciones()');
+      console.log('instituciones host: ', this.host);
+      let app = require('./../assets/json/config_app.json');
+      console.log('app.host: ', app.host)
       try {
-        let data = await fetch(this.host+'/instituciones/all/');
+        let data = await fetch(app.host+'/instituciones/all/');
         let instituciones = await data.json();
         commit('setInstituciones', instituciones);   
       } catch (error) {
@@ -121,7 +125,7 @@ export default new Vuex.Store({
         });
 
     },
-    /// Asignacion de Cargos
+    /// --- Asignacion de Cargos
     allAsignacionCargos: async function(){
       console.log('actions.allAsignacionCargos()')
       try {
@@ -132,7 +136,7 @@ export default new Vuex.Store({
         console.log(error);          
       }
     },    
-    // Sacramentos
+    /// --- Sacramentos
     // allSacramentos: 
 
     /// Usuarios

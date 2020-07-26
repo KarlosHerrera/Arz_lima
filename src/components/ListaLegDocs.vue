@@ -49,8 +49,8 @@
           <td class='align_right'> {{ doc.precio | frmDecimal }} </td>
           <td> {{ doc.nombreSacramento }} </td>
           <td class=' d-flex justify-content-center align-items-center' v-if='true' >
-            <button class='btn_actions btn_1' @click='updateItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Editar</button>
-            <button class='btn_actions btn_1' @click='deleteItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Anular</button>
+            <button class='btn btn_actions btn_1' @click='updateItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Editar</button>
+            <button class='btn btn_actions btn_1' @click='deleteItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Anular</button>
           </td>
         </tr>
 
@@ -70,7 +70,6 @@ import moment from 'moment';
 import jsPDF from 'jspdf';
 // Download jspdf and jspdf-autotable from github
 import DesdeHasta from '@/components/desde-hasta.vue';
-// import FiltraTabla from '@/components/FiltraTabla.vue';
 
 // import InputFecha from '@/components/input-fecha.vue';
 
@@ -80,8 +79,6 @@ export default {
   name: 'ListaLegDoc',
   components: {
     DesdeHasta
-    // FiltraTabla,
-    // inputDate
   },
   data(){
     return { 
@@ -89,7 +86,7 @@ export default {
     listDocuments: [],
     listDocs: [],
     // elemSearch: ['docLegalizacion','nombreInstitucion','apellidosNombres','ticket','refNombre','nombreSacramento'],
-    elemSearch: ['docLegalizacion','nombreInstitucion','apellidosNombres','nombreSacramento','ticket','refNombre','xxx'],
+    elemSearch: ['docLegalizacion','nombreInstitucion','apellidosNombres','nombreSacramento','ticket','refNombre'],
     ascending: false,
     sortField: '',
     // fechaHoy: new Date(),
@@ -328,8 +325,8 @@ thead tr th{
   height: 1.9rem;
 }
 /* Test */
-div {
+/* div {
   border-radius: var(--border-radius) !important;   
-/* border: 1px solid white; */
-}
+ border: 1px solid white; 
+} */
 </style1>
