@@ -3,11 +3,11 @@
    <div id='subMenu' class='subMenu'>
       <ul class="nav justify-content-center">
         <li class="nav-item d-flex flex-column">
-           <router-link class="nav-link sub_menu" to="/instituciones">Instituciones</router-link>
+           <router-link class="nav-link sub_menu" to="/institucionesLista">Instituciones</router-link>
            <div></div>
         </li>
         <li class="nav-item">
-          <router-link  class="nav-link sub_menu" to="/religiosos">Religiosos</router-link>
+          <router-link  class="nav-link sub_menu" to="/religiososLista">Religiosos</router-link>
           <div></div>
         </li>
 

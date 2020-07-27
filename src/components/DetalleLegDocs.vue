@@ -12,7 +12,7 @@
   <div class='content-header d-flex'>
   </div> 
 
-  <div class='content-body row sd-flex flex-column align-content-center '>   <!--  flex-column-->
+  <div class='content-body row d-flex flex-column align-content-center '>   <!--  flex-column-->
 
     <form id='formDoc' class='col-8 formBase' onsubmit="return false;" novalidate autocomplete="nope" data-btnEnable='btnSave'>
       <div class="form-row justify-content-between">
@@ -122,7 +122,7 @@
             
         </div>
     </form>
-    <opciones-crud class='' :crud="crud" @confirm_Create="confirmCreate" @confirm_Update="confirmUpdate" @confirm_Delete="confirmDelete" @exit_Form="exitForm"></opciones-crud>
+    <opciones-crud class='' :crud="crud" @confirm_Create="confirmCreate" @confirm_Update="confirmUpdate" @confirm_Delete="confirmDelete" @exit_Form="exitForm" @reset_Form='resetForm'></opciones-crud>
 
   </div>
 <modal-sellos :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></modal-sellos>
@@ -251,7 +251,11 @@ export default {
       } 
     },
     resetForm: function(){
+      this.rec.codInstitucion = '';
+      this.rec.codReligioso = '';
+      this.codSacramento = '';
       document.getElementById(idForm).reset();
+
     },
     confirmCreate: async function(){
       console.log('confirmCreate()');

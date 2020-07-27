@@ -1,4 +1,4 @@
-// Religiosos.vue
+// ListaReligiosos.vue
 <template>
 <div class="content d-flex flex-column">
   <div class="content-title">

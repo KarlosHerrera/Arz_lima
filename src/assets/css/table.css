@@ -25,6 +25,9 @@ thead > tr {
     font-weight: 400;
     border: 1px solid blue;
 }
+tbody tr {
+    height: 1.7rem;    
+}
 thead tr th {
     /* position: fixed; */
 

@@ -4,13 +4,12 @@
   <div class="content-title">
     <div class='headerTitle'>Legalizacion de Documentos</div>
   </div>
-  <!-- <hr> -->
   <div class="content-header row d-flex">
     <div class='col-3 d-flex justify-content-start align-items-center'>
       <button class='btn btn-sm btn_1 btn_new' @click='createItem'>Nuevo</button>
       <!-- <button class='btn btn-sm btn_1' @click='test1'>Test 1</button>  -->
       <!-- <button class='btn btn-sm btn_1' @click='test2'>Test 2</button>  -->
-      <button class='btn btn-sm btn_1' @click='print_1'>Print</button>
+      <!-- <button class='btn btn-sm btn_1' @click='print_1'>Print</button> -->
     </div>
     <div class='col-5 d-flex justify-content-center'>
       <desde-hasta  :desde='desde' :hasta='hasta' @valor_fechas='aceptaFechas'></desde-hasta>

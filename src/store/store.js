@@ -63,9 +63,11 @@ export default new Vuex.Store({
     /// --- Religiosos
     allReligiosos: async function({ commit }){
       console.log('actions.allReligiosos()');
-      console.log('religiosos host: ', this.host);
+// console.log('religiosos host: ', this.host);
+      let app = await require('./../assets/json/config_app.json');
+      // console.log('app.host: ', app.host)      
       try {
-        let data = await fetch(this.host+'/religiosos/all/');
+        let data = await fetch(app.host+'/religiosos/all/');
         let religiosos = await data.json();
         commit('setReligiosos', religiosos);   
       } catch (error) {
@@ -78,9 +80,10 @@ export default new Vuex.Store({
     // allInstituciones: async fu nction({ commit }){
     allInstituciones: async function({ commit }){
       console.log('actions.allInstituciones()');
-      console.log('instituciones host: ', this.host);
-      let app = require('./../assets/json/config_app.json');
-      console.log('app.host: ', app.host)
+      // console.log('instituciones host: ', this.host);
+
+      let  app = await require('./../assets/json/config_app.json');
+      // console.log('app.host: ', app.host)
       try {
         let data = await fetch(app.host+'/instituciones/all/');
         let instituciones = await data.json();

@@ -3,7 +3,7 @@
    <div id='subMenu' class='subMenu'>
       <ul class="nav justify-content-center">
         <li class="nav-item d-flex flex-column">
-           <router-link class="nav-link subMenu_items" to="/Intituciones">Instituciones</router-link>
+           <router-link class="nav-link subMenu_items" to="/Instituciones">Instituciones</router-link>
            <div></div>
         </li>  
         <li class="nav-item d-flex flex-column">

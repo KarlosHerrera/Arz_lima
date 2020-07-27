@@ -17,7 +17,7 @@ import listaInstituciones from '@/components/ListaInstituciones';
 import AsigReligiosos from '../components/AsigReligiosos';
 import ListaLegDocs from '../components/ListaLegDocs';
 import DetalleLegDocs from '../components/DetalleLegDocs';
-
+import Instituciones from '@/components/Instituciones';
 
 import Jerarquias from '../components/Jerarquias';
 import Sacramentos from '../components/Sacramentos';
@@ -50,12 +50,12 @@ const routes = [
 //     component: Users
 //   },
   {
-    path: '/instituciones',
+    path: '/institucionesLista',
     name: 'Instituciones',
     component: listaInstituciones
   },
   {
-    path: '/religiosos',
+    path: '/religiososLista',
     name: 'Religiosos',
     component: listaReligiosos
   },  
@@ -85,11 +85,11 @@ const routes = [
     name: 'Tablas',
     component: Tablas
   },
-//   {
-//     path: '/detailCustomer',
-//     name: 'detailCustomer',
-//     component: detailCustomer
-//   },
+  {
+    path: '/instituciones',
+    name: 'instituciones',
+    component: Instituciones
+  },
   {
     path: '/sacramentos',
     name: 'sacramentos',
