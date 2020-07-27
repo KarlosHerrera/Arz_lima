@@ -3,12 +3,11 @@
 <div class="content d-flex flex-column">
   <div class="content-title">
     <div class="headerTitle">
-
-          <div class='titulo_2'>Consulta Instituciones</div>
+          <div class='titulo_2' v-if='view_content'>Consulta de Instituciones</div>
+          <div class='titulo_2' v-if='!view_content'>Datos de Institucion</div>
           <div class='d-flex justify-content-end' >  
             <filtra-tabla v-if='view_content' :recordList="Instituciones_min" :colsSearch='searchInstituciones' @filter_Process="filterProcessInst" ></filtra-tabla>
           </div>
-
     </div>    
   </div>
   <!-- Lista -->
@@ -224,6 +223,14 @@ padding: 4px  ;
 /* .filterInput {
    height: 1.5rem !important;
 } */
+.headerTitle {
+  padding: 3px p0;
+}
+.titulo_2 {
+  font-weight: 600;
+  padding-bottom: 1px;
+
+}
 .content-search {
  height: 1.5rem !important;
 

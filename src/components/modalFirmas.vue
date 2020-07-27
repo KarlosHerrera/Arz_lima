@@ -11,10 +11,9 @@
         </div>      
        <div class="modal-body">
 
-        <b-carousel id="carousel-1" :interval="0" img-width="400" img-height="300"
+        <b-carousel id="carousel-1" :interval="0" 
             controls indicators class="d-block img-fluid"> 
           <b-carousel-slide  v-for="(itm, index) in imagenes" :key='index' :img-src="itm.firma" ></b-carousel-slide>
-        <!--   <b-carousel-slide img-src="/media/I107-C02.jpg"></b-carousel-slide>  -->
         </b-carousel>
 
        </div>
@@ -31,6 +30,7 @@ console.log('<< modal-firmas.vue >>');
 
 import axios from 'axios';
 import { mapState } from 'vuex';
+const s3 = require('@/assets/js/aws_connection.js');
 
 export default {
   name: 'modal-firmas',
@@ -71,10 +71,49 @@ export default {
         return '-1';
       }) 
 
+    },
+    firmas_aws: function(){
+      console.log('sellos_aws()');
+      let codReligioso = this.datosInstitucion.codReligioso.trim();
+      let self = this;
+      let url = this.host+'/religiosos/firma/'+codReligioso;
+      axios.get(url)
+      .then(function(response){ 
+        let params = {
+          Bucket: 'arz-lima',
+          Key: 'firmas/'
+        };  
+        response.data.forEach(function(img){
+          params.Key = 'firmas/'+img.firma;
+          img.firma = self.loadImgS3(img.firma);
+          console.log(img.firma);
+        });
+      })
+      .catch(function(error) {
+        console.log(error);
+        return '-1';
+      }) 
+
+    }, 
+    loadImgS3: function(imgName){
+      console.log(`loadImgS3(${imgName})`);
+      let self = this;
+      let params = {
+        Bucket: 'arz-lima',
+        Key: 'firmas/'+imgName
+      };  
+      let promise = s3.getSignedUrlPromise('getObject', params);
+      promise.then(function(url) {
+        // console.log('The URL is: ', url);
+        self.imagenes.push({sello: url});
+      }, 
+      function(err) { console.log(err); }
+      );
     }
   },
   mounted: function(){
-    this.cargaFirmas();
+    // this.cargaFirmas();
+    this.firmas_aws();
   }  
 }
 </script>

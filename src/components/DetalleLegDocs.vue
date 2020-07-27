@@ -3,9 +3,9 @@
 <div class="content ">
   <div class="content-title ">
     <div class='headerTitle'>
-      <div class='titleProps col-12'>Documento - {{ title_detail }}</div>
-      Inst:{{ rec.codInstitucion }} - 
-      Rel:{{ rec.codReligioso }}
+      <div class='titulo_2 col-12'>{{ title_detail }} Documento</div>
+      <!-- Inst:{{ rec.codInstitucion }} - 
+      Rel:{{ rec.codReligioso }} -->
     </div>
   </div>
   <!-- <hr> -->
@@ -55,8 +55,8 @@
       <div class="form-row">
         <div class="col-11 form-group">
           <label for="religioso" class="formControlLabel">Religioso*</label>
-            <v-select v-model="rec.codReligioso" label="apellidosNombres"
-            :options="tmpReligiosos" :reduce="ele => ele.codReligioso"
+            <v-select v-model="rec.codReligioso" label="apellidosNombres" required
+            :options="tmpReligiosos" :reduce="ele => ele.codReligioso" 
             :clearable="false" class='miClase'
             >
               <div slot="no-options">No existen opciones!</div>
@@ -69,7 +69,7 @@
       <div class="form-row">
         <div class="col-9 form-group">
           <label for="sacramento" class="formControlLabel">Sacramento*</label>
-            <v-select v-model="rec.codSacramento" label="nombreSacramento" id='codSac'
+            <v-select v-model="rec.codSacramento" label="nombreSacramento" 
             :options="listSacramentos" :reduce="ele => ele.codSacramento" placeholder=''
             :clearable="false" @input="changeSacramento" class='miClase'
             >
@@ -155,7 +155,6 @@ import opcionesCrud from '@/components/opciones-crud.vue'
 import { disabledElementId, disabledForm } from '@/assets/js/lib';
 // import phoenix from '@/assets/js/lib';
 
-
 import { evalInput } from '@/assets/js/form';
 import Swal from 'sweetalert2';
 let optAlert = require('@/assets/json/opt_swal2.json');
@@ -169,9 +168,6 @@ export default {
     // modal,
     modalSellos,
     modalFirmas
-  },
-  props: {
-    msg: String
   },
   data(){
     return {
@@ -251,6 +247,7 @@ export default {
       } 
     },
     resetForm: function(){
+      console.log(' resetForm()');
       this.rec.codInstitucion = '';
       this.rec.codReligioso = '';
       this.codSacramento = '';
@@ -393,7 +390,6 @@ export default {
     loadReligiosos(){
       // console.log('loadReligiosos()');
       this.$store.dispatch('allReligiosos');
-      
     },
     loadInstituciones(){
       // console.log('loadInstituciones()');
@@ -460,7 +456,7 @@ export default {
       console.log(`selInstitucion(${value})`);
       // let codInstitucion = value.srcElement.value;
       let codInstitucion = value;
-      // this.rec.codReligioso = '153';
+      this.rec.codReligioso = '';
       // console.log('Valor = ', value.srcElement.value);
       // console.log('codInstitucion = ', codInstitucion);
       // console.log('Religioso = ', this.Religiosos);
@@ -563,7 +559,18 @@ select.decorated option:hover {
 select > option:hover { 
   color: #1B517E; 
   cursor: pointer; 
-} 
+}
+.content-header {
+  text-align: center;
+  height: 0.5rem;
+  /* padding: 0.3rem 0; */
+}
+.titulo_2 {
+  font-weight: 600;
+  padding-bottom: 2px;
+  margin: 4px 0;
+    height: 2rem;
+}
 .icon_Calendar {
   width: 2rem;
   height: 3rem;

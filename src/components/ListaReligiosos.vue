@@ -3,8 +3,8 @@
 <div class="content d-flex flex-column">
   <div class="content-title">
     <div class="headerTitle">
-
-          <div class='titulo_2 '>Consulta Religiosos</div>
+          <div class='titulo_2' v-if='view_content'>Consulta de Religiosos</div>
+          <div class='titulo_2' v-if='!view_content'>Datos de Religioso</div>
           <div class='d-flex justify-content-end' >  
             <filtra-tabla v-if='view_content' :recordList="Religiosos_min" :colsSearch='searchReligiosos' @filter_Process="filterProcessInst" ></filtra-tabla>
           </div>
@@ -215,6 +215,9 @@ padding: 1px;
 .itemCurrent {
       height: 1.7rem;
 padding: 4px  ;
+}
+.titulo_2 {
+  font-weight: 600;
 }
 /* .filterInput {
    height: 1.5rem !important;

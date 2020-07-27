@@ -2,7 +2,7 @@
 <template>
 <div class='content'>
   <div class="content-title">
-    <div class='headerTitle'>Legalizacion de Documentos</div>
+    <div class='headerTitle titulo_2'>Legalizacion de Documentos</div>
   </div>
   <div class="content-header row d-flex">
     <div class='col-3 d-flex justify-content-start align-items-center'>
@@ -293,6 +293,11 @@ export default {
 <style scoped>
 .content-body {
   height: 90%;  /* 90%  */
+}
+.titulo_2 {
+  font-weight: 600;
+  padding-bottom: 2px;
+  margin: 4px 0;
 }
 .table_Docs {
   width: 100%;

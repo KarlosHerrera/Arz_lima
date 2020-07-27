@@ -174,8 +174,8 @@ export default {
   },
   mounted: function(){
     this.setComponent();
-    this.cargaSellos();
-    // this.sellos_aws();
+    // this.cargaSellos();
+    this.sellos_aws();
   }  
 }
 </script>

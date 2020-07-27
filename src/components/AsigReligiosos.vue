@@ -443,9 +443,7 @@ padding: 2px 3px;
   /* font-weight: 600; */
 }
 .titulo_2 {
-  /* font-weight: 600; */
-  font-weight: 500;
-
+  font-weight: 600;
   padding-bottom: 2px;
 }
 

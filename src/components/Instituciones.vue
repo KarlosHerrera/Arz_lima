@@ -3,7 +3,7 @@
 <div class="content d-flex flex-column">
   <div class="content-title">
         <div class='titulo_2 align_center' v-if='view_content'>Instituciones</div>   
-        <div class='titulo_2 align_center' v-if='!view_content'>Instituciones - {{title_detail}}</div>
+        <div class='titulo_2 align_center' v-if='!view_content'>{{title_detail}} Institucion</div>
     <div class="headerTitle d-flex justify-content-between">
         <div class='d-flex justify-content-start align-items-center' v-if='view_content' >
             <button class='btn btn-sm btn_1 btn_new' @click='createItem'>Nuevo</button>
@@ -216,12 +216,12 @@ export default {
     setComponent(){
 
         if( this.crud == 'C' ) {
-            this.title_detail = 'Nuevo'; 
+            this.title_detail = 'Nueva'; 
             // this.resetForm();
         }
         if( this.crud == 'R' ) this.title_detail = 'Consulta';           
-        if( this.crud == 'U' ) this.title_detail = 'Editar';
-        if( this.crud == 'D' ) this.title_detail = 'Anular' ;
+        if( this.crud == 'U' ) this.title_detail = 'Edita';
+        if( this.crud == 'D' ) this.title_detail = 'Anula' ;
         if( this.crud == 'R' ) {
             // disabledElementId('btnSellos', false);
             this.load_();
@@ -443,6 +443,7 @@ padding: 1px;
 }
 .titulo_2 {
     font-size: 1.2rem;
+      font-weight: 600;
     color: black;
 }
 .itemCurrent {
