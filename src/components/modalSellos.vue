@@ -10,10 +10,11 @@
           <div class='align-items-end'></div> -->
         </div>      
        <div class="modal-body">
-        <b-carousel id="carousel-1" :interval="0" controls indicators class="d-block img-fluid"> 
-          <!-- img-width="400" img-height="300" -->
-          <b-carousel-slide  v-for="(itm, index) in imagenes" :key='index' :img-src="itm.sello"  img-width="400" img-height="300" background='red' ></b-carousel-slide>
-        </b-carousel>
+          <div class='noImgs' v-if='!verImgs'>Sin imagenes de sello(s).</div>
+          <b-carousel id="carousel-1" :interval="0" controls indicators class="d-block img-fluid"  v-if='verImgs'> 
+            <!-- img-width="400" img-height="300" -->
+            <b-carousel-slide  v-for="(itm, index) in imagenes" :key='index' :img-src="itm.sello"  img-width="400" img-height="300" background='red' ></b-carousel-slide>
+          </b-carousel>
        </div>
         <div class="modal-footer">
             <button class="btnExit btn btn-sm btn_1" @click="$emit('close')">Salir</button>
@@ -77,6 +78,7 @@ export default {
       acepta: false,
       pathImg: '',
       imagenes: [],
+      verImgs: true
     }
   },
   computed: { // Expone state al template
@@ -98,6 +100,10 @@ export default {
       let url = this.host+'/instituciones/sello/'+codInstitucion;
       axios.get(url)
       .then(function(response){ 
+        if( response.data.length == 0 ){
+          self.verImgs = false;
+        }
+        self.verImgs = true;
         let tmp = [];
         // console.log('imagenes.sellos = ', response.data);
         response.data.forEach(function(img){
@@ -121,15 +127,22 @@ export default {
       let url = this.host+'/instituciones/sello/'+codInstitucion;
       axios.get(url)
       .then(function(response){ 
-        let params = {
-          Bucket: 'arz-lima',
-          Key: 'sellos/'
-        };  
-        response.data.forEach(function(img){
-          params.Key = 'sellos/'+img.sello;
-          img.sello = self.loadImgS3_2(img.sello);
-          console.log(img.sello);
-        });
+        if( response.data.length == 0 ){
+          console.log('sin imagenes...');
+          self.verImgs = false;
+        }else{
+          self.verImgs = false;
+          let params = {
+            Bucket: 'arz-lima',
+            Key: 'sellos/'
+          };  
+          response.data.forEach(function(img){
+            params.Key = 'sellos/'+img.sello;
+            img.sello = self.loadImgS3_2(img.sello);
+            // console.log(img.sello);
+          });
+            
+        }
       })
       .catch(function(error) {
         console.log(error);
@@ -197,6 +210,10 @@ export default {
 }
 .modal-footer {
     height: 10%;  
+}
+.noImgs {
+  font-size: 1.5rem;
+
 }
 /*  */
 .carousel-control-next, .carousel-control-prev {

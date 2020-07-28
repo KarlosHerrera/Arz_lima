@@ -9,6 +9,9 @@ moment.locale('es');
 
 Vue.use(Vuex)
 
+let apis = require('./../assets/json/config_app.json');
+let host = apis.host;
+
 let fechaHoy = new Date();
 // console.log('store.fechHoy = ', fechaHoy);
 let fechas_Doc = { desde:  moment(fechaHoy).format('YYYY-MM-DD hh:mm:ss'), hasta: moment(fechaHoy).format('YYYY-MM-DD hh:mm:ss') };
@@ -24,7 +27,7 @@ export default new Vuex.Store({
     crud: '*',
     record: {},
     fechas_ingresadas: fechas_Doc,
-    host: ''
+    host: host
   },
   mutations: {
     setHost: function(state, data){
@@ -64,10 +67,10 @@ export default new Vuex.Store({
     allReligiosos: async function({ commit }){
       console.log('actions.allReligiosos()');
 // console.log('religiosos host: ', this.host);
-      let app = await require('./../assets/json/config_app.json');
+      // let app = await require('./../assets/json/config_app.json');
       // console.log('app.host: ', app.host)      
       try {
-        let data = await fetch(app.host+'/religiosos/all/');
+        let data = await fetch(this.host+'/religiosos/all/');
         let religiosos = await data.json();
         commit('setReligiosos', religiosos);   
       } catch (error) {
@@ -82,10 +85,10 @@ export default new Vuex.Store({
       console.log('actions.allInstituciones()');
       // console.log('instituciones host: ', this.host);
 
-      let  app = await require('./../assets/json/config_app.json');
+      // let  app = await require('./../assets/json/config_app.json');
       // console.log('app.host: ', app.host)
       try {
-        let data = await fetch(app.host+'/instituciones/all/');
+        let data = await fetch(this.host+'/instituciones/all/');
         let instituciones = await data.json();
         commit('setInstituciones', instituciones);   
       } catch (error) {

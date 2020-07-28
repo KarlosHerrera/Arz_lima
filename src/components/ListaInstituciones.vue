@@ -19,15 +19,15 @@
           <th>Institucion<span></span></th>
           <th>Direccion<span></span></th>
           <th>Tipo Institucion<span></span></th>
-          <th>Telefono1<span></span></th>
+          <th>Telefono 1<span></span></th>
         </tr>
       </thead>
       <tbody id='bodyTable' class='' >
         <tr v-for="(doc, index) in tmpInstituciones" :key='index' @dblclick='detalleItem(index)' @mouseover='itemFocus(index)' @blur='itemBlur'>
           <td> {{ doc.codInstitucion}} </td>
-          <td> {{ doc.nombreInstitucion | frmLongMaxima(50) }} </td>
+          <td> {{ doc.nombreInstitucion | frmLongMaxima(45) }} </td>
           <td> {{ doc.direccion | frmLongMaxima(50) }} </td>
-          <td> {{ doc.nombreTipo | frmLongMaxima(15) }} </td>
+          <td> {{ doc.nombreTipo | frmLongMaxima(12) }} </td>
           <td> {{ doc.telefono1 }} </td>
         </tr>
       </tbody>
@@ -133,7 +133,7 @@ export default {
       codInstitucion: '',
       nombreInstitucion: '',
       datosInstitucion: {},      
-      searchInstituciones: ['codInstitucion','nombreInstitucion','nombreTipo'],
+      searchInstituciones: ['codInstitucion','nombreInstitucion','direccion','nombreTipo','telefono1'],
       view_content: true,
       itemCurrent: 0
     }

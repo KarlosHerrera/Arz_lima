@@ -2,7 +2,7 @@
 <template>
   <div class='content-del-al d-flex  flex-grow-0'>
     <div class="content-del input-group input-group-sm d-flex justify-content-center align-items-center">
-      <label class='lblFecha'>Al:</label>  
+      <label class='lblFecha'>Dl:</label>  
       <vuejs-datepicker id='desde' v-model="fecha_del" :language="lenguaje" format="dd/MM/yyyy" 
         :fullMonthName="true" :mondayFirst="true" :bootstrapStyling="false" inputClass="form-control-sm miEstilo"
         calendarClass='calendario'  :highlighted="{days: [ 0 ] }">

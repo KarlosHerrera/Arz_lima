@@ -5,17 +5,16 @@
   <div class="modal-wrapper">
     <div class="modal-container">
         <div class="modal-header d-flex">
-          <div class='align-items-center'> {{ datosReligioso.codReligioso }} - {{ datosReligioso.apellidosNombres }}</div>
+          <div class='align-items-center'> {{ datosReligioso.codReligioso }} - {{ datosReligioso.nombreReligioso }}</div>
           <!-- <div class='align-items-center'>Sellos</div>
           <div class='align-items-end'></div> -->
         </div>      
        <div class="modal-body">
-
-        <b-carousel id="carousel-1" :interval="0" 
-            controls indicators class="d-block img-fluid"> 
-          <b-carousel-slide  v-for="(itm, index) in imagenes" :key='index' :img-src="itm.firma" ></b-carousel-slide>
-        </b-carousel>
-
+          <div class='noImgs' v-if='!verImgs'>Sin imagenes de firmas(s).</div>
+          <b-carousel id="carousel-1" :interval="0"  v-if='verImgs'
+              controls indicators class="d-block img-fluid"> 
+            <b-carousel-slide  v-for="(itm, index) in imagenes" :key='index' :img-src="itm.firma" ></b-carousel-slide>
+          </b-carousel>
        </div>
         <div class="modal-footer">
             <button class="btnExit btn btn-sm btn_1" @click="$emit('close')">Salir</button>
@@ -43,6 +42,7 @@ export default {
     return {
       acepta: false,
       imagenes: [],
+      verImgs: true
     }
   },
   computed: { // Expone state al template
@@ -74,20 +74,25 @@ export default {
     },
     firmas_aws: function(){
       console.log('sellos_aws()');
-      let codReligioso = this.datosInstitucion.codReligioso.trim();
+      let codReligioso = this.datosReligioso.codReligioso.trim();
       let self = this;
       let url = this.host+'/religiosos/firma/'+codReligioso;
       axios.get(url)
       .then(function(response){ 
-        let params = {
-          Bucket: 'arz-lima',
-          Key: 'firmas/'
-        };  
-        response.data.forEach(function(img){
-          params.Key = 'firmas/'+img.firma;
-          img.firma = self.loadImgS3(img.firma);
-          console.log(img.firma);
-        });
+        if( response.data.length == 0 ){
+          self.verImgs = false;
+        }else{   
+          self.verImgs = true;     
+          let params = {
+            Bucket: 'arz-lima',
+            Key: 'firmas/'
+          };  
+          response.data.forEach(function(img){
+            params.Key = 'firmas/'+img.firma;
+            img.firma = self.loadImgS3(img.firma);
+            // console.log(img.firma);
+          });
+        }
       })
       .catch(function(error) {
         console.log(error);

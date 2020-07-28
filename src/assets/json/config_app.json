@@ -1,5 +1,5 @@
 {
-    "host": "https://arzobispado-lima.herokuapp.com",
+    "host": "http://localhost:3000",
 
     "comment": " http://localhost:3000 | https://arzobispado-lima.herokuapp.com "
 }

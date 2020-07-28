@@ -27,10 +27,10 @@
       <tbody id='bodyTable' class='' >
         <tr v-for="(doc, index) in tmpReligiosos" :key='index' @dblclick='detalleItem(index)' @mouseover='itemFocus(index)' @blur='itemBlur'>
           <td> {{ doc.codReligioso}} </td>
-          <td> {{ doc.apellidosNombres | frmLongMaxima(50) }} </td>
+          <td> {{ doc.apellidosNombres | frmLongMaxima(45) }} </td>
           <td> {{ doc.nombreJerarquia | frmLongMaxima(15) }} </td>
           <td> {{ doc.nombreInstitucion | frmLongMaxima(30) }} </td>
-          <td> {{ doc.direccion | frmLongMaxima(50) }} </td>
+          <td> {{ doc.direccion | frmLongMaxima(30) }} </td>
           <td> {{ doc.telefono1 }} </td>
         </tr>
       </tbody>
@@ -130,7 +130,7 @@ export default {
       codReligioso: '',
       apellidosNombres: '',
       datosReligioso: {},      
-      searchReligiosos: ['codReligioso','apellidosNombres','nombreInstitucion'],
+      searchReligiosos: ['codReligioso','apellidosNombres','nombreJerarquia','direccion','telefono1'],
       view_content: true,
       itemCurrent: 0
     }
