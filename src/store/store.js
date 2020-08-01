@@ -60,17 +60,19 @@ export default new Vuex.Store({
       state.fechas_ingresadas.desde = fechas.desde;
       state.fechas_ingresadas.hasta = fechas.hasta;
     }
+
   },
   actions: {
       // { commit, dispatch } = objetos contexto
     /// --- Religiosos
-    allReligiosos: async function({ commit }){
+    allReligiosos: async function({ state, commit }){
       console.log('actions.allReligiosos()');
 // console.log('religiosos host: ', this.host);
       // let app = await require('./../assets/json/config_app.json');
-      // console.log('app.host: ', app.host)      
+      let url = state.host+'/religiosos/all/';
+      console.log('religiosos/all url: ', url);    
       try {
-        let data = await fetch(this.host+'/religiosos/all/');
+        let data = await fetch(url);
         let religiosos = await data.json();
         commit('setReligiosos', religiosos);   
       } catch (error) {
@@ -81,14 +83,15 @@ export default new Vuex.Store({
 
     /// ---Instituciones
     // allInstituciones: async fu nction({ commit }){
-    allInstituciones: async function({ commit }){
+    allInstituciones: async function({ state, commit }){
       console.log('actions.allInstituciones()');
       // console.log('instituciones host: ', this.host);
-
+      let url = state.host+'/instituciones/all/';
       // let  app = await require('./../assets/json/config_app.json');
       // console.log('app.host: ', app.host)
+      console.log('Instituciones url: ', url);   
       try {
-        let data = await fetch(this.host+'/instituciones/all/');
+        let data = await fetch(url);
         let instituciones = await data.json();
         commit('setInstituciones', instituciones);   
       } catch (error) {

@@ -68,7 +68,35 @@ export function evalInput(obj){
 		if( btnEnable ) btnEnable.setAttribute('disabled','');
 	}
 }
-
+export function evalValue(id){
+	console.log(`evalValue(${id})`);
+	if( !id || id == null || !typeof(Id) == 'string') return false;	
+	let obj = document.getElementById(id);
+	if( !obj ) return false;
+	let sValor = obj.value;
+	let sPatron = obj.getAttribute("pattern");
+	let sRequerido = obj.getAttribute("required");
+	// console.log('required... ', sRequerido);
+	if( sRequerido && sValor.trim() == '' ) return false;
+	if( (!sPatron || sPatron != '') && sValor.trim() != '' ){
+		// console.log('expresion regular...');
+		if ( !evalExpReg(sPatron, sValor) )	return false;
+	}
+	return true;
+}
+// function evalValues(aValues){
+// console.log(`evalValues(${aValues})`);	
+// 	return true;
+// }
+export function evalString(value){
+	console.log(`evalString(${value})`);
+	if( !value || value == null || !typeof(value) == 'string') return false;
+	if( value.trim() == '') return false;
+	return true;
+}
+// function evalStrings(){
+// 	return true;
+// }
 function evalExpReg(sPatron, sValor){
 	// Evalua Expresion Regular del Input
 	// if( arguments.length != 2) console.log('evalExpReg() -> Arguments no valid.');

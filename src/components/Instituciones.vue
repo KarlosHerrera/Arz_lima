@@ -2,7 +2,7 @@
 <template>
 <div class="content d-flex flex-column">
   <div class="content-title">
-        <div class='titulo_2 align_center' v-if='view_content'>Instituciones</div>   
+        <div class='titulo_2 align_center' v-if='view_content'>Mantenimiento de Instituciones</div>   
         <div class='titulo_2 align_center' v-if='!view_content'>{{title_detail}} Institucion</div>
     <div class="headerTitle d-flex justify-content-between">
         <div class='d-flex justify-content-start align-items-center' v-if='view_content' >
@@ -35,6 +35,7 @@
           <td class=' d-flex justify-content-center align-items-center'>
             <button class='btn btn-sm btn_actions btn_1' @click='updateItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Editar</button>
             <button class='btn btn-sm btn_actions btn_1' @click='deleteItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Anular</button>
+            <button class='btn btn-sm btn_actions btn_1' @click='sellosItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Sellos</button>
           </td>
         </tr>
       </tbody>
@@ -44,112 +45,124 @@
   <!-- row d-flex flex-column align-content-center -->
   <div class='detailRecord col-11' v-else>
     <div class='flex-column justify-content-center'>
-
-    <form id='formInstitucion' class='col-10 formBase' onsubmit="return false;" novalidate autocomplete="nope" data-btnEnable='btnSave'>
-        <div class="form-row justify-content-between">
+      <form id='formInstitucion' class='col-10 formBase' onsubmit="return false;" novalidate autocomplete="nope" data-btnEnable='btnSave'>
+          <div class="form-row justify-content-between">
             <div class="col-2 form-group">
                 <label for="codInstitucion" class="formControlLabel">Codigo*</label>
                 <input  type="text" name="codInstitucion" v-model="rec.codInstitucion" class="form-control form-control-sm" 
-                        id="IdDocLeg" placeholder="" 
-                        @input="input($event.target)" pattern="^[1-9]{1}[0-9]{1,4}$" autocomplete='off' required>
+                        id="codInstitucion" placeholder=""  disabled
+                        @input="input($event.target)" pattern="^[1-9]{1}[0-9]{1,2}$" autocomplete='off' required>
                 <small id="" class="form-text text-muted"></small>
             </div>
-        </div> 
-        <div class="form-row">
-            <div class="col-11 form-group">
-                <label for="nombreInstitucion" class="formControlLabel">Nombre*</label>
-                <input type="text" name='nombreInstitucion' v-model="rec.nombreInstitucion" class="form-control form-control-sm" placeholder=""
-                    @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z -]{1,49}$" autocomplete='off' data-upper='1c'>
-                <small id="" class="form-text text-muted"></small>
-            </div>          
-        </div>             
-        <div class="form-row">
-            <div class="col-9 form-group">
-            <label for="" class="formControlLabel">Tipo*</label>
-                <v-select v-model="rec.tipoInstitucion" label="nombreTipo" id='codSac'
-                :options="tiposInstitucion" :reduce="ele => ele.tipoInstitucion" placeholder=''
-                :clearable="false" class='miClase'
-                >
-                <div slot="no-options">No existen opciones!</div>
-                </v-select> 
+            <div class="col-6 form-group">
+              <label for="" class="formControlLabel">Tipo*</label>
+              <v-select v-model="rec.tipoInstitucion" label="nombreTipo" id='tipoInstitucion'
+              :options="tiposInstitucion" :reduce="ele => ele.tipoInstitucion" placeholder=''
+              :clearable="false" class='miClase'
+              >
+              <div slot="no-options">No existen opciones!</div>
+              </v-select> 
             </div>
-        </div>
-        <div class="form-row">
-            <div class="col-11 form-group">
-                <label for="departamento" class="formControlLabel">Departamento*</label>
-                <v-select v-model="rec.codDepartamento" label="nombreDepartamento" required
-                :options="Departamentos" :reduce="ele => ele.codDepartamento" placeholder=''
-                :clearable="false" @input="selDepartamento" class='miClase'
-                >
-                <div slot="no-options">No existen opciones!</div>
-                </v-select>
-            </div>
+          </div> 
 
-        </div>
-        <div class="form-row">
-            <div class="col-11 form-group">
-                <label for="provincia" class="formControlLabel">Provincia*</label>
-                <v-select v-model="rec.codProvincia" label="nombreProvincia" required
-                :options="tmpProvincias" :reduce="ele => ele.codProvincia" placeholder=''
-                :clearable="false" @input="selProvincia" class='miClase'
-                >
-                <div slot="no-options">No existen opciones!</div>
-                </v-select>
-            </div>
-        </div>       
-        <div class="form-row">
-            <div class="col-11 form-group">
-                <label for="distrito" class="formControlLabel">Distrito*</label>
-                <v-select v-model="rec.codDistrito" label="nombreDistrito" required
-                :options="Distritos" :reduce="ele => ele.codDistrito" placeholder=''
-                :clearable="false" class='miClase'
-                >
-                <div slot="no-options">No existen opciones!</div>
-                </v-select>
-            </div>
-        </div>   
-        <div class="form-row">
-            <div class="col-3 form-group">
-                <label for="telefono1" class="formControlLabel">Telefono 1</label>
-                <input type="text" name='telefono1' v-model="rec.telefono1" class="form-control form-control-sm"  placeholder=""
-                    @input="input($event.target)" pattern="^[1-9]{1}[0-9]{4}$" autocomplete='off'>
-                <small id="" class="form-text text-muted"></small>
-            </div>
-            <div class="col-3 form-group">
-                <label for="telefono2" class="formControlLabel">Telefono 2</label>
-                <input type="text" name='telefono2' v-model="rec.telefono2" class="form-control form-control-sm"  placeholder=""
-                    @input="input($event.target)" pattern="^[1-9]{1}[0-9]{4}$" autocomplete='off'>
-                <small id="" class="form-text text-muted"></small>
-            </div>
-            <div class="col-3 form-group">
-                <label for="fax" class="formControlLabel">Fax</label>
-                <input type="text" name='fax' v-model="rec.fax" class="form-control form-control-sm"  placeholder=""
-                    @input="input($event.target)" pattern="^[1-9]{1}[0-9]{4}$" autocomplete='off'>
-                <small id="" class="form-text text-muted"></small>
-            </div>
+          <div class="form-row">
+              <div class="col-11 form-group">
+                  <label for="nombreInstitucion" class="formControlLabel">Nombre*</label>
+                    <input type="text" name='nombreInstitucion' v-model="rec.nombreInstitucion" class="form-control form-control-sm" 
+                      id='nombreInstitucion' placeholder="" required
+                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 -./]{1,59}$" autocomplete='off' data-upper='1c'>
+                  <small id="" class="form-text text-muted"></small>
+              </div>          
+          </div>             
+          <div class="form-row">
+              <div class="col-11 form-group">
+                  <label for="direccion" class="formControlLabel">Direccion*</label>
+                    <input type="text" name='direccion' v-model="rec.direccion" class="form-control form-control-sm" 
+                      id='direccion' placeholder="" required
+                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 #-.()/]{1,99}$" autocomplete='off' data-upper='1c'>
+                  <small id="" class="form-text text-muted"></small>
+              </div>          
+          </div>  
+          <div class="form-row">
+              <div class="col-11 form-group">
+                  <label for="departamento" class="formControlLabel">Departamento*</label>
+                  <v-select v-model="rec.codDepartamento" label="nombreDepartamento" required
+                  :options="Departamentos" :reduce="ele => ele.codDepartamento" placeholder=''
+                  :clearable="false" @input="selDepartamento" class='miClase'
+                  >
+                  <div slot="no-options">No existen opciones!</div>
+                  </v-select>
+              </div>
 
-        </div>
-        <div class="form-row">
-            <div class="col-9 form-group">
-                <label for="email" class="formControlLabel">Correo</label>
-                <input type="text" name='email' v-model="rec.email" class="form-control form-control-sm"  placeholder=""
-                    @input="input($event.target)" pattern="^[1-9]{1}[0-9]{4}$" autocomplete='off'>
-                <small id="" class="form-text text-muted"></small>
-            </div>
-        </div> 
-        <div class="form-row">
-            <div class="col-9 form-group">
-                <label for="web" class="formControlLabel">Pagina web</label>
-                <input type="text" name='web' v-model="rec.web" class="form-control form-control-sm"  placeholder=""
-                    @input="input($event.target)" pattern="^[1-9]{1}[0-9]{4}$" autocomplete='off'>
-                <small id="" class="form-text text-muted"></small>
-            </div>
-        </div> 
-    </form> 
-    <opciones-crud class='' :crud="crud" @confirm_Create="confirmCreate" @confirm_Update="confirmUpdate" @confirm_Delete="confirmDelete" @exit_Form="exitForm" @reset_Form='resetForm'></opciones-crud>
+          </div>
+          <div class="form-row">
+              <div class="col-11 form-group">
+                  <label for="provincia" class="formControlLabel">Provincia*</label>
+                  <v-select v-model="rec.codProvincia" label="nombreProvincia" required
+                  :options="tmpProvincias" :reduce="ele => ele.codProvincia" placeholder=''
+                  :clearable="false" @input="selProvincia" class='miClase'
+                  >
+                  <div slot="no-options">No existen opciones!</div>
+                  </v-select>
+              </div>
+          </div>       
+          <div class="form-row">
+              <div class="col-11 form-group">
+                  <label for="distrito" class="formControlLabel">Distrito*</label>
+                  <v-select v-model="rec.codDistrito" label="nombreDistrito" required
+                  :options="tmpDistritos" :reduce="ele => ele.codDistrito" placeholder=''
+                  :clearable="false" class='miClase'
+                  >
+                  <div slot="no-options">No existen opciones!</div>
+                  </v-select>
+              </div>
+          </div>   
+          <div class="form-row">
+              <div class="col-3 form-group">
+                  <label for="telefono1" class="formControlLabel">Telefono 1</label>
+                  <input type="text" name='telefono1' v-model="rec.telefono1" class="form-control form-control-sm"
+                      id='telefono1' placeholder=""
+                      @input="input($event.target)" pattern="^[1-9]{1}[0-9]{5,9}$" autocomplete='off'>
+                  <small id="" class="form-text text-muted"></small>
+              </div>
+              <div class="col-3 form-group">
+                  <label for="telefono2" class="formControlLabel">Telefono 2</label>
+                  <input type="text" name='telefono2' v-model="rec.telefono2" class="form-control form-control-sm" 
+                    id='telefono2' placeholder=""
+                      @input="input($event.target)" pattern="^[1-9]{1}[0-9]{5,9}$" autocomplete='off'>
+                  <small id="" class="form-text text-muted"></small>
+              </div>
+              <div class="col-3 form-group">
+                  <label for="fax" class="formControlLabel">Fax</label>
+                  <input type="text" name='fax' v-model="rec.fax" class="form-control form-control-sm"
+                        id='fax' placeholder=""
+                      @input="input($event.target)" pattern="^[1-9]{1}[0-9-]{5,9}$" autocomplete='off'>
+                  <small id="" class="form-text text-muted"></small>
+              </div>
+          </div>
+          <div class="form-row">
+              <div class="col-9 form-group">
+                  <label for="email" class="formControlLabel">Correo</label>
+                  <input type="text" name='email' v-model="rec.email" class="form-control form-control-sm"
+                      id='email' placeholder=""
+                      @input="input($event.target)" pattern1="[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}" autocomplete='off'>
+                  <small id="" class="form-text text-muted"></small>
+              </div>
+          </div> 
+          <div class="form-row">
+              <div class="col-9 form-group">
+                  <label for="web" class="formControlLabel">Pagina web</label>
+                  <input type="text" name='web' v-model="rec.web" class="form-control form-control-sm"
+                      id='web' placeholder=""
+                      @input="input($event.target)" pattern1="/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/" autocomplete='off'>
+                  <small id="" class="form-text text-muted"></small>
+              </div>
+          </div> 
+      </form> 
+      <opciones-crud class='' :crud="crud" @confirm_Create="confirmCreate" @confirm_Update="confirmUpdate" @confirm_Delete="confirmDelete" @exit_Form="exitForm" @reset_Form='resetForm'></opciones-crud>
     </div>
   </div>
- 
+  <!-- <button class='btn btn-sm btn_1 btn_new' @click='evalua'>Evalua</button>  -->
   <div class="content-footer align-items-end"  v-if='view_content'>
     <div class='itemCurrent '>Items: {{ itemCurrent}}/{{tmpInstituciones.length}} </div>
   </div>
@@ -160,16 +173,14 @@
 <script>
 console.log('<< Instituciones.vue >>');
 
-    const idForm = 'formInstitucion';
-// import axios from 'axios';
-import {  disabledForm } from '@/assets/js/lib';
-import { evalInput } from '@/assets/js/form';
+const idForm = 'formInstitucion';
+import axios from 'axios';
+import {  disabledForm, disabledElementId } from '@/assets/js/lib';
+import {  evalInput, evalString, evalValue } from '@/assets/js/form';
 
 import moment from 'moment';
 moment.locale('es');
 
-// import vuejsDatepicker from 'vuejs-datepicker';
-// import { es } from 'vuejs-datepicker/dist/locale';
 import modalSellos from '@/components/modalSellos.vue';
 import opcionesCrud from '@/components/opciones-crud.vue'
 
@@ -187,26 +198,27 @@ export default {
   },  
   data(){
     return {
-        Instituciones: [],
-        tmpInstituciones: [],
-        tiposInstitucion: [],
-        Departamentos: [],
-        Provincias: [],
-        tmpProvincias: [],
-        Distritos: [],
-        tmpDistritos: [],
-        rec: {},
-        crud: '',
-        title_detail: '',
-        // lenguaje: es,
-        fechaHoy: new Date(),   // UTCs
-        verSellos: false,
-        codInstitucion: '',
-        nombreInstitucion: '',
-        datosInstitucion: {},      
-        searchInstituciones: ['codInstitucion','nombreInstitucion','nombreTipo'],
-        view_content: true,
-        itemCurrent: 0
+      Instituciones: [],
+      tmpInstituciones: [],
+      tiposInstitucion: [],
+      Departamentos: [],
+      Provincias: [],
+      tmpProvincias: [],
+      Distritos: [],
+      tmpDistritos: [],
+      rec: {},
+      crud: '',
+      title_detail: '',
+      // lenguaje: es,
+      fechaHoy: new Date(),   // UTCs
+      verSellos: false,
+      codInstitucion: '',
+      nombreInstitucion: '',
+      datosInstitucion: {},      
+      searchInstituciones: ['codInstitucion','nombreInstitucion','nombreTipo','direccion'],
+      view_content: true,
+      itemCurrent: 0,
+        observacionesCrud: ''
     }
   },  
   computed: { // Expone state al template
@@ -214,100 +226,211 @@ export default {
   },
   methods: {
     setComponent(){
-
-        if( this.crud == 'C' ) {
-            this.title_detail = 'Nueva'; 
-            // this.resetForm();
-        }
-        if( this.crud == 'R' ) this.title_detail = 'Consulta';           
-        if( this.crud == 'U' ) this.title_detail = 'Edita';
-        if( this.crud == 'D' ) this.title_detail = 'Anula' ;
-        if( this.crud == 'R' ) {
-            // disabledElementId('btnSellos', false);
-            this.load_();
-        }      
-        if( this.crud == 'U' ) {
-            // disabledForm(idForm, true, ['docLeg']); // atributo 'name'
-            this.load_();
-        }
-
-        this.view_content = false;
-
     },
-    load_(){
+    list_view(){
 
+      if( this.crud == 'C' ) {
+        this.title_detail = 'Nueva'; 
+        // this.resetForm();
+        this.generaCodigo();
+        // this.rec.codInstitucion='1002';
+        // this.rec.nombreInstitucion='AAANombre de Institucion 1002';
+        // this.rec.direccion='Direccion';
+        // this.rec.tipoInstitucion='03';
+      }
+      if( this.crud == 'R' ) this.title_detail = 'Consulta';           
+      if( this.crud == 'U' ) this.title_detail = 'Edita';
+      if( this.crud == 'D' ) this.title_detail = 'Anula' ;
+      if( this.crud == 'R' ) {
+        // disabledElementId('btnSellos', false);
+        this.load_relation();
+      }    
+      if( this.crud == 'U') {
+        disabledElementId('codInstitucion', true);
+        disabledForm(idForm, true, ['codInstitucion']); // atributo 'name'
+        this.load_relation();
+      }
+      if( this.crud == 'D' ) {
+        disabledForm(idForm, true); // atributo 'name'
+        disabledForm(idForm, true); //
+        this.load_relation();
+      }
+
+      this.view_content = false;
+    },
+    load_relation(){
+      this.selDepartamento(this.rec.codDepartamento);
+      this.selProvincia(this.rec.codProvincia)
     },
     resetForm: function(){
-        console.log('this.idForm', this.idForm);
+      console.log('this.idForm', idForm);
       document.getElementById(this.idForm).reset();
     },
+    evaluaItem(){
+      // let objForm = document.getElementById(idForm);
+      // console.dir(objForm);
+      let obs='';
+      let evaluacion = true;
+      if( !evalValue('codInstitucion') ) { obs+='*Codigo '; evaluacion = false}
+      if( !evalValue('nombreInstitucion') ) { obs+=' *Nombre '; evaluacion = false}
+      if( !evalString(this.rec.tipoInstitucion) ) {obs+=' *Tipo'; evaluacion = false}
+      if( !evalString(this.rec.codDepartamento) ) {obs+=' *Departamento'; evaluacion = false}
+      if( !evalString(this.rec.codProvincia) ) {obs+=' *Provincia'; evaluacion = false}
+      if( !evalString(this.rec.codDistrito) ) {obs+=' *Distrito'; evaluacion = false}
+      if( !evalValue('telefono1') ) {obs+=' *Telefono 1'; evaluacion = false}
+      if( !evalValue('telefono2') ) {obs+=' *Telefono 2'; evaluacion = false}
+      if( !evalValue('fax') ) {obs+=' *Fax'; evaluacion = false;}
+      if( !evalValue('email') ) {obs+=' *Correo'; evaluacion = false;}
+      if( !evalValue('web') ) {obs+=' *Pagina WEB'; evaluacion = false;}
+      this.observacionesCrud = obs;
+      return evaluacion;
+    },
     detalleItem(index){
-        console.log(`detalleItem(${index})`);
-        this.crud = 'R';
-        this.rec = this.tmpInstituciones[index];
-        this.setComponent();
-        // this.view_content = false;
-      // this.imgSellos();
+      console.log(`detalleItem(${index})`);
+      this.crud = 'R';
+      this.rec = this.tmpInstituciones[index];
+      this.list_view();
     },
     createItem(){
-        console.log('createItem()');
-        this.crud = 'C';
-        this.rec = {}
-        this.setComponent();
+      // console.log('createItem()');
+      this.crud = 'C';
+      this.rec = {}
+      this.list_view();
+    },
+    evalua(){
+      console.log('evalua()');
+      let evaluacion = true;
+      let id = this.rec.codDepartamento;
+      // if( evalValue( id ) ) evaluacion = false;
+      if( evalString(id) ) evaluacion = false;
+      if( evalValue('1321')) evaluacion = false;
+      let title = 'Evaluando: '+id;
+      if ( evaluacion ) { 
+        swal2.fire({title: title, text: 'Verique los datos ingresados.'});
+        return false;
+      }else{
+        swal2.fire({title: title, text: 'Datos OK.'});
+
+      }      
+
     },
     confirmCreate: async function(){
+      // console.log('confirmCreate()');
+      let title = 'Nueva Institucion';
+
+      if ( !this.evaluaItem() ) { 
+        swal2.fire({title: title, text: 'Verique los datos ingresados: '+this.observacionesCrud });
+        return false;
+      }else{
+        // swal2.fire({title: title, text: 'Datos OK.'});
         this.rec.creado_usuario = this.$store.state.User_Name;
         let url = this.host+'/instituciones/create';
+        console.log('url = ', url);
         let options = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(this.rec)
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.rec)
         };
         try {
-            let data = await fetch(url, options);
-            let res = await data.json();
-            let text = (res.status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!'; 
-            await swal2.fire({ title: 'Nueva Institucion: ', text: text });
-            this.exitForm();    // Componente padre
+          let data = await fetch(url, options);
+          let res = await data.json();
+          let text = (res.status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!'; 
+          if( res.status ) this.loadInstituciones();
+          await swal2.fire({ title: 'Nueva Institucion: ', text: text });
+          this.exitForm();    // Componente padre
         } catch (error) {
             console.log('Error:', error);
-        }         
+        }    
+      }    
     },
-    updateItem(){
-        console.log('updateItem()');
-        this.crud = 'U';
+    updateItem(index){
+      // console.log('updateItem()');
+      this.crud = 'U';
+      this.rec = this.tmpInstituciones[index];
+      this.list_view();
+    },
+    confirmUpdate: async function(){
+      // console.log('confirmUpdate()');
+      let title = 'Edita Institucion';
+      if ( !this.evaluaItem() ) { 
+        swal2.fire({title: title, text: 'Verique los datos ingresados: '+this.observacionesCrud });
+        return false;
+      }else{
+        // swal2.fire({title: title, text: 'Datos OK.'});
+        let data = {  
+          codInstitucion: this.rec.codInstitucion, 
+          nombreInstitucion: this.rec.nombreInstitucion,
+          direccion: this.rec.direccion,
+          tipoInstitucion: this.rec.tipoInstitucion,
+          codDepartamento: this.rec.codDepartamento,
+          codProvincia: this.rec.codProvincia,          
+          codDistrito: this.rec.codDistrito,
+          telefono1: this.rec.telefono1,
+          telefono2: this.rec.telefono2,
+          fax: this.rec.fax,
+          email: this.rec.email,
+          web: this.rec.web,
+          modificado: new Date(),
+          modificado_usuario: this.$store.state.User_Name
+        };  
+        // console.log('data: ', data)
+        let url = this.host+'/instituciones/update';
+        let options = {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        };
+        try {
+          let text = '';
+          let data = await fetch(url, options);
+          let res = await data.json();
+          if( res.status ) this.loadInstituciones();
+          text = (res.status)? 'Modificado Satisfactoriamente.': 'Fallo modificacion!';
+          await swal2.fire({title: title, text: text});
+          this.exitForm();
+        } catch (error) {
+          console.log('Error:', error);
+        }
+      }
 
-        this.setComponent();
     },
-    confirmUpdate(){
-    },
-    deleteItem(){
-        console.log('deleteItem()');
-        this.crud = 'D';
-        this.setComponent();
+    deleteItem(index){
+      // console.log('deleteItem()');
+      this.crud = 'D';
+      this.rec = this.tmpInstituciones[index];
+      this.list_view();
     },
     confirmDelete: async function(){
-       console.log('confirmDelete()');
+      // console.log('confirmDelete()');
+      let title = 'Anula Institucion';
+      
       this.rec.eliminado = new Date();
       this.rec.eliminado_usuario =  this.$store.state.User_Name;
       let url = this.host+'/instituciones/delete';
       let options = {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(this.rec)
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.rec)
       };
       try {
-          let text = '';
-          let data = await fetch(url, options);
-          let res = await data.json();
-          text = (res.status)? 'Anulado Satisfactoriamente!': 'Fallo la anulacion!';
-          await swal2.fire({title: 'Institucion', text: text});
-          disabledForm(idForm, false);
-          this.exitForm();
+        let text = '';
+        let data = await fetch(url, options);
+        let res = await data.json();
+        if( res.status ) this.loadInstituciones();          
+        text = (res.status)? 'Anulado Satisfactoriamente!': 'Fallo la anulacion!';
+        await swal2.fire({title: title, text: text});
+        disabledForm(idForm, false);
+        this.exitForm();
       } catch (error) {
-          console.log('Error:', error);
+        console.log('Error:', error);
       }
 
+    },
+    sellosItem(index){
+      console.log(`sellosItem(${index})`);
+      alert('Opcion en Proceso...');
+      this.datosInstitucion.codInstitucion = this.rec.codInstitucion;
+      this.datosInstitucion.nombreInstitucion = this.rec.nombreInstitucion;
     },
     imgSellos(index){
       console.log(`imgSellos(${index})`);
@@ -327,19 +450,19 @@ export default {
           let res = await data.json();
           this.Instituciones = res[0];
           this.tmpInstituciones = res[0];
-        //   this.tmpInstituciones = res[0];
       } catch (error) {
           console.log('Error:', error);
       }      
 
     },
     async loadTiposInstitucion(){
-      console.log('loadTipoInstituciones()');
+      // console.log('loadTipoInstituciones()');
+      // let self = this;
       let url = this.host+'/tablas/tipoinstitucion/all';
       try {
         let data = await fetch(url);
         let res = await data.json();
-        this.TiposInstitucion = res;
+        this.tiposInstitucion = res;
       } catch (error) { console.log('Error:', error);
       }
     },      
@@ -374,20 +497,21 @@ export default {
       }
     },
     selDepartamento(value){
-    console.log(`selDepartamento(${value})`);
+      // console.log(`selDepartamento(${value})`);
       // let codInstitucion = value.srcElement.value;
       let codDepartamento = value;
-      // this.rec.codReligioso = '153';
+      // this.rec.codProvincia = '';
+      // this.rec.codDistrito = '';
       // console.log('Valor = ', value.srcElement.value);
-      // console.log('codInstitucion = ', codInstitucion);
-      console.log('Provincias = ', this.Provincias);
+      // console.log('codDepartamento = ', codDepartamento);
+      // console.log('Provincias = ', this.Provincias.length );
       this.tmpProvincias = this.Provincias.filter( ele => ele.codDepartamento == codDepartamento);
-      console.log('tmpReligiosos => ', this.tmpProvincias.length);
+      // console.log('tmpProvinckas => ', this.tmpProvincias.length);
     },
     selProvincia(value){
-    console.log(`selProvincia(${value})`);
+      // console.log(`selProvincia(${value})`);
       let codProvincia = value;
-      this.tmpDistritoss = this.Distritos.filter( ele => ele.codProvincia == codProvincia);
+      this.tmpDistritos = this.Distritos.filter( ele => ele.codProvincia == codProvincia);
     },
     input: function(self){
       evalInput(self);
@@ -396,6 +520,21 @@ export default {
         this.view_content = true;
     //   this.$router.go(-1);
     }, 
+    generaCodigo: function(){
+      console.log('generaCodigo()');
+      let self = this;
+      let url = this.host+'/instituciones/lastCode';
+      axios.get(url)
+      .then(function(response){ 
+        let code = parseInt(response.data.code, 10) + 1;
+        self.rec.codInstitucion =  code+'';
+        console.log('code=>', code)
+      })
+      .catch(function(error) {
+        console.log(error);
+        return '-1';
+      })
+    },       
     itemFocus(index){
       this.itemCurrent = index+1;
     },
@@ -423,6 +562,7 @@ export default {
 </script>
 
 <style scoped src='@/assets/css/table.css'></style>
+// <style src="@/assets/css/vue-select.css"></style>
 <style scoped>
 @import url('./../assets/css/scroll_bar.css');
 .content {
@@ -485,6 +625,20 @@ tbody tr {
 tbody tr td {
 
 padding: 2px 3px;
+}
+.v-select {
+  background-color: white;
+/* border: 0.066rem solid darkgray !important; */
+  /* border: none; */
+  /* height: 2rem;  */
+}
+select:focus{ outline: none ;}
+select.decorated option:hover { 
+    box-shadow: 0 0 10px 100px #38809b inset !important; 
+} 
+select > option:hover { 
+  color: #1B517E; 
+  cursor: pointer; 
 }
 /* -------- -- Media Queries --------*/
 /* Large devices (desktops, 992px and up) */

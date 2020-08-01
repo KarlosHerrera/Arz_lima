@@ -17,19 +17,22 @@ export function disabledElementId(eleId, value){
 	// element.classList.      
 }
 export function disabledForm(idForm, YesNo, ElementsForm){
+	console.log(`disabledForm(${idForm}, ${YesNo}, ${ElementsForm})`);
     //  Habilita/Deshabilita (YesNo = boolean), todos los elementos del form () o una lista especifica (ElementsForm)
     // console.log('disabledForm('+idForm+')');
-    // console.log('boolean: ', YesNo);
+	// console.log('boolean: ', YesNo);
+	console.log('id = ', idForm);
     if( !idForm || !YesNo ){
-        console.log('disabledForm(idForm - String, YesNo - Boolean)');
-        return null;
+		console.log('disabledForm(idForm - String, YesNo - Boolean, [ElementsForm - Array])');
+		return null;
     }
-    const objForm = document.getElementById(idForm).elements;
-	if( !objForm ){ console.log('Form (Form ='+idForm+'), not found.'); return null; }
-	console.log(objForm);
+	let objForm = document.getElementById(idForm);
+	if( !objForm ){ console.log('Form = '+idForm+', not found.'); return null; }
+	objForm = objForm.elements;
+	console.dir(objForm);
     // if( objForm.nodeName !== 'FORM' ){ console.log('Form = '+idForm+', no es un FORM'); return null;}
     // console.dir(objForm);
-    if( !ElementsForm ){        // Todos los elementos del form
+    if( !ElementsForm ){        // Todos los elementos del form (Sin parametro ElementsForm)
         for(let e=0; e < objForm.length ; e++){
             // console.log(objForm[e]);
             objForm[e].disabled = YesNo;
@@ -42,7 +45,6 @@ export function disabledForm(idForm, YesNo, ElementsForm){
     }
 
 }
-
 
 // export function disabledEle(Id, YesNo){ 
 

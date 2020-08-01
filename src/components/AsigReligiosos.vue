@@ -128,9 +128,6 @@ import axios from 'axios';
 import moment from 'moment';
 moment.locale('es');
 
-// import modal from '@/components/modal.vue';
-// import vuejsDatepicker from 'vuejs-datepicker';
-// import { es } from 'vuejs-datepicker/dist/locale';
 import asignaCargo from '@/components/asignaCargo.vue';
 import desasignaCargo from '@/components/desasignaCargo.vue';
 import modalSellos from '@/components/modalSellos.vue';
@@ -142,21 +139,16 @@ import Swal from 'sweetalert2';
 let optAlert = require('@/assets/json/opt_swal2.json');
 const swal2 = Swal.mixin(optAlert);
 
-
 export default {
   name: 'AsigRel',
   components: {
     // vuejsDatepicker,
-    // modal,
     asignaCargo,
     desasignaCargo,
     modalFirmas,
     modalSellos
 
   },  
-  props: {
-    msg: String
-  },
   data(){
     return {
       Instituciones_min: [],
@@ -272,9 +264,6 @@ export default {
 
     },
     async loadReligiosos(){
-      // console.log('loadReligiosos()');
-      // this.$store.dispatch('allReligiosos');
-      // let url = 'http://localhost:3000/asignacionCargos/Religiosos_min';
       let url = this.host+'/Religiosos/Religiosos_min';
       let options = {
           method: 'GET',
@@ -292,14 +281,10 @@ export default {
 
     },
     async loadInstituciones(){
-      // console.log('loadInstituciones()');
-      // this.$store.dispatch('allInstituciones');
-      // let url = 'http://localhost:3000/asignacionCargos/Instituciones_min';
       let url = this.host+'/Instituciones/Instituciones_min';
       let options = {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
-          // body: JSON.stringify(this.rec)
       };
       try {
           let data = await fetch(url, options);

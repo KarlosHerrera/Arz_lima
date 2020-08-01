@@ -2,8 +2,8 @@
 <template>
 <div class='content'>
   <div class="content-title">
-    <div class='headerTitle titulo_2'>Legalizacion de Documentos</div>
   </div>
+    <div class='headerTitle titulo_2'>Legalización de Documentos</div>
   <div class="content-header row d-flex">
     <div class='col-3 d-flex justify-content-start align-items-center'>
       <button class='btn btn-sm btn_1 btn_new' @click='createItem'>Nuevo</button>
@@ -84,7 +84,6 @@ export default {
     routeDet: '/DetalleLegDocs',
     listDocuments: [],
     listDocs: [],
-    // elemSearch: ['docLegalizacion','nombreInstitucion','apellidosNombres','ticket','refNombre','nombreSacramento'],
     elemSearch: ['docLegalizacion','nombreInstitucion','apellidosNombres','nombreSacramento','ticket','refNombre'],
     ascending: false,
     sortField: '',
@@ -134,7 +133,6 @@ export default {
       this.$store.commit('setCrud', 'U');
       let record = this.listDocs[index];
       this.$store.commit('setRecord', record);
-      // console.log('update()', record);
       this.$router.push(this.routeDet);
     },
     deleteItem(index){
@@ -184,12 +182,8 @@ export default {
       this.$store.commit('setFechas_Doc', {desde: from , hasta: to});
       let options = {
           method: 'POST',
-          //headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          // headers: { 'Content-Type': 'multipart/form-data' },
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(fechas)
-          //mode: 'no-cors',
-          //body: formData
       };            
       let url = this.host+'/movDocumentos/all';
       const res = await fetch(url, options);

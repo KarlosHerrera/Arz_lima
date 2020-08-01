@@ -4,8 +4,8 @@
   <div class="content-title ">
     <div class='headerTitle'>
       <div class='titulo_2 col-12'>{{ title_detail }} Documento</div>
-      <!-- Inst:{{ rec.codInstitucion }} - 
-      Rel:{{ rec.codReligioso }} -->
+      Inst:{{ rec.codInstitucion }} - 
+      Rel:{{ rec.codReligioso }}
     </div>
   </div>
   <!-- <hr> -->
@@ -19,7 +19,7 @@
           <div class="col-2 form-group">
               <label for="docLeg" class="formControlLabel">Documento*</label>
               <input  type="text" name="docLeg" v-model="rec.docLegalizacion" class="form-control form-control-sm" 
-                      id="IdDocLeg" placeholder="Numero de documento" 
+                      id="IdDocLeg" placeholder="" 
                       @input="input($event.target)" pattern="^[0-9]{1,5}$" autocomplete='off' required>
               <small id="" class="form-text text-muted"></small>
           </div>
@@ -33,10 +33,12 @@
                     inputClass="form-control-sm miEstilo" id='fecDoc' :disabled-dates='desactivaFechas'
                     calendarClass='calendario' @input='changeFechaDoc' :highlighted="{days: [ 0 ] }">
                 </vuejs-datepicker>
-                <span class='icon_Calendar d-flex justify-content-center align-items-center' @click='ver_calendario'><b-icon-calendar2 class='icon-calendar2'></b-icon-calendar2></span>
+                <!-- <span class='icon_Calendar d-flex justify-content-center align-items-center' @click='ver_calendario'><b-icon-calendar2 class='icon-calendar2'></b-icon-calendar2></span> -->
                </div>
               <small id="" class="form-text text-muted"></small>
           </div>
+          <!-- <div class="col-1">
+          </div> -->
       </div>
       <div class="form-row">
         <div class="col-11 form-group">
@@ -74,7 +76,7 @@
             :clearable="false" @input="changeSacramento" class='miClase'
             >
             <div slot="no-options">No existen opciones!</div>
-            </v-select> 
+            </v-select>
         </div>
         <div class="col-2 form-group">
             <label for="precio" class="formControlLabel align_right">Precio</label>
@@ -99,24 +101,24 @@
           <small id="" class="form-text text-muted"></small>
         </div>
       </div>
-      <div class="form-row" >
+      <div class="form-row">
           <div class="col-2 form-group">
             <label for="libro" class="formControlLabel">Libro</label>
             <input type="text" name='libro' v-model="record.refLibro" class="form-control form-control-sm" placeholder=""
-              @input="input($event.target)" pattern="^[0-9-]{1,3}$" autocomplete='off'>
+              @input="input($event.target)" pattern="^[0-9-]{4}$" autocomplete='off'>
             <span class='icon_ctn'><i class="far fa-eye"></i></span>
             <small id="" class="form-text text-muted"></small>
           </div>
           <div class="col-2 form-group">
             <label for="folio" class="formControlLabel">Folio</label>
             <input type="text" name='folio' v-model="record.refFolio" class="form-control form-control-sm"  placeholder=""
-              @input="input($event.target)" pattern="^[0-9-]{1,3}$" autocomplete='off'>         
+              @input="input($event.target)" pattern="^[0-9-]{4}$" autocomplete='off'>         
             <small id="" class="form-text text-muted"></small>
           </div>
           <div class="col-2 form-group">
             <label for="numero" class="formControlLabel">Numero</label>        
             <input type="text" name='numero' v-model="record.refNumero" class="form-control form-control-sm" placeholder=""
-              @input="input($event.target)" pattern="^[0-9-]{1,3}$" autocomplete='off'>      
+              @input="input($event.target)" pattern="^[0-9-]{4}$" autocomplete='off'>      
             <label for=''><i class="far fa-eye"></i></label>
           </div>  
             
@@ -153,7 +155,6 @@ import { mapState } from 'vuex';
 import opcionesCrud from '@/components/opciones-crud.vue'
 
 import { disabledElementId, disabledForm } from '@/assets/js/lib';
-// import phoenix from '@/assets/js/lib';
 
 import { evalInput } from '@/assets/js/form';
 import Swal from 'sweetalert2';
@@ -165,7 +166,6 @@ export default {
   components: {
     opcionesCrud,
     vuejsDatepicker,
-    // modal,
     modalSellos,
     modalFirmas
   },
@@ -190,7 +190,7 @@ export default {
       datosReligioso: {}
     }
   },
-  computed: { // Expone state al template
+  computed: { // Expone state al template/script
     ...mapState(['host','Religiosos','Instituciones','record', 'fechas_ingresadas']),
     crud: function(){
       return this.$store.state.crud;
@@ -224,9 +224,9 @@ export default {
       if( this.crud == 'U' ) { this.formMethod = 'PUT'; this.title_detail = 'Editar'}
       if( this.crud == 'D' ) { this.formMethod = 'DELETE'; this.title_detail = 'Anular' }
       if( this.crud == 'D' || this.crud == 'R' ) {
-          disabledForm(idForm, true);
-          disabledElementId('docLeg', false);
-          this.load_tmpReligiosos();
+        disabledForm(idForm, true);
+        disabledElementId('docLeg', false);
+        this.load_tmpReligiosos();
       }
       if( this.crud == 'R' ) {
         disabledElementId('btnSellos', false);
@@ -247,7 +247,7 @@ export default {
       } 
     },
     resetForm: function(){
-      console.log(' resetForm()');
+      // console.log('resetForm()');
       this.rec.codInstitucion = '';
       this.rec.codReligioso = '';
       this.codSacramento = '';
@@ -258,6 +258,8 @@ export default {
       console.log('confirmCreate()');
       // let objForm = document.getElementById(idForm);
       // console.dir(objForm);
+
+      // Consistencia
       // if ( !evalForm( idForm ) ) {
       //   swal2.fire({title: 'Nuevo Documento', text: 'Verique los datos ingresados.'});
       //   return false;
@@ -305,6 +307,9 @@ export default {
       // let objForm = document.getElementById(idForm);
       // let rec = this.$store.state.record;
       // console.log('record:', rec);
+
+      // Consistencia
+
       let data = {  
           docLegalizacion: this.rec.docLegalizacion, 
           // fechaDoc: moment(rec.fechaDoc).format('YYYY-MM-DD'),
@@ -325,8 +330,6 @@ export default {
       let url = this.host+'/movDocumentos/update';
       let options = {
           method: 'PUT',
-          // headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          // body: formData
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
       };
@@ -374,14 +377,14 @@ export default {
       this.$router.go(-1);
     },
      view_sellos(){
-      console.log(`view_sellos()`);
+      // console.log(`view_sellos()`);
       this.verSellos = !this.verSellos;
       let codInstitucion = this.rec.codInstitucion;
       this.datosInstitucion = this.Instituciones.find(ele => ele.codInstitucion == codInstitucion); 
 
     },
     view_firmas(){
-       console.log('view_firmas');
+      // console.log('view_firmas');
       this.verFirmas = !this.verFirmas;
       let codReligioso = this.rec.codReligioso;
       this.datosReligioso = this.Religiosos.find(ele => ele.codReligioso == codReligioso); 
@@ -409,12 +412,11 @@ export default {
 
     },
     existRecord: async function(doc){
-      console.log(`existRecord(${doc})?`);
+      // console.log(`existRecord(${doc})?`);
       let self = this;
       let url = this.host+'/movDocumentos/checkDoc';
       let options = {
           method: 'POST',
-          // headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ nroDoc: doc })
       };
@@ -434,12 +436,12 @@ export default {
       let url = this.host+'/movDocumentos/lastDoc';
        axios.get(url)
       .then(function(response){ 
-        // console.log(response.dasta);
         self.nroDoc = parseInt(response.data.nroDoc, 10) + 1 +'';
         self.rec.docLegalizacion = self.nroDoc;
         self.ultFecDoc = moment(response.data.fecDoc).format('YYYY-MM-DD');
         // console.log('self.ultFecDoc', self.ultFecDoc);
 
+        // Deshabilita fechas en el calendario (consistencia)
         let from = moment(self.fechaHoy).subtract(1,'years');
         let to = moment(self.fechaHoy).subtract(1, 'days');
         to = moment(self.ultFecDoc);
@@ -456,12 +458,7 @@ export default {
       console.log(`selInstitucion(${value})`);
       // let codInstitucion = value.srcElement.value;
       let codInstitucion = value;
-      this.rec.codReligioso = '';
-      // console.log('Valor = ', value.srcElement.value);
-      // console.log('codInstitucion = ', codInstitucion);
-      // console.log('Religioso = ', this.Religiosos);
       this.tmpReligiosos = this.Religiosos.filter( ele => ele.codInstitucion == codInstitucion);
-      console.log('tmpReligiosos => ', this.tmpReligiosos.length);
     },
     changeSacramento(value){
       console.log('changeSacramento');
@@ -502,8 +499,8 @@ export default {
   mounted: function(){
     // console.log('hook.mounted()')
     console.log('mounted host => ', this.host);
-    this.loadInstituciones();
     this.loadReligiosos();
+    this.loadInstituciones();
     this.loadSacramentos();
     this.setComponent();
   }

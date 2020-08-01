@@ -14,31 +14,9 @@ router.get('/all', (req, res) => {
     conn.query(sql, function(err, rows){
         if(err) console.log('error: ', err);
         res.status(200).json(rows[0]);
-        
-        // res.send(rows);
     });
 });
-// router.get('/Instituciones_min', (req, res) => {
-//     console.log('asignacionCargos/Instituciones_min');
 
-//     const sql = "SELECT codInstitucion, nombreInstitucion FROM instituciones WHERE activo = 'S' ORDER BY nombreInstitucion";
-//     conn.query(sql, function(err, rows){
-//         if(err) throw err;
-//         // console.log('instituciones =', rows)
-//         res.status(200).json(rows);
-//         // res.send(rows);
-//     });
-// });
-// router.get('/Religiosos_min', (req, res) => {
-//     console.log('asignacionCargos/Religiosos_min');
-
-//     const sql = "SELECT codReligioso, apellidosNombres FROM religiosos WHERE activo = 'S' ORDER BY apellidosNombres";
-//     conn.query(sql, function(err, rows){
-//         if(err) throw err;
-//         res.status(200).json(rows);
-//         // res.send(rows);
-//     });
-// });
 router.get('/cargos', (req, res) => {
     console.log('asignacionCargos/cargos');
 
@@ -101,7 +79,6 @@ router.put('/update', (req, res) => {
             // console.log('sql: ', err.sql);
             res.json({status: false, msg: 'Unsucessfull', crud: 'create'});
         }else{
-            // console.log(rows);
             res.json({status: true, msg: 'Sucessfull', crud: 'create'});
         }
     })

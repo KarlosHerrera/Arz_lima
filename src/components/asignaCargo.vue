@@ -5,20 +5,21 @@
   <div class="modal-wrapper">
     <div class="modal-container">
         <div class="modal-header d-flex flex-column">
-          <div class='titulo'>
-            <span class='codigo'>Institucion</span>
-            <span class='nombre'>: {{datosAsignacion.codInstitucion }} - {{ datosAsignacion.nombreInstitucion }}</span>
+            <div class='titulo'>Asignar Cargo Religioso</div>
+          <div class='subtitulo'>
+            <span class='codigo'>Institucion:</span>
+            <span class='nombre'> {{datosAsignacion.codInstitucion }} - {{ datosAsignacion.nombreInstitucion }}</span>
           </div>
-          <div class='titulo'>
-            <span class='codigo'>Religioso</span>
-            <span class='nombre'> : {{datosAsignacion.codReligioso }} - {{ datosAsignacion.nombreReligioso }} </span>
+          <div class='subtitulo'>
+            <span class='codigo'>Religioso:</span>
+            <span class='nombre'> {{datosAsignacion.codReligioso }} - {{ datosAsignacion.nombreReligioso }} </span>
           </div>
           <div class='msgCont col-12 d-flex' v-if='isMsg'>
             <div class='msgText align_center'> {{ msgText }} </div>
           </div>
         </div>
        <div class="modal-body">
-        <form id='formDoc' class='col-10 formBase' onsubmit="return false;" novalidate autocomplete="nope" data-btnEnable='btnConfirmar'>
+        <form id='formDoc' class='col-12 formBase' onsubmit="return false;" novalidate autocomplete="nope" data-btnEnable='btnConfirmar'>
           <div class="form-row">
               <div class="col-2 form-group">
                   <label for="fecha" class="formControlLabel left">Fecha*</label>
@@ -37,8 +38,8 @@
             <div class="col-12 form-group">
                 <label for="cargo" class="formControlLabel">Cargo*</label>
                 <v-select v-model="rec.codCargo" label="nombreCargo" required
-                :options="Cargos" :reduce="ele => ele.codCargo" placeholder=''
-                :clearable="false"  class='miClase'
+                :options="Cargos" :reduce="ele => ele.codCargo" placeholder=''          
+                @input="isMsg = false" :clearable="false"  class='miClase'
                 >
                   <div slot="no-options">No existen opciones!</div>
                 </v-select>
@@ -53,7 +54,7 @@
                         inputClass="form-control-sm miEstilo" id='fecInicio' 
                         calendarClass='calendario' :highlighted="{days: [ 0 ] }">
                     </vuejs-datepicker>
-                    <span class='icon_Calendar d-flex justify-content-center align-items-center'><b-icon-calendar2 class='icon-calendar2'></b-icon-calendar2></span>
+                    <!-- <span class='icon_Calendar d-flex justify-content-center align-items-center'><b-icon-calendar2 class='icon-calendar2'></b-icon-calendar2></span> -->
                   </div>
                   <small id="" class="form-text text-muted"></small>
             </div>
@@ -62,7 +63,7 @@
             <div class="col-12 form-group">
               <label for="observaciones" class="formControlLabel">Observaciones</label>
               <input type="text" name='observaciones' v-model="rec.obs_asignacion" class="form-control form-control-sm" placeholder=""
-                @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 ,.-]{1,99}$" autocomplete='off'>
+                @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 (),-./#@]{0,99}$" autocomplete='off' id="observaciones">
               <small id="" class="form-text text-muted"></small>
             </div>
           </div>
@@ -86,15 +87,10 @@ import axios from 'axios';
 import moment from 'moment';
 moment.locale('es');
 
-
 import vuejsDatepicker from 'vuejs-datepicker';
 import { es } from 'vuejs-datepicker/dist/locale';
 
 import { evalInput } from '@/assets/js/form';
-
-// import Swal from 'sweetalert2';
-// let optAlert = require('@/assets/json/opt_swal2.json');
-// const swal2 = Swal.mixin(optAlert);
 import { mapState } from 'vuex';
 
 export default {
@@ -130,7 +126,7 @@ export default {
     confirmar: async function(){
       console.log('confirmar()');
 
-      if ( this.rec.codCargo=='' ) {
+      if ( this.rec.codCargo=='' || !this.rec.codCargo ) {
         this.msgText = 'Verifique los datos ingresados...';
         this.isMsg = true;
       }else{
@@ -138,26 +134,24 @@ export default {
         this.rec.codInstitucion = this.datosAsignacion.codInstitucion;
         this.rec.codReligioso = this.datosAsignacion.codReligioso;
         this.rec.fechaInicio = moment(this.rec.fechaDoc).format('YYYY-MM-DD');
-      
-        console.log(this.rec);
-          let url = this.host+'/asignacionCargos/create';
-          let options = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(this.rec)
-          };
-          try {
-              let data = await fetch(url, options);
-              let res = await data.json();
-              let status = res.status;
-              let title = 'Nueva Asignacion';
-              let text = (status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!'; 
-              // this.cargaCargos();
-              this.$emit('retorno_asignacion', { status, title, text });          
-
-          } catch (error) {
-              console.log('Error:', error);
-          }
+    
+        let url = this.host+'/asignacionCargos/create';
+        let options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.rec)
+        };
+        try {
+            let data = await fetch(url, options);
+            let res = await data.json();
+            let status = res.status;
+            let title = 'Nueva Asignacion';
+            let text = (status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!'; 
+            // this.cargaCargos();
+            this.$emit('retorno_asignacion', { status, title, text });          
+        } catch (error) {
+            console.log('Error:', error);
+        }
 
       }
   
@@ -221,7 +215,6 @@ export default {
   background-color: lightgray;
 
 }
-
 .btnExit, .btnConfirmar {
     width: 15rem;
 }
@@ -235,17 +228,24 @@ export default {
   color: inherit;
 }
 .titulo {
-  padding: 2.3px;
+  width: 100%;
+  font-size: 1.1rem;
+  padding-bottom: 0.4rem; 
+  font-weight: 600;  
+}
+.subtitulo {
+  font-size: 1.0rem;
+  padding: 0.2rem;
 }
 .codigo, .nombre {
-
-  padding: 2px;
+  margin: 0 0.1rem;
+  padding: 0.2rem;
 }
 .codigo {
-  width: 20rem;
+ 
 }
 .nombre {
-    font-weight: 500;  
+    font-weight: 600;  
 }
 /*  */
 .carousel-control-next-icon, .carousel-control-prev-icon {

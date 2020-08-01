@@ -5,21 +5,21 @@
   <div class="modal-wrapper">
     <div class="modal-container">
         <div class="modal-header d-flex flex-column">
-          <div class='titulo'>
-            <div class='align_center'>Desasignar Cargo Religioso</div>
-            <span class='codigo'>Institucion</span>
-            <span class='nombre'>: {{datosAsignacion.codInstitucion }} - {{ datosAsignacion.nombreInstitucion }}</span>
+            <div class='titulo'>Desasignar Cargo Religioso</div>
+          <div class='subtitulo'>
+            <span class='codigo'>Institucion:</span>
+            <span class='nombre'> {{datosAsignacion.codInstitucion }} - {{ datosAsignacion.nombreInstitucion }}</span>
           </div>
-          <div class='titulo'>
-            <span class='codigo'>Religioso</span>
-            <span class='nombre'> : {{datosAsignacion.codReligioso }} - {{ datosAsignacion.nombreReligioso }} </span>
+          <div class='subtitulo'>
+            <span class='codigo'>Religioso:</span>
+            <span class='nombre'> {{datosAsignacion.codReligioso }} - {{ datosAsignacion.nombreReligioso }} </span>
           </div>
           <div class='msgCont col-12 d-flex' v-if='isMsg'>
             <div class='msgText align_center'> {{ msgText }} </div>
           </div>
         </div>
        <div class="modal-body">
-        <form id='formDoc' class='col-10 formBase' onsubmit="return false;" novalidate autocomplete="nope" data-btnEnable='btnConfirmar'>
+        <form id='formDoc' class='col-12 formBase' onsubmit="return false;" novalidate autocomplete="nope" data-btnEnable='btnConfirmar'>
           <div class="form-row">
               <div class="col-3 form-group">
                   <label for="fecha" class="formControlLabel left">Fecha*</label>
@@ -54,10 +54,10 @@
                   <div class='d-flex align-items-center'>  
                     <vuejs-datepicker v-model="rec.fechaFin" :language="lenguaje" format="dd/MM/yyyy" 
                         :fullMonthName="true" :mondayFirst="true" :bootstrapStyling="false" 
-                        inputClass="form-control-sm miEstilo" id='fechaFin' 
-                        calendarClass='calendario' :highlighted="{days: [ 0 ] }">
+                        inputClass="form-control-sm miEstilo" id='fechaFin' :disabled-dates='desactivaFechas'
+                        @input="isMsg = false" calendarClass='calendario' :highlighted="{days: [ 0 ] }">
                     </vuejs-datepicker>
-                    <span class='icon_Calendar d-flex justify-content-center align-items-center'><b-icon-calendar2 class='icon-calendar2'></b-icon-calendar2></span>
+                    <!-- <span class='icon_Calendar d-flex justify-content-center align-items-center'><b-icon-calendar2 class='icon-calendar2'></b-icon-calendar2></span> -->
                   </div>
                   <small id="" class="form-text text-muted"></small>
             </div>
@@ -66,7 +66,7 @@
             <div class="col-12 form-group">
               <label for="observaciones" class="formControlLabel">Observaciones</label>
               <input type="text" name='observaciones' v-model="rec.observaciones" class="form-control form-control-sm" placeholder=""
-                @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 ,./-]{1,99}$" autocomplete='off'>
+                @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z 0-9 (),-./@#]{0,99}$" autocomplete='off' id="observaciones">
               <small id="" class="form-text text-muted"></small>
             </div>
           </div>
@@ -86,7 +86,6 @@
 <script>
 console.log('<< desasignaCargo.vue >>');    
 
-// import axios from 'axios';
 import moment from 'moment';
 moment.locale('es');
 
@@ -94,10 +93,6 @@ import vuejsDatepicker from 'vuejs-datepicker';
 import { es } from 'vuejs-datepicker/dist/locale';
 
 import { evalInput } from '@/assets/js/form';
-// import Swal from 'sweetalert2';
-// let optAlert = require('@/assets/json/opt_swal2.json');
-// const swal2 = Swal.mixin(optAlert);
-
 import { mapState } from 'vuex';
 
 export default {
@@ -114,9 +109,10 @@ export default {
     return {
       rec: {},
       lenguaje: es,
-      fechaHoy: moment(),   // UTC
+      fechaHoy: new Date(),   // UTC
       isMsg: false,
-      msgText: ''
+      msgText: '',
+      desactivaFechas: {}
     }
   },
   computed: { // Expone state al template
@@ -124,16 +120,18 @@ export default {
   },  
   methods:{
     setComponent(){
-      this.rec.fecha = moment(this.fechaHoy).format('DD-MM-YYYY');
-      this.rec.fechaInicio = moment(this.datosAsignacion.fechaInicio).format('DD-MM-YYYY');
-      this.rec.fechaFin =this.fechaHoy;
+      this.rec.fecha = moment(this.fechaHoy).format();
+      this.rec.fechaInicio = moment(this.datosAsignacion.fechaInicio).format('YYYY-MM-DD hh:mm:ss');
+      this.rec.fechaFin = moment(this.fechaHoy).format('YYYY-MM-DD hh:mm:ss');
+      // Deshabilita fechas en el calendario (consistencia)
+      let from = moment(this.rec.fechaInicio).subtract(1,'years');
+      let to = moment(this.rec.fechaInicio);
+      this.desactivaFechas = { ranges: [ { from: from, to: to } ] };    
     },
     confirmar: async function(){
       console.log('confirmar()');
 
-      // let objForm = document.getElementById(idForm);
-      // console.dir(objForm);
-      if ( this.rec.codCargo=='' ) {
+      if ( !this.rec.fechaFin ) {
         this.msgText = 'Verifique los datos ingresados...';
         this.isMsg = true;
       }else{
@@ -142,37 +140,40 @@ export default {
         reg.fechaFin = moment(this.rec.fechaFin).format('YYYY-MM-DD');
         reg.obs_desasignacion =  this.rec.observaciones;
         reg.modificado_Usuario = this.$store.state.User_Name;
-        // console.log('Datos a enviar al servidor: ', this.rec);
-          let url = this.host+'/asignacionCargos/update';
-          let options = {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(reg)
-          };
-          try {
-              let data = await fetch(url, options);
-              let res = await data.json();
-              let status = res.status;
-              let title = 'Desasignar Cargo';
-              let text = (status)? 'Proceso Satisfactorio!': 'Fallo proceso!'; 
-              this.$emit('retorno_desasignacion', { status, title, text });          
-          } catch (error) {
-              console.log('Error:', error);
-          }
 
+        let url = this.host+'/asignacionCargos/update';
+        let options = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(reg)
+        };
+        try {
+            let data = await fetch(url, options);
+            let res = await data.json();
+            let status = res.status;
+            let title = 'Desasignar Cargo';
+            let text = (status)? 'Proceso Satisfactorio!': 'Fallo proceso!'; 
+            this.$emit('retorno_desasignacion', { status, title, text });          
+        } catch (error) {
+            console.log('Error:', error);
+        }
       }
   
     },
     input: function(self){
       evalInput(self);
-    }    
+    }
+  },
+  created: function(){
+    this.setComponent();
   },
   mounted: function(){
-    this.setComponent();
-  }    
+    document.getElementById('observaciones').focus();
+  }   
 }
 </script>
 <style scoped src="@/assets/css/modalComponent.css"></style>
+<style scoped src="@/assets/css/vueSelect.css"></style>
 <style scoped>
 /* @import url('@/assets/css/modalComponent.css'); */
 .modal-container {
@@ -188,11 +189,28 @@ export default {
 .btnExit, .btnConfirmar {
     width: 15rem;
 }
-
-
-.codigo, .nombre {
-
-  padding: 2px;
+.titulo {
+  width: 100%;
+  font-size: 1.1rem;
+  padding-bottom: 0.4rem; 
+  font-weight: 600;  
 }
+.subtitulo {
+  font-size: 1.0rem;
+  padding: 0.2rem;
+}
+.codigo, .nombre {
+  margin: 0 0.1rem;
+  padding: 0.2rem;
+}
+.codigo {
 
+} 
+.nombre {
+  font-weight: 600;  
+}
+#fechaFin:hover {
+  cursor: pointer;
+   background-color: red !important;
+}
 </style>

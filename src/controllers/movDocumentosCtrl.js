@@ -19,7 +19,7 @@ router.get('/lastDoc',  (req, res) => {
             console.log('sql: ', err.sql);
             res.status(200).json({ status: false, msg: 'Insuccessfull', nroDoc:  '-1' });            
         }
-        // console.log('Documento: ', rows[0].docLegalizacion);
+        console.log('Registro: ', rows[0]);
         // console.log('Fecha: ', rows[0].fechaDoc);
         // console.log(rows);
         res.status(200).json({ status: true, msg: 'Successfull', nroDoc: rows[0].docLegalizacion, fecDoc: rows[0].fechaDoc });
@@ -80,7 +80,7 @@ router.post('/all', (req, res) => {
 router.post('/id', async (req, res) => {
     // let existUser = true;
     const { id } = req.paramas;
-    const sql =  "SELECT * FROM tabla WHERE id = ?";
+    const sql = "SELECT * FROM tabla WHERE id = ?";
     conn.query(sql, [id], (err, rows) => {
         if(err) throw err;
         res.json(rows[0]);
@@ -136,7 +136,7 @@ router.put('/update', (req, res) => {
     const docLegalizacion = data.docLegalizacion;
     delete data.docLegalizacion;
     data.fechaDoc = moment(data.fechaDoc).format('YYYY-MM-DD hh:mm:ss');
-    data.modificado = moment(data.modificaso).format('YYYY-MM-DD hh:mm:ss');
+    data.modificado = moment(data.modificado).format('YYYY-MM-DD hh:mm:ss');
     // console.log('data: ', data);
     let sql = "UPDATE movimientodocumento SET ? WHERE docLegalizacion = ?";
     // console.log('sql = ', sql)

@@ -100,7 +100,7 @@ router.get('/one', async (req, res) => {
 });
 // Create document
 router.post('/create', async (req, res) => {
-    console.log('/Dcumentos/create');
+    console.log('/religiosos/create');
     // const {docLegalizacion, fechaDoc, codInstitucion, nombreInstitucion} = req.body;
     // console.log('------------ body ---------------');
     // console.log(username, fullname, role, password, mobile);
@@ -108,7 +108,7 @@ router.post('/create', async (req, res) => {
 
     res.json({
         status: 'ok',
-        crud: 'create'
+        crud: 'create religiosos'
     });
 });
 // Update document

@@ -4,8 +4,23 @@ const express = require('express');
 const router = express.Router();
 const conn = require('../assets/js/db_mysql.js');
 
-// const currentUser = state.User_Name;
+const  moment =require('moment');
+moment.locale('es');
 
+// const currentUser = state.User_Name;
+router.get('/lastCode',  (req, res) => {
+    console.log('instituciones/lastCode');
+ 
+    let sql = "SELECT CAST(codInstitucion AS UNSIGNED) AS codigo FROM Instituciones ORDER BY codigo DESC LIMIT 1";
+    conn.query(sql, function(err, rows){
+        if(err){
+            console.log('sqlMessage: ', err.sqlMessage);
+            console.log('sql: ', err.sql);
+            res.status(200).json({ status: false, msg: 'Insuccessfull', code:  '-1' });            
+        }
+        res.status(200).json({ status: true, msg: 'Successfull', code: rows[0].codigo+'' });
+    });    
+});
 router.get('instituciones/:codInstitucion', (req, res) => {
     console.log('/instituciones/:codInstitucion');
     console.log('req.params = ', req.params.codInstitucion);
@@ -49,7 +64,7 @@ router.get('/all_rel', async (req, res) => {
 
 });
 // User verify 
-router.post('/:id', async (req, res) => {
+router.post('/instituciones/:id', async (req, res) => {
     // let existUser = true;
     // console.log("router.post('/user)------>");
     // console.log('body = ', req.body);
@@ -60,7 +75,7 @@ router.post('/:id', async (req, res) => {
  
     res.json({
         status: 'ok',
-        crud: 'read one'
+        crud: 'read one.....'
     });
 
 });
@@ -84,40 +99,75 @@ router.get('/sello/:codInstitucion', async (req, res) => {
 
 });
 
-// Create document
+// Create Record
 router.post('/create', async (req, res) => {
     console.log('/instituciones/create');
     // const {username, fullname, role, password, mobile} = req.body;
     // console.log('------------ body ---------------');
     // console.log(username, fullname, role, password, mobile);
+    let data = req.body;
+    let codInstitucion = data.codInstitucion;
+    console.log('Data =>', data);
+    // const {docLegalizacion, fechaDoc, codInstitucion, codReligioso, codSacramento} = req.body;
+    // console.log('------------ body -------------');
+    // console.log(docLegalizacion, fechaDoc, codInstitucion, codReligioso, codSacramento);
 
-
-    res.json({
-        status: 'ok',
-        crud: 'create'
-    });
+    // data. = moment(data.fechaDoc).format('YYYY-MM-DD hh:mm:ss');
+    conn.query('INSERT INTO instituciones SET ?', [data], function(err, rows){
+        if(err){
+            console.log('sqlMessage: ', err.sqlMessage);
+            console.log('sql: ', err.sql);
+            res.json({status: false, msg: 'Unsucessfull', codInstitucion: codInstitucion, crud: 'create'});
+        }else{
+            console.log(rows);
+            res.json({status: true, msg: 'Sucessfull', codInstitucion: codInstitucion, crud: 'create'});
+        }
+    })
+    // res.json({
+    //     status: 'ok',
+    //     crud: 'create'
+    // });
 });
 // Update document
 router.put('/update', (req, res) => {
     console.log('/instituciones/update');
-
-    res.json({
-        status: 'ok',
-        crud: 'update'
-    });
+    const data = req.body;
+    const codInstitucion = data.codInstitucion;
+    delete data.codInstitucion;
+    data.modificado = moment(data.modificado).format('YYYY-MM-DD hh:mm:ss');
+    let sql = "UPDATE instituciones SET ? WHERE codInstitucion = ?";
+    console.log('Data =>', data);    
+    conn.query(sql, [data, codInstitucion], function(err, rows){
+        if(err){
+            console.log('sqlMessage: ', err.sqlMessage);
+            console.log('sql: ', err.sql);
+            res.json({status: false, msg: 'Unsucessfull', codInstitucion: codInstitucion, crud: 'update'});
+        }else{
+            res.json({status: true, msg: 'Sucessfull', codInstitucion: codInstitucion, crud: 'update'});
+        }
+    }); 
+    // res.json({
+    //     status: 'ok',
+    //     crud: 'update'
+    // });
 });
-
 // Delete one document
 router.delete('/delete', async (req, res) => {
     console.log('/instituciones/delete');
-
-
-    res.json({
-        // id: id,
-        status: 'ok',
-        crud: 'delete on'
-    });
-
+    const data = req.body;
+    const codInstitucion = data.codInstitucion;
+    data.eliminado = moment(data.eliminado).format('YYYY-MM-DD hh:mm:ss');
+    // let sql = 'DELETE FROM movimientoDocumento WHERE codInstitucion = ?';
+    let sql = "UPDATE instituciones SET activo = ? WHERE codInstitucion = ?";
+    conn.query(sql, ['N', codInstitucion], function(err, rows){
+        if(err){
+            console.log('sqlMessage: ', err.sqlMessage);
+            console.log('sql: ', err.sql);
+            res.json({status: false, msg: 'Unsucessfull', codInstitucion: codInstitucion, crud: 'delete'});
+        }else{
+            res.json({status: true, msg: 'Sucessfull', codInstitucion: codInstitucion, crud: 'delete'});
+        }
+    }); 
 });
 module.exports = router;
 // End

@@ -21,7 +21,7 @@ const tablasCtrl = require('./controllers/tablasCtrl');
 //      const sellosCtrl = require('./controllers/sellosCtrl');
 
 // settings
-app.set('port', process.env.PORT || 3000);  // Configuracion de puerto (variables globales)
+app.set('port', process.env.PORT || 5000);  // Configuracion de puerto (variables globales)
 
 app.use('/', serveStatic(path.join(__dirname,'./../dist')));  // Carga 
 
