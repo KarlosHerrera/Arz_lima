@@ -42,17 +42,16 @@
     </table>
   </div>
   <!-- Detail -->
-  <!-- row d-flex flex-column align-content-center -->
-  <div class='detailRecord col-11' v-else>
-    <div class='flex-column justify-content-center'>
-      <form id='formInstitucion' class='col-10 formBase' onsubmit="return false;" novalidate autocomplete="nope" data-btnEnable='btnSave'>
+  <div class='detailRecord d-flex' v-else>
+    <div class='col-12 content-form d-flex flex-column'>
+      <form id='formInstitucion' class='formBase' onsubmit="return false;" novalidate autocomplete="nope" data-btnEnable='btnSave'>
           <div class="form-row justify-content-between">
             <div class="col-2 form-group">
-                <label for="codInstitucion" class="formControlLabel">Codigo*</label>
-                <input  type="text" name="codInstitucion" v-model="rec.codInstitucion" class="form-control form-control-sm" 
-                        id="codInstitucion" placeholder=""  disabled
-                        @input="input($event.target)" pattern="^[1-9]{1}[0-9]{1,2}$" autocomplete='off' required>
-                <small id="" class="form-text text-muted"></small>
+              <label for="codInstitucion" class="formControlLabel">Codigo*</label>
+              <input  type="text" name="codInstitucion" v-model="rec.codInstitucion" class="form-control form-control-sm" 
+                      id="codInstitucion" placeholder=""  disabled
+                      @input="input($event.target)" pattern="^[1-9]{1}[0-9]{1,2}$" autocomplete='off' required>
+              <small id="" class="form-text text-muted"></small>
             </div>
             <div class="col-6 form-group">
               <label for="" class="formControlLabel">Tipo*</label>
@@ -66,7 +65,7 @@
           </div> 
 
           <div class="form-row">
-              <div class="col-11 form-group">
+              <div class="col-12 form-group">
                   <label for="nombreInstitucion" class="formControlLabel">Nombre*</label>
                     <input type="text" name='nombreInstitucion' v-model="rec.nombreInstitucion" class="form-control form-control-sm" 
                       id='nombreInstitucion' placeholder="" required
@@ -75,7 +74,7 @@
               </div>          
           </div>             
           <div class="form-row">
-              <div class="col-11 form-group">
+              <div class="col-12 form-group">
                   <label for="direccion" class="formControlLabel">Direccion*</label>
                     <input type="text" name='direccion' v-model="rec.direccion" class="form-control form-control-sm" 
                       id='direccion' placeholder="" required
@@ -84,7 +83,7 @@
               </div>          
           </div>  
           <div class="form-row">
-              <div class="col-11 form-group">
+              <div class="col-12 form-group">
                   <label for="departamento" class="formControlLabel">Departamento*</label>
                   <v-select v-model="rec.codDepartamento" label="nombreDepartamento" required
                   :options="Departamentos" :reduce="ele => ele.codDepartamento" placeholder=''
@@ -96,7 +95,7 @@
 
           </div>
           <div class="form-row">
-              <div class="col-11 form-group">
+              <div class="col-12 form-group">
                   <label for="provincia" class="formControlLabel">Provincia*</label>
                   <v-select v-model="rec.codProvincia" label="nombreProvincia" required
                   :options="tmpProvincias" :reduce="ele => ele.codProvincia" placeholder=''
@@ -107,7 +106,7 @@
               </div>
           </div>       
           <div class="form-row">
-              <div class="col-11 form-group">
+              <div class="col-12 form-group">
                   <label for="distrito" class="formControlLabel">Distrito*</label>
                   <v-select v-model="rec.codDistrito" label="nombreDistrito" required
                   :options="tmpDistritos" :reduce="ele => ele.codDistrito" placeholder=''
@@ -117,7 +116,7 @@
                   </v-select>
               </div>
           </div>   
-          <div class="form-row">
+          <div class="form-row justify-content-between">
               <div class="col-3 form-group">
                   <label for="telefono1" class="formControlLabel">Telefono 1</label>
                   <input type="text" name='telefono1' v-model="rec.telefono1" class="form-control form-control-sm"
@@ -141,7 +140,7 @@
               </div>
           </div>
           <div class="form-row">
-              <div class="col-9 form-group">
+              <div class="col-12 form-group">
                   <label for="email" class="formControlLabel">Correo</label>
                   <input type="text" name='email' v-model="rec.email" class="form-control form-control-sm"
                       id='email' placeholder=""
@@ -150,7 +149,7 @@
               </div>
           </div> 
           <div class="form-row">
-              <div class="col-9 form-group">
+              <div class="col-12 form-group">
                   <label for="web" class="formControlLabel">Pagina web</label>
                   <input type="text" name='web' v-model="rec.web" class="form-control form-control-sm"
                       id='web' placeholder=""
@@ -159,7 +158,7 @@
               </div>
           </div> 
       </form> 
-      <opciones-crud class='' :crud="crud" @confirm_Create="confirmCreate" @confirm_Update="confirmUpdate" @confirm_Delete="confirmDelete" @exit_Form="exitForm" @reset_Form='resetForm'></opciones-crud>
+      <opciones-crud class='row' :crud="crud" @confirm_Create="confirmCreate" @confirm_Update="confirmUpdate" @confirm_Delete="confirmDelete" @exit_Form="exitForm" @reset_Form='resetForm'></opciones-crud>
     </div>
   </div>
   <!-- <button class='btn btn-sm btn_1 btn_new' @click='evalua'>Evalua</button>  -->
@@ -238,7 +237,7 @@ export default {
         // this.rec.direccion='Direccion';
         // this.rec.tipoInstitucion='03';
       }
-      if( this.crud == 'R' ) this.title_detail = 'Consulta';           
+      if( this.crud == 'R' ) this.title_detail = 'Datos';           
       if( this.crud == 'U' ) this.title_detail = 'Edita';
       if( this.crud == 'D' ) this.title_detail = 'Anula' ;
       if( this.crud == 'R' ) {
@@ -528,7 +527,7 @@ export default {
       .then(function(response){ 
         let code = parseInt(response.data.code, 10) + 1;
         self.rec.codInstitucion =  code+'';
-        console.log('code=>', code)
+        // console.log('code=>', code)
       })
       .catch(function(error) {
         console.log(error);
@@ -598,11 +597,14 @@ padding: 4px  ;
 
 }
 .detailRecord {
-  border: 1px solid darkslategray;
-  width: 90%;
-  padding-top: 4px;
-  padding-right: 4px;
-  padding-bottom: 4px;
+  /* border: 1px solid darkslategray; */
+  width: 100%;
+  padding: 0.27rem;
+
+}
+.formBase {
+padding: 0.45rem;
+
 }
 .fila {
   display: flex;

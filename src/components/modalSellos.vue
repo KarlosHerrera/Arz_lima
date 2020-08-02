@@ -12,7 +12,6 @@
        <div class="modal-body">
           <div class='noImgs' v-if='!verImgs'>Sin imagenes de sello(s).</div>
           <b-carousel id="carousel-1" :interval="0" controls indicators class="d-block img-fluid"  v-if='verImgs'> 
-            <!-- img-width="400" img-height="300" -->
             <b-carousel-slide  v-for="(itm, index) in imagenes" :key='index' :img-src="itm.sello"  img-width="400" img-height="300" background='red' ></b-carousel-slide>
           </b-carousel>
        </div>
@@ -25,36 +24,36 @@
 
 </transition>    
 
-<!--  <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-          <ol class="carousel-indicators">
-            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-          </ol>
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img class="d-block w-100" src="./../../public/media/I107-C01.jpg" alt="First slide">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100" src="./../../public/media/I107-C02.jpg" alt="Second slide">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100" src="./../../public/media/I107-C03.jpg" alt="Third slide">
-            </div>
-          </div>
-          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-          </a>
-        </div>
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block w-100" src="./../../public/media/I107-C01.jpg" alt="First slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="./../../public/media/I107-C02.jpg" alt="Second slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="./../../public/media/I107-C03.jpg" alt="Third slide">
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
 
         <div class="modal-footer">
             <button class="btnExit btn btn-sm btn_1" @click="$emit('close')">Salir</button>
-        </div>-->
+        </div>
 
 </template>
 <script>
@@ -187,8 +186,8 @@ export default {
   },
   mounted: function(){
     this.setComponent();
-    // this.cargaSellos();
-    this.sellos_aws();
+    this.cargaSellos();
+    // this.sellos_aws();
   }  
 }
 </script>

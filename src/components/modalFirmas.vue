@@ -117,8 +117,8 @@ export default {
     }
   },
   mounted: function(){
-    // this.cargaFirmas();
-    this.firmas_aws();
+    this.cargaFirmas();
+    // this.firmas_aws();
   }  
 }
 </script>

@@ -70,7 +70,7 @@ export default new Vuex.Store({
 // console.log('religiosos host: ', this.host);
       // let app = await require('./../assets/json/config_app.json');
       let url = state.host+'/religiosos/all/';
-      console.log('religiosos/all url: ', url);    
+      // console.log('religiosos/all url: ', url);    
       try {
         let data = await fetch(url);
         let religiosos = await data.json();
@@ -89,7 +89,7 @@ export default new Vuex.Store({
       let url = state.host+'/instituciones/all/';
       // let  app = await require('./../assets/json/config_app.json');
       // console.log('app.host: ', app.host)
-      console.log('Instituciones url: ', url);   
+      // console.log('Instituciones url: ', url);   
       try {
         let data = await fetch(url);
         let instituciones = await data.json();

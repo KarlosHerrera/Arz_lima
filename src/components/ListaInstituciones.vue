@@ -86,8 +86,8 @@
     </div>
     <hr>
     <div class="botones d-flex justify-content-end">
-      <button class='btn btn-sm btn_1 btn_detail' @click='imgSellos'>Sellos</button>
-      <button class='btn btn-sm btn_1 btn_detail' @click='view_content = true'>Salir</button>
+      <button class='btn btn-sm btn_1 btn_detail' @click='imgSellos'>Sellos <span class="badge badge-light"> {{ rec.num_sellos }} </span><span class="sr-only">cantidad de sellos</span></button>
+      <button class='btn btn-sm btn_1 btn_detail' @click='view_content = true'>Salir</button> 
     </div>
     </div>
   </div>
@@ -106,13 +106,7 @@ console.log('<< ListaInstituciones.vue >>');
 import moment from 'moment';
 moment.locale('es');
 
-// import vuejsDatepicker from 'vuejs-datepicker';
-// import { es } from 'vuejs-datepicker/dist/locale';
 import modalSellos from '@/components/modalSellos.vue';
-
-// import Swal from 'sweetalert2';
-// let optAlert = require('@/assets/json/opt_swal2.json');
-// const swal2 = Swal.mixin(optAlert);
 
 import { mapState } from 'vuex';
 
@@ -127,7 +121,6 @@ export default {
       Instituciones_min: [],
       tmpInstituciones: [],
       rec: {},
-      // lenguaje: es,
       fechaHoy: new Date(),   // UTCs
       verSellos: false,
       codInstitucion: '',
@@ -269,8 +262,11 @@ padding: 4px  ;
   margin: 5px 2px;
 }
 .btn_detail {
-  width: 5rem;
+  width: 6rem;
 
+}
+.badge {
+  margin: 0 0.27rem;
 }
 /* -------- -- Media Queries --------*/
 /* Large devices (desktops, 992px and up) */

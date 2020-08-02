@@ -35,7 +35,8 @@ router.get('/all', async (req, res) => {
     console.log('instituciones/all');
     // let sql = `SELECT codInstitucion, nombreInstitucion
     //             FROM instituciones WHERE activo='S' ORDER BY nombreInstitucion`;
-    let sql = `SELECT * FROM instituciones WHERE activo='S' ORDER BY nombreInstitucion`;                
+    let sql = `SELECT * , (SELECT count(*) FROM sellosinstitucion WHERE sellosinstitucion.codInstitucion = instituciones.codInstitucion) AS num_sellos
+                FROM instituciones WHERE activo='S' ORDER BY nombreInstitucion`;                
 
     conn.query(sql, function(err, rows){
         if(err) console.log('err => ', err);

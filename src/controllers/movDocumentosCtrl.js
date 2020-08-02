@@ -28,7 +28,7 @@ router.get('/lastDoc',  (req, res) => {
 // Verifica numero de Documento
 router.post('/checkDoc',  (req, res) => {
     const { nroDoc } = req.body;
-    console.log(`/check/NroDoc=${nroDoc}`);
+    // console.log(`/check/NroDoc=${nroDoc}`);
     let sql = `SELECT count(*) AS total FROM movimientodocumento WHERE docLegalizacion = '${nroDoc}'`;
     conn.query(sql, function(err, rows){
         if(err){
@@ -44,10 +44,7 @@ router.post('/checkDoc',  (req, res) => {
                 res.status(200).json({status: true, found: 'Yes', records: total});
             }
         }
-        // res.status(200).json(rows);
-        // conn.end();
-        // res.status(500).json([]);
-     
+    
     });    
 });
 

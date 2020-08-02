@@ -14,7 +14,7 @@
 
   <div class='content-body row d-flex flex-column align-content-center '>   <!--  flex-column-->
 
-    <form id='formDoc' class='col-8 formBase' onsubmit="return false;" novalidate autocomplete="nope" data-btnEnable='btnSave'>
+    <form id='formDoc' class='col-9 formBase' onsubmit="return false;" novalidate autocomplete="nope" data-btnEnable='btnSave'>
       <div class="form-row justify-content-between">
           <div class="col-2 form-group">
               <label for="docLeg" class="formControlLabel">Documento*</label>
@@ -41,7 +41,7 @@
           </div> -->
       </div>
       <div class="form-row">
-        <div class="col-11 form-group">
+        <div class="col-10 form-group">
             <label for="institucion" class="formControlLabel">Institucion*</label>
             <v-select v-model="rec.codInstitucion" label="nombreInstitucion" required
             :options="Instituciones" :reduce="ele => ele.codInstitucion" placeholder=''
@@ -50,22 +50,22 @@
               <div slot="no-options">No existen opciones!</div>
             </v-select>
         </div>
-        <div class="col-1 form-group align-self-end">
-         <button id='btnSellos' class='btn btn-sm btn_1' :disabled='!rec.codInstitucion'  @click='view_sellos'>Sellos</button>
+        <div class="col-2 form-group align-self-end">
+         <button id='btnSellos' class='btn btn-sm btn_1 btnSellos' :disabled='!rec.codInstitucion' @click='view_sellos'>Sellos <span class="badge badge-light">{{ num_sellos }}</span></button>
         </div>
       </div>
       <div class="form-row">
-        <div class="col-11 form-group">
+        <div class="col-10 form-group">
           <label for="religioso" class="formControlLabel">Religioso*</label>
             <v-select v-model="rec.codReligioso" label="apellidosNombres" required
             :options="tmpReligiosos" :reduce="ele => ele.codReligioso" 
-            :clearable="false" class='miClase'
+            :clearable="false"  @input="numFirmas" class='miClase'
             >
               <div slot="no-options">No existen opciones!</div>
             </v-select>          
         </div>
-        <div class="col-1 form-group align-self-end">
-         <button id='btnFirmas' class='btn btn-sm btn_1' :disabled='!rec.codReligioso' @click="view_firmas">Firmas</button>
+        <div class="col-2 form-group align-self-end">
+         <button id='btnFirmas' class='btn btn-sm btn_1 btnFirmas' :disabled='!rec.codReligioso' @click="view_firmas">Firmas <span class="badge badge-light">{{ num_firmas }}</span></button>
         </div>
       </div> 
       <div class="form-row">
@@ -80,7 +80,8 @@
         </div>
         <div class="col-2 form-group">
             <label for="precio" class="formControlLabel align_right">Precio</label>
-            <input type="number" name='precio' v-model="rec.precio" class="form-control form-control-sm align_right"  placeholder=""
+            <input type="number" name='precio' v-model="rec.precio" class="form-control form-control-sm align_right" 
+                id='precio'  placeholder=""
                 @input="input($event.target)" pattern="" value='0.00' required>
             <span class='icon_ctn'><i class="far fa-eye"></i></span>
           <small id="" class="form-text text-muted"></small>
@@ -90,35 +91,40 @@
       <div class="form-row">
         <div class="col-2 form-group">
           <label for="ticket" class="formControlLabel">Ticket</label>
-          <input type="text" name='ticket' v-model="record.ticket" class="form-control form-control-sm"  placeholder=""
-              @input="input($event.target)" pattern="^[1-9]{1}[0-9]{4}$" autocomplete='off'>
+          <input type="text" name='ticket' v-model="record.ticket" class="form-control form-control-sm"
+            id='ticket'  placeholder=""
+            @input="input($event.target)" pattern="^[1-9]{1}[0-9]{4}$" autocomplete='off'>
           <small id="" class="form-text text-muted"></small>
         </div>
         <div class="col-9 form-group">
           <label for="beneficiario" class="formControlLabel">Beneficiario(s)</label>
-          <input type="text" name='beneficiario' v-model="record.refNombre" class="form-control form-control-sm" placeholder=""
-            @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z -]{1,49}$" autocomplete='off' data-upper='1c'>
+          <input type="text" name='beneficiario' v-model="record.refNombre" class="form-control form-control-sm"
+            id='beneficiario' placeholder=""
+            @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 ,-/()#]{1,49}$" autocomplete='off' data-upper='1c'>
           <small id="" class="form-text text-muted"></small>
         </div>
       </div>
       <div class="form-row">
           <div class="col-2 form-group">
             <label for="libro" class="formControlLabel">Libro</label>
-            <input type="text" name='libro' v-model="record.refLibro" class="form-control form-control-sm" placeholder=""
-              @input="input($event.target)" pattern="^[0-9-]{4}$" autocomplete='off'>
+            <input type="text" name='libro' v-model="record.refLibro" class="form-control form-control-sm"
+              id='refLibro' placeholder=""
+              @input="input($event.target)" pattern="^[0-9]{4}$" autocomplete='off'>
             <span class='icon_ctn'><i class="far fa-eye"></i></span>
             <small id="" class="form-text text-muted"></small>
           </div>
           <div class="col-2 form-group">
             <label for="folio" class="formControlLabel">Folio</label>
-            <input type="text" name='folio' v-model="record.refFolio" class="form-control form-control-sm"  placeholder=""
-              @input="input($event.target)" pattern="^[0-9-]{4}$" autocomplete='off'>         
+            <input type="text" name='folio' v-model="record.refFolio" class="form-control form-control-sm"
+              id='refFolio' placeholder=""
+              @input="input($event.target)" pattern="^[0-9]{4}$" autocomplete='off'>         
             <small id="" class="form-text text-muted"></small>
           </div>
           <div class="col-2 form-group">
             <label for="numero" class="formControlLabel">Numero</label>        
-            <input type="text" name='numero' v-model="record.refNumero" class="form-control form-control-sm" placeholder=""
-              @input="input($event.target)" pattern="^[0-9-]{4}$" autocomplete='off'>      
+            <input type="text" name='numero' v-model="record.refNumero" class="form-control form-control-sm"
+              id='refNumero' placeholder=""
+              @input="input($event.target)" pattern="^[0-9]{4}$" autocomplete='off'>      
             <label for=''><i class="far fa-eye"></i></label>
           </div>  
             
@@ -156,7 +162,7 @@ import opcionesCrud from '@/components/opciones-crud.vue'
 
 import { disabledElementId, disabledForm } from '@/assets/js/lib';
 
-import { evalInput } from '@/assets/js/form';
+import { evalInput, evalString, evalValue } from '@/assets/js/form';
 import Swal from 'sweetalert2';
 let optAlert = require('@/assets/json/opt_swal2.json');
 const swal2 = Swal.mixin(optAlert);
@@ -185,9 +191,12 @@ export default {
       desactivaFechas: {},
       imgSellos: [],
       verSellos: false,
+      num_sellos: 0,
       datosInstitucion: {},
       verFirmas: false,
-      datosReligioso: {}
+      num_firmas: 0,
+      datosReligioso: {},
+      observacionesCrud: ''
     }
   },
   computed: { // Expone state al template/script
@@ -214,7 +223,7 @@ export default {
         this.generaDoc();
         // Obj. fechas deshabilitadas
         // console.log('ultFecDoc = ', this.ultFecDoc);
-
+ 
         let hoy = moment(this.fechaHoy).format('YYYY-MM-DD hh:mm:ss');
         // this.rec.docLegalizacion = this.nroDoc;
         this.rec.fechaDoc = hoy;
@@ -227,6 +236,7 @@ export default {
         disabledForm(idForm, true);
         disabledElementId('docLeg', false);
         this.load_tmpReligiosos();
+
       }
       if( this.crud == 'R' ) {
         disabledElementId('btnSellos', false);
@@ -258,49 +268,61 @@ export default {
       console.log('confirmCreate()');
       // let objForm = document.getElementById(idForm);
       // console.dir(objForm);
-
+      // this.rec.docLegalizacion ='3019'; 
       // Consistencia
-      // if ( !evalForm( idForm ) ) {
-      //   swal2.fire({title: 'Nuevo Documento', text: 'Verique los datos ingresados.'});
-      //   return false;
-      // }else{
-      //   swal2.fire({title: 'Nuevo Documento', text: 'Datos OK.'});
+      let doc = this.existRecord(this.rec.docLegalizacion);
+      console.log('doc = ', doc);
+      let evaluacion = true;
+      let obs = '';
+      if( !evalValue('IdDocLeg') ) { obs+='*Documento '; evaluacion = false}
+      if( !evalString( this.rec.codInstitucion ) ) {obs+=' *Institucion'; evaluacion = false}  
+      if( !evalString( this.rec.fechaDoc ) ) {obs+=' *Institucion'; evaluacion = false}  
+      if( !evalString( this.rec.codReligioso ) ) {obs+=' *Religioso'; evaluacion = false}  
+      if( !evalString( this.rec.codSacramento ) ) {obs+=' *Sacramento'; evaluacion = false}  
+      if( !evalValue('ticket') ) { obs+=' -Ticket '; evaluacion = false}
+      if( !evalValue('beneficiario') ) {obs+=' -Beneficiario'; evaluacion = false}
+      if( !evalValue('refLibro') ) {obs+=' -Libro'; evaluacion = false}
+      if( !evalValue('refFolio') ) {obs+=' -Folio'; evaluacion = false}
+      if( !evalValue('refNumero') ) {obs+=' -Numero'; evaluacion = false}
+      this.observacionesCrud = obs;
+      if ( !evaluacion ) {
+        swal2.fire({title: 'Nuevo Documento', text: 'Verique los datos ingresados: '+this.observacionesCrud });
+      }else{
+        swal2.fire({title: 'Nuevo Documento', text: 'Datos OK.'});
+        let rec = this.$store.state.record;
+        this.rec.creado_usuario = this.$store.state.User_Name;
+      
+        console.log(`Documento existe?: ${ this.rec.docLegalizacion }`);
+        console.log('boolean => ', this.existeDoc);
+        if( this.existeDoc ){
+          swal2.fire({title: `Nuevo Documento: ${ this.rec.docLegalizacion}`, text: `Numero de documento existe! `});
+        }else{
+          // // Definir formato de fecha
 
-      // }
-      let rec = this.$store.state.record;
-      this.rec.creado_usuario = this.$store.state.User_Name;
-      // console.log(`Documento existe?: ${ this.rec.docLegalizacion }`);
-      // this.existRecord(this.rec.docLegalizacion);
-      // console.log('boolean : ', this.existeDoc);
-      // if ( this.existRecord(this.rec.docLegalizacion) ) { 
-      // if( this.existeDoc == true ){
-      //   swal2.fire({title: `Nuevo Documento: ${ this.rec.docLegalizacion}`, text: `Numero de documento existe! `});
-      //   // return false;
-      // }else{
-        // // Definir formato de fecha
-        rec.fechaDoc = moment(rec.fechaDoc).format('YYYY-MM-DD');
-        let url = this.host+'/movDocumentos/create';
-        let options = {
-            method: 'POST',
-            //headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            // headers: { 'Content-Type': 'multipart/form-data' },
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(this.rec)
-            //mode: 'no-cors',
-            //body: formData
-        };
-        try {
-            let data = await fetch(url, options);
-            let res = await data.json();
-            let nroDoc = res.nroDoc;
-            let text = (res.status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!'; 
-            await swal2.fire({ title: 'Nuevo Documento: '+ nroDoc, text: text });
-            this.exitForm();    // Componente padre
-        } catch (error) {
-            console.log('Error:', error);
-        }  
-      // }
+          rec.fechaDoc = moment(rec.fechaDoc).format('YYYY-MM-DD');
+          let url = this.host+'/movDocumentos/create';
+          let options = {
+              method: 'POST',
+              //headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              // headers: { 'Content-Type': 'multipart/form-data' },
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(this.rec)
+              //mode: 'no-cors',
+              //body: formData
+          };
+          try {
+              let data = await fetch(url, options);
+              let res = await data.json();
+              let nroDoc = res.nroDoc;
+              let text = (res.status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!'; 
+              await swal2.fire({ title: 'Nuevo Documento: '+ nroDoc, text: text });
+              this.exitForm();    // Componente padre
+          } catch (error) {
+              console.log('Error:', error);
+          } 
+        }
 
+      }
     },
     confirmUpdate: async function(){
       console.log('confirmUpdate()');
@@ -376,19 +398,29 @@ export default {
       //this.$router.push('/users');
       this.$router.go(-1);
     },
-     view_sellos(){
+    view_sellos(){
       // console.log(`view_sellos()`);
       this.verSellos = !this.verSellos;
       let codInstitucion = this.rec.codInstitucion;
       this.datosInstitucion = this.Instituciones.find(ele => ele.codInstitucion == codInstitucion); 
 
     },
+    numSellos(){
+      // console.log('num_sellos()');
+      let codInstitucion = this.rec.codInstitucion;
+      let elemento = this.Instituciones.find(ele => ele.codInstitucion == codInstitucion); 
+      this.num_sellos = ( elemento ? elemento.num_sellos: 0 );
+    },
     view_firmas(){
       // console.log('view_firmas');
       this.verFirmas = !this.verFirmas;
       let codReligioso = this.rec.codReligioso;
       this.datosReligioso = this.Religiosos.find(ele => ele.codReligioso == codReligioso); 
-
+    },
+    numFirmas(){
+      let codReligioso = this.rec.codReligioso;
+      let elemento = this.Religiosos.find(ele => ele.codReligioso == codReligioso);
+      this.num_firmas = ( elemento ? elemento.num_firmas: 0 );
     },
     loadReligiosos(){
       // console.log('loadReligiosos()');
@@ -425,6 +457,7 @@ export default {
           let res = await data.json();
           self.existeDoc = res.status;
           console.log('self.existeDoc', self.existeDoc);         
+          return self.existeDoc;
       } catch (error) { 
           console.log(error);
       }
@@ -455,13 +488,14 @@ export default {
       })
     },    
     selInstitucion(value){
-      console.log(`selInstitucion(${value})`);
+      // console.log(`selInstitucion(${value})`);
       // let codInstitucion = value.srcElement.value;
       let codInstitucion = value;
       this.tmpReligiosos = this.Religiosos.filter( ele => ele.codInstitucion == codInstitucion);
+      this.numSellos();
     },
     changeSacramento(value){
-      console.log('changeSacramento');
+      // console.log('changeSacramento()');
       // let codigo = evt.target.value;
       let codigo = value;
       let precio = 0;
@@ -500,6 +534,7 @@ export default {
     // console.log('hook.mounted()')
     console.log('mounted host => ', this.host);
     this.loadReligiosos();
+    
     this.loadInstituciones();
     this.loadSacramentos();
     this.setComponent();
@@ -580,5 +615,11 @@ select > option:hover {
 .icon-calendar2 {
   width: 1.1rem !important;
   height: 1.1rem !important;
+}
+.btnSellos, .btnFirmas {
+  width: 5rem;
+}
+.badge {
+  margin: 0 0.27rem;
 }
 </style>

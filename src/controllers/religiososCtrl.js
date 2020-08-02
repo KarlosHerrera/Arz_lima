@@ -29,7 +29,8 @@ router.get('/', (req, res) => {
 // Get all documents
 router.get('/all', (req, res) => {
     // console.log('religiosos/all');
-    let sql = `SELECT codReligioso, apellidosNombres, codJerarquia, codReligioso, codCargo, codInstitucion
+    let sql = `SELECT codReligioso, apellidosNombres, codJerarquia, codReligioso, codCargo, codInstitucion,
+                    (SELECT count(*) FROM firmareligiosos WHERE firmareligiosos.codReligioso = religiosos.codReligioso) AS num_firmas
               FROM religiosos WHERE activo='S' ORDER BY apellidosNombres`;
     conn.query(sql, function(err, rows){
         if(err) throw err;
