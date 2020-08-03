@@ -21,6 +21,8 @@ import Instituciones from '@/components/Instituciones';
 
 import Jerarquias from '../components/Jerarquias';
 import Sacramentos from '../components/Sacramentos';
+import tipoInstitucion from '../components/tipoInstitucion';
+
 
 
 
@@ -89,7 +91,12 @@ const routes = [
     path: '/instituciones',
     name: 'instituciones',
     component: Instituciones
-  },
+  }, 
+  {
+    path: '/tipoInstitucion',
+    name: 'tipoInstitucion',
+    component: tipoInstitucion
+  },  
   {
     path: '/sacramentos',
     name: 'sacramentos',

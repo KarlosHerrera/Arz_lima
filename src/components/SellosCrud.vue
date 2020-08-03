@@ -1,47 +1,35 @@
-// modalSellos.vue
+// SellosCrud.vue
 <template>
 <transition name="modal">
   <div class="modal-mask">
   <div class="modal-wrapper">
     <div class="modal-container">
-        <div class="modal-header d-flex">
-          <div class='align-items-center'> {{ datosInstitucion.codInstitucion }} - {{ datosInstitucion.nombreInstitucion }}</div>
-          <!-- <div class='align-items-center'>Sellos</div>
-          <div class='align-items-end'></div> -->
+        <div class="modal-header d-flex justify-content-between align-items-center">
+            <div class='titulo-1 align-items-left'>Institucion</div>
+            <div class='titulo-2 align-items-center'> {{ datosInstitucion.codInstitucion }} - {{ datosInstitucion.nombreInstitucion }}</div>
+            <div class='escape lign-items-end' @click="$emit('close')">X</div> 
         </div>      
-       <div class="modal-body">
+       <div class="modal-body"> 
           <div class='noImgs' v-if='!verImgs'>Sin imagenes de sello(s)</div>
-          <!--   img-width="400" img-height="300"   class="img-sellos d-block img-fluid" -->
-          <b-carousel id="carousel-1" :interval="0" controls indicators  v-if='verImgs'> 
-            <b-carousel-slide  v-for="(itm, index) in imagenes" :key='index' :img-src="itm.sello" ></b-carousel-slide>
+          <b-carousel id="carouselSellos" :interval="0" controls indicators  v-if='verImgs'> 
+            <b-carousel-slide v-for="(itm, index) in imagenes" :key='index' :img-src="itm.sello" ></b-carousel-slide>
           </b-carousel>
-          <!-- ------------------------------------------------------------------- -->
-          <!-- <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" v-if='verImgs'>
-            <ol class="carousel-indicators">
-              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-            </ol>
-            <div class="carousel-inner">
-
-              <div class="carousel-item" :class='{active: index == 0}' v-for="(itm, index) in imagenes" :key='index' >
-                <img class="img-sello d-block" :src="itm.sello" >
-              </div>
-
-            </div>
-            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Anterior</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Siguiente</span>
-            </a>
-          </div>   -->
-
        </div>
-        <div class="modal-footer">
-            <button class="btnExit btn btn-sm btn_1" @click="$emit('close')">Salir</button>
+        <div class="modal-footer d-flex justify-content-between align-items-center">
+           <div class='col-1 d-flex justify-content-center' style='background: plum'>
+                <div>Items:</div>
+            </div>             
+            <div class='col-4 d-flex justify-content-center' style='background: teal'>
+                <button class="btn-crud btn btn-sm btn_1" @click="addImg">Adicionar</button>
+                <button class="btn-crud btn btn-sm btn_1" @click="confirmAdd">Confirma</button>
+            </div> 
+            <div class='col-4  d-flex justify-content-center' style='background: tomato'>
+                <button class="btn-crud btn btn-sm btn_1" @click="deleteImg">Borrar</button>
+                <button class="btn-crud btn btn-sm btn_1" @click="confirmDelete">Confirma</button>                
+            </div> 
+            <div class='col-2  d-flex justify-content-end'  style='background: tan'>
+                <button class="btnExit btn btn-sm btn_1" @click="$emit('close')">Salir</button>
+            </div>
         </div>    
     </div>    
   </div>    
@@ -51,7 +39,7 @@
 
 </template>
 <script>
-console.log('<< modal-sellos.vue >>');    
+console.log('<< sellos-crud.vue >>');    
 
 import axios from 'axios';
 import { mapState } from 'vuex';
@@ -59,7 +47,7 @@ import { mapState } from 'vuex';
 const s3 = require('@/assets/js/aws_connection.js');
 
 export default {
-  name: 'modal-sellos',
+  name: 'sellos-crud',
   props: {
     titulo: { type: String, default: 'Cabecera' },
     cuerpo: { type: String, default: 'Cuerpo' },
@@ -70,7 +58,8 @@ export default {
       acepta: false,
       pathImg: '',
       imagenes: [],
-      verImgs: true
+      verImgs: true,
+      indexImg: 0
     }
   },
   computed: { // Expone state al template
@@ -80,6 +69,20 @@ export default {
     setComponent: function(){
       let ruta = require('./../assets/json/config_img.json');
       this.pathImg = ruta.pathSellos;
+    },
+    addImg(){
+
+    },
+    confirmAdd(){
+
+    },
+    deleteImg(){
+
+    },
+    confirmDelete(){
+        console.log('confirmDelete()');
+        let sellos= document.getElementById('carouselSellos')
+        console.dir(sellos);
     },
     cargaSellos: function(){
       console.log('modalSellos.cargaSellos()');
@@ -179,6 +182,10 @@ export default {
     this.setComponent();
   },
   mounted: function(){
+    //   document.getElementById('imgIndex').addEventListener('slide.bs.carousel', function(evt){
+    //       console.log('Event - slide.bs.carousel');
+    //       this.indexImg = evt.from;
+    //   });
     this.cargaSellos();
     // this.sellos_aws();
   }  
@@ -192,6 +199,8 @@ export default {
 } 
 .modal-header {
     height: 10%;
+    height: 8%;
+    padding: 0.5rem 0.35rem;
 }
 .modal-body {
   /* width: 100%; */
@@ -205,15 +214,37 @@ export default {
   height: 100%;
 }
 .modal-footer {
+    margin: 0;
+    padding: 0;
     height: 10%;  
 }
 .noImgs {
   font-size: 1.5rem;
 
 }
-/*  */
-.carousel-control-next, .carousel-control-prev {
-  /* background-color: red; */
-  color: blue !important;
+.titulo-1 {
+    font-size: 1.1rem;
+    font-weight: 600;
+
 }
+.btn-crud {
+    width: 4.3rem;
+
+}
+.escape{
+    border: 1px solid black;
+    padding: 2px;
+}
+.escape:hover {
+    cursor: pointer;
+    background-color: rgb(165, 162, 162);
+    color: white;
+}
+.btnExit {
+   width: 4.3rem; 
+}
+.col-1, .col-2, .col-4 {
+    padding: 0;
+}
+
 </style>

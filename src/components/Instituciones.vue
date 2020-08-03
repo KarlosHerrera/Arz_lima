@@ -165,6 +165,7 @@
   <div class="content-footer align-items-end"  v-if='view_content'>
     <div class='itemCurrent '>Items: {{ itemCurrent}}/{{tmpInstituciones.length}} </div>
   </div>
+  <sellos-crud :datosInstitucion="datosInstitucion" v-if="verSellosCrud" @close='verSellosCrud=false'></sellos-crud>
   <modal-sellos :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></modal-sellos>  
 </div>
 </template>
@@ -174,13 +175,15 @@ console.log('<< Instituciones.vue >>');
 
 const idForm = 'formInstitucion';
 import axios from 'axios';
-import {  disabledForm, disabledElementId } from '@/assets/js/lib';
-import {  evalInput, evalString, evalValue } from '@/assets/js/form';
+import { disabledForm, disabledElementId } from '@/assets/js/lib';
+import { evalInput, evalString, evalValue } from '@/assets/js/form';
 
 import moment from 'moment';
 moment.locale('es');
 
 import modalSellos from '@/components/modalSellos.vue';
+import SellosCrud from '@/components/SellosCrud.vue';
+
 import opcionesCrud from '@/components/opciones-crud.vue'
 
 import Swal from 'sweetalert2';
@@ -192,6 +195,7 @@ import { mapState } from 'vuex';
 export default {
   name: 'Instituciones',
   components: {
+    SellosCrud,
     modalSellos,
     opcionesCrud
   },  
@@ -211,13 +215,14 @@ export default {
       // lenguaje: es,
       fechaHoy: new Date(),   // UTCs
       verSellos: false,
+      verSellosCrud: false,
       codInstitucion: '',
       nombreInstitucion: '',
       datosInstitucion: {},      
       searchInstituciones: ['codInstitucion','nombreInstitucion','nombreTipo','direccion'],
       view_content: true,
       itemCurrent: 0,
-        observacionesCrud: ''
+      observacionesCrud: ''
     }
   },  
   computed: { // Expone state al template
@@ -243,7 +248,7 @@ export default {
       if( this.crud == 'R' ) {
         // disabledElementId('btnSellos', false);
         this.load_relation();
-      }    
+      }
       if( this.crud == 'U') {
         disabledElementId('codInstitucion', true);
         disabledForm(idForm, true, ['codInstitucion']); // atributo 'name'
@@ -251,11 +256,10 @@ export default {
       }
       if( this.crud == 'D' ) {
         disabledForm(idForm, true); // atributo 'name'
-        disabledForm(idForm, true); //
         this.load_relation();
       }
 
-      this.view_content = false;
+
     },
     load_relation(){
       this.selDepartamento(this.rec.codDepartamento);
@@ -427,9 +431,10 @@ export default {
     },
     sellosItem(index){
       console.log(`sellosItem(${index})`);
-      alert('Opcion en Proceso...');
-      this.datosInstitucion.codInstitucion = this.rec.codInstitucion;
-      this.datosInstitucion.nombreInstitucion = this.rec.nombreInstitucion;
+      this.verSellosCrud = !this.verSellosCrud;
+      this.datosInstitucion.codInstitucion = this.tmpInstituciones[index].codInstitucion;
+      this.datosInstitucion.nombreInstitucion = this.tmpInstituciones[index].nombreInstitucion;
+
     },
     imgSellos(index){
       console.log(`imgSellos(${index})`);
@@ -561,7 +566,6 @@ export default {
 </script>
 
 <style scoped src='@/assets/css/table.css'></style>
-// <style src="@/assets/css/vue-select.css"></style>
 <style scoped>
 @import url('./../assets/css/scroll_bar.css');
 .content {

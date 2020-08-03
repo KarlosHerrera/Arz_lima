@@ -90,7 +90,7 @@
 
     <hr>
     <div class="botones d-flex justify-content-end">
-      <button class='btn btn-sm btn_1 btn_detail' @click='imgFirmas'>Firmas</button>
+      <button class='btn btn-sm btn_1 btn_detail' @click='imgFirmas'>Firmas <span class="badge badge-light"> {{ rec.num_firmas }} </span><span class="sr-only">cantidad de firmas</span></button>
       <button class='btn btn-sm btn_1 btn_detail' @click='view_content = true'>Salir</button>
     </div>
     </div>
@@ -262,6 +262,9 @@ padding: 4px  ;
 .btn_detail {
   width: 5rem;
 
+}
+.badge {
+  margin: 0 0.27rem;
 }
 /* -------- -- Media Queries --------*/
 /* Large devices (desktops, 992px and up) */

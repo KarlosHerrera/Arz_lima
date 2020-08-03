@@ -11,7 +11,7 @@
            <div></div>
         </li>              
         <li class="nav-item d-flex flex-column">
-           <router-link class="nav-link subMenu_items" to="/TipoInstitucion">Tipo-Institucion</router-link>
+           <router-link class="nav-link subMenu_items" to="/tipoInstitucion">Tipo-Institucion</router-link>
            <div></div>
         </li>
         <li class="nav-item">

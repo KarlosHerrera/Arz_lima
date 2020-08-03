@@ -18,9 +18,7 @@ import filtratabla from '@/components/filtra-tabla.vue';
 
 // import "vue-select/dist/vue-select.css";
 
-// const moment = require('moment');
 import moment from 'moment';
-// require('moment/local/es');
 // Integrar moment.js al html5 para los inputs (documentacion)
 moment.locale('es');
 import numeral from 'numeral';

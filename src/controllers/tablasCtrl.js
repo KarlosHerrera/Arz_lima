@@ -77,11 +77,21 @@ router.post('/tipoinstitucion/create', (req, res) => {
 // Update document
 router.put('/tipoinstitucion/update', (req, res) => {
     console.log('/tablas/tipoinstitucion/update');
-
-    res.json({
-        status: 'ok',
-        crud: 'update'
-    });
+    const data = req.body;
+    const tipoInstitucion = data.tipoInstitucion;
+    delete data.tipoInstitucion;
+    data.modificado = moment(data.modificado).format('YYYY-MM-DD hh:mm:ss');
+    let sql = "UPDATE tipoinstitucion SET ? WHERE tipoInstitucion = ?";
+    console.log('Data =>', data);    
+    conn.query(sql, [data, tipoInstitucion], function(err){
+        if(err){
+            console.log('sqlMessage: ', err.sqlMessage);
+            console.log('sql: ', err.sql);
+            res.json({status: false, msg: 'Unsucessfull', tipoInstitucion: tipoInstitucion, crud: 'update'});
+        }else{
+            res.json({status: true, msg: 'Sucessfull', tipoInstitucion: tipoInstitucion, crud: 'update'});
+        }
+    }); 
 });
 // Delete one document
 router.delete('/tipoinstitucion/delete', async (req, res) => {

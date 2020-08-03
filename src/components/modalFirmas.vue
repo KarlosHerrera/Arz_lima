@@ -42,6 +42,7 @@ export default {
     return {
       acepta: false,
       imagenes: [],
+      pathImg: '',      
       verImgs: true
     }
   },
@@ -49,18 +50,21 @@ export default {
      ...mapState(['host', 'record']), 
   },
   methods: {
+    setComponent: function(){
+      let ruta = require('./../assets/json/config_img.json');
+      this.pathImg = ruta.pathFirmas;
+    },    
     cargaFirmas: function(){
       // console.log('modalFirmas.cargaFirmas()');
       let codReligioso = this.datosReligioso.codReligioso.trim();
       // console.log('codReligioso = ', codReligioso );
-      let path =  './../media/sellos/';
       let self = this;
       let url = this.host+'/religiosos/firmas/'+codReligioso;
       axios.get(url)
       .then(function(response){ 
         let tmp = [];
         response.data.forEach(function(img){
-          img.firma = path+img.firma.trim();
+          img.firma = self.pathImg+img.firma.trim();
           tmp.push(img);
         })
         self.imagenes = tmp;
@@ -116,6 +120,9 @@ export default {
       );
     }
   },
+  created: function(){
+    this.setComponent();
+  },  
   mounted: function(){
     this.cargaFirmas();
     // this.firmas_aws();
@@ -126,13 +133,27 @@ export default {
 <style scoped>
 .modal-container {
     width: 45rem;
-    height: 31rem;
+    height:55%;
 } 
+.modal-header {
+    height: 10%;
+}
 .modal-body {
-  width: 100%;
+  /* width: 100%; */
   height: 80%;
   background-color: lightgray;
+  margin: 5px 0;
 
 }
+.img-firma{
+  width: 100%;
+  height: 100%;
+}
+.modal-footer {
+    height: 10%;  
+}
+.noImgs {
+  font-size: 1.5rem;
 
+}
 </style>

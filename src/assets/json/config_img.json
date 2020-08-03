@@ -1,4 +1,4 @@
 {
-    "pathSellos": "/media/sellos/",
-    "pathFirmas": "/media/firmas/"
+    "pathSellos": "./../media/sellos/",
+    "pathFirmas": "./../media/firmas/"
 }
