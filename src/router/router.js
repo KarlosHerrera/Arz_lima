@@ -18,6 +18,7 @@ import AsigReligiosos from '../components/AsigReligiosos';
 import ListaLegDocs from '../components/ListaLegDocs';
 import DetalleLegDocs from '../components/DetalleLegDocs';
 import Instituciones from '@/components/Instituciones';
+import Religiosos from '@/components/Religiosos';
 
 import Jerarquias from '../components/Jerarquias';
 import Sacramentos from '../components/Sacramentos';
@@ -91,7 +92,12 @@ const routes = [
     path: '/instituciones',
     name: 'instituciones',
     component: Instituciones
-  }, 
+  },
+  {
+  path: '/religiosos',
+  name: 'religiosos',
+  component: Religiosos,
+  },
   {
     path: '/tipoInstitucion',
     name: 'tipoInstitucion',

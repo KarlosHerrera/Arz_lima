@@ -2,15 +2,15 @@
 <template>
 <div class="content d-flex flex-column">
   <div class="content-title">
-        <div class='titulo_2 align_center' v-if='view_content'>Mantenimiento de Instituciones</div>   
-        <div class='titulo_2 align_center' v-if='!view_content'>{{title_detail}} Institucion</div>
+        <div class='titulo_2 align_center' v-if='view_content'>Mantenimiento de Religiosos</div>   
+        <div class='titulo_2 align_center' v-if='!view_content'>{{title_detail}} Religioso</div>
     <div class="headerTitle d-flex justify-content-between">
         <div class='d-flex justify-content-start align-items-center' v-if='view_content' >
             <button class='btn btn-sm btn_1 btn_new' @click='createItem'>Nuevo</button>
         </div>         
 
         <div class='d-flex justify-content-end' >  
-            <filtra-tabla v-if='view_content' :recordList="Instituciones" :colsSearch='searchInstituciones' @filter_Process="filterProcessInst" ></filtra-tabla>
+            <filtra-tabla v-if='view_content' :recordList="Religiosos" :colsSearch='searchReligioso' @filter_Process="filterProcess" ></filtra-tabla>
         </div>
     </div>    
   </div>
@@ -20,22 +20,22 @@
       <thead class='rounded-top'>
         <tr>
            <th>Cod.<span></span></th>
-          <th>Institucion<span></span></th>
-          <th>Tipo Institucion<span></span></th>
+          <th>Religioso<span></span></th>
+          <th>Jerarquia<span></span></th>
           <th>Direccion<span></span></th>
           <th class='text-center'>Opciones</th>
         </tr>
       </thead>
       <tbody id='bodyTable' class='' >
-        <tr v-for="(doc, index) in tmpInstituciones" :key='index' @dblclick='detalleItem(index)' @mouseover='itemFocus(index)' @blur='itemBlur'>
-          <td> {{ doc.codInstitucion}} </td>
-          <td> {{ doc.nombreInstitucion | frmLongMaxima(40) }} </td>
-          <td> {{ doc.nombreTipo | frmLongMaxima(15) }} </td>
+        <tr v-for="(doc, index) in tmpReligiosos" :key='index' @dblclick='detalleItem(index)' @mouseover='itemFocus(index)' @blur='itemBlur'>
+          <td> {{ doc.codReligioso}} </td>
+          <td> {{ doc.apellidosNombres | frmLongMaxima(40) }} </td>
+          <td> {{ doc.nombreJerarquia | frmLongMaxima(15) }} </td>
           <td> {{ doc.direccion | frmLongMaxima(30) }} </td>
           <td class=' d-flex justify-content-center align-items-center'>
             <button class='btn btn-sm btn_actions btn_1' @click='updateItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Editar</button>
             <button class='btn btn-sm btn_actions btn_1' @click='deleteItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Anular</button>
-            <button class='btn btn-sm btn_actions btn_1' @click='sellosItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Sellos</button>
+            <button class='btn btn-sm btn_actions btn_1' @click='firmasItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Firmas</button>
           </td>
         </tr>
       </tbody>
@@ -44,19 +44,19 @@
   <!-- Detail -->
   <div class='detailRecord d-flex' v-else>
     <div class='col-12 content-form d-flex flex-column'>
-      <form id='formInstitucion' class='formBase' onsubmit="return false;" novalidate autocomplete="nope" :disabled='true' data-btnEnable='btnSave'>
+      <form id='formReligioso' class='formBase' onsubmit="return false;" novalidate autocomplete="nope" data-btnEnable='btnSave'>
           <div class="form-row justify-content-between">
             <div class="col-2 form-group">
-              <label for="codInstitucion" class="formControlLabel">Codigo*</label>
-              <input  type="text" name="codInstitucion" v-model="rec.codInstitucion" class="form-control form-control-sm bold" 
-                       ref='codInstitucion' placeholder=""  disabled
+              <label for="codReligioso" class="formControlLabel">Codigo*</label>
+              <input  type="text" name="codReligioso" v-model="rec.codReligioso" class="form-control form-control-sm" 
+                      id="codReligioso" placeholder=""  disabled
                       @input="input($event.target)" pattern="^[1-9]{1}[0-9]{1,2}$" autocomplete='off' required>
               <small id="" class="form-text text-muted"></small>
             </div>
             <div class="col-6 form-group">
-              <label for="" class="formControlLabel">Tipo*</label>
-              <v-select v-model="rec.tipoInstitucion" label="nombreTipo" id='tipoInstitucion'
-              :options="tiposInstitucion" :reduce="ele => ele.tipoInstitucion" placeholder=''
+              <label for="" class="formControlLabel">Jerarquia*</label>
+              <v-select v-model="rec.codJerarquia" label="nombreJerarquia" id='codJerarquia'
+              :options="Jerarquias" :reduce="ele => ele.codJerarquia" placeholder=''
               :clearable="false" class='miClase'
               >
               <div slot="no-options">No existen opciones!</div>
@@ -66,9 +66,9 @@
 
           <div class="form-row">
               <div class="col-12 form-group">
-                  <label for="nombreInstitucion" class="formControlLabel">Nombre*</label>
-                    <input type="text" name='nombreInstitucion' v-model="rec.nombreInstitucion" class="form-control form-control-sm" 
-                      id='nombreInstitucion' placeholder="" required
+                  <label for="nombreReligioso" class="formControlLabel">Nombre*</label>
+                    <input type="text" name='nombreInstitucion' v-model="rec.apellidosNombres" class="form-control form-control-sm" 
+                      id='apellidosNombres' placeholder="" required
                       @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 -./]{1,59}$" autocomplete='off' data-upper='1c'>
                   <small id="" class="form-text text-muted"></small>
               </div>          
@@ -132,9 +132,9 @@
                   <small id="" class="form-text text-muted"></small>
               </div>
               <div class="col-3 form-group">
-                  <label for="fax" class="formControlLabel">Fax</label>
-                  <input type="text" name='fax' v-model="rec.fax" class="form-control form-control-sm"
-                        id='fax' placeholder=""
+                  <label for="movil" class="formControlLabel">Movil</label>
+                  <input type="text" name='fax' v-model="rec.movil" class="form-control form-control-sm"
+                        id='movil' placeholder=""
                       @input="input($event.target)" pattern="^[1-9]{1}[0-9-]{5,9}$" autocomplete='off'>
                   <small id="" class="form-text text-muted"></small>
               </div>
@@ -148,32 +148,23 @@
                   <small id="" class="form-text text-muted"></small>
               </div>
           </div> 
-          <div class="form-row">
-              <div class="col-12 form-group">
-                  <label for="web" class="formControlLabel">Pagina web</label>
-                  <input type="text" name='web' v-model="rec.web" class="form-control form-control-sm"
-                      id='web' placeholder=""
-                      @input="input($event.target)" pattern1="/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/" autocomplete='off'>
-                  <small id="" class="form-text text-muted"></small>
-              </div>
-          </div> 
       </form> 
       <opciones-crud class='row' :crud="crud" @confirm_Create="confirmCreate" @confirm_Update="confirmUpdate" @confirm_Delete="confirmDelete" @exit_Form="exitForm" @reset_Form='resetForm'></opciones-crud>
     </div>
   </div>
   <!-- <button class='btn btn-sm btn_1 btn_new' @click='evalua'>Evalua</button>  -->
   <div class="content-footer align-items-end"  v-if='view_content'>
-    <div class='itemCurrent '>Items: {{ itemCurrent}}/{{tmpInstituciones.length}} </div>
+    <div class='itemCurrent '>Items: {{ itemCurrent}}/{{tmpReligiosos.length}} </div>
   </div>
-  <sellos-crud :datosInstitucion="datosInstitucion" v-if="verSellosCrud" @close='verSellosCrud=false'></sellos-crud>
-  <modal-sellos :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></modal-sellos>  
+  <firmas-crud :datosReligioso="datosRweligioso" v-if="verFirmasCrud" @close='verFirmasCrud=false'></firmas-crud>
+  <modal-firmas :datosReligioso="datosReligioso" v-if="verFirmas" @close='verFirmas=false'></modal-firmas>  
 </div>
 </template>
 
 <script>
-console.log('<< Instituciones.vue >>');
+console.log('<< Religiosos.vue >>');
 
-const idForm = 'formInstitucion';
+const idForm = 'formReligioso';
 import axios from 'axios';
 import { disabledForm, disabledElementId } from '@/assets/js/lib';
 import { evalInput, evalString, evalValue } from '@/assets/js/form';
@@ -181,8 +172,8 @@ import { evalInput, evalString, evalValue } from '@/assets/js/form';
 import moment from 'moment';
 moment.locale('es');
 
-import modalSellos from '@/components/modalSellos.vue';
-import SellosCrud from '@/components/SellosCrud.vue';
+import modalFirmas from '@/components/modalFirmas.vue';
+import FirmasCrud from '@/components/FirmasCrud.vue';
 
 import opcionesCrud from '@/components/opciones-crud.vue'
 
@@ -193,17 +184,17 @@ const swal2 = Swal.mixin(optAlert);
 import { mapState } from 'vuex';
 
 export default {
-  name: 'Instituciones',
+  name: 'Religiosos',
   components: {
-    SellosCrud,
-    modalSellos,
+    FirmasCrud,
+    modalFirmas,
     opcionesCrud
   },  
   data(){
     return {
-      Instituciones: [],
-      tmpInstituciones: [],
-      tiposInstitucion: [],
+      Religiosos: [],
+      tmpReligiosos: [],
+      Jerarquias: [],
       Departamentos: [],
       Provincias: [],
       tmpProvincias: [],
@@ -214,16 +205,15 @@ export default {
       title_detail: '',
       // lenguaje: es,
       fechaHoy: new Date(),   // UTCs
-      verSellos: false,
-      verSellosCrud: false,
-      codInstitucion: '',
-      nombreInstitucion: '',
-      datosInstitucion: {},      
-      searchInstituciones: ['codInstitucion','nombreInstitucion','nombreTipo','direccion'],
+      verFirmas: false,
+      verFirmasCrud: false,
+      codReligioso: '',
+      apellidosNombres: '',
+      datosReligioso: {},      
+      searchReligioso: ['codReligioso','apellidosNombres','nombreJerarquia','direccion'],
       view_content: true,
       itemCurrent: 0,
-      observacionesCrud: '',
-      isHabForm: true
+      observacionesCrud: ''
     }
   },  
   computed: { // Expone state al template
@@ -233,7 +223,7 @@ export default {
     setComponent(){
     },
     list_view(){
- 
+       
       if( this.crud == 'C' ) {
         this.title_detail = 'Nueva'; 
         // this.resetForm();
@@ -251,15 +241,15 @@ export default {
         this.load_relation();
       }
       if( this.crud == 'U') {
-        disabledElementId('codInstitucion', true);
-        disabledForm(idForm, true, ['codInstitucion']); // atributo 'name'
+        disabledElementId('codReligioso', true);
+        disabledForm(idForm, true, ['codReligioso']); // atributo 'name'
         this.load_relation();
       }
       if( this.crud == 'D' ) {
         disabledForm(idForm, true); // atributo 'name'
         this.load_relation();
       }
-      this.view_content = false;
+        this.view_content = false;
 
     },
     load_relation(){
@@ -275,30 +265,23 @@ export default {
       // console.dir(objForm);
       let obs='';
       let evaluacion = true;
-      if( !evalValue('codInstitucion') ) { obs+='*Codigo '; evaluacion = false}
-      if( !evalValue('nombreInstitucion') ) { obs+=' *Nombre '; evaluacion = false}
-      if( !evalString(this.rec.tipoInstitucion) ) {obs+=' *Tipo'; evaluacion = false}
+      if( !evalValue('codReligioso') ) { obs+='*Codigo '; evaluacion = false}
+      if( !evalValue('apellidosNombres') ) { obs+=' *Nombre '; evaluacion = false}
+      if( !evalString(this.rec.codJerarquia) ) {obs+=' *Jerarquia'; evaluacion = false}
       if( !evalString(this.rec.codDepartamento) ) {obs+=' *Departamento'; evaluacion = false}
       if( !evalString(this.rec.codProvincia) ) {obs+=' *Provincia'; evaluacion = false}
       if( !evalString(this.rec.codDistrito) ) {obs+=' *Distrito'; evaluacion = false}
       if( !evalValue('telefono1') ) {obs+=' *Telefono 1'; evaluacion = false}
       if( !evalValue('telefono2') ) {obs+=' *Telefono 2'; evaluacion = false}
-      if( !evalValue('fax') ) {obs+=' *Fax'; evaluacion = false;}
+      if( !evalValue('movil') ) {obs+=' *Movil'; evaluacion = false;}
       if( !evalValue('email') ) {obs+=' *Correo'; evaluacion = false;}
-      if( !evalValue('web') ) {obs+=' *Pagina WEB'; evaluacion = false;}
       this.observacionesCrud = obs;
       return evaluacion;
     },
     detalleItem(index){
       console.log(`detalleItem(${index})`);
       this.crud = 'R';
-      this.rec = this.tmpInstituciones[index];
-      this.list_view();
-    },
-    createItem(){
-      // console.log('createItem()');
-      this.crud = 'C';
-      this.rec = {}
+      this.rec = this.tmpReligiosos[index];
       this.list_view();
     },
     evalua(){
@@ -318,18 +301,23 @@ export default {
       }      
 
     },
+    createItem(){
+      // console.log('createItem()');
+      this.crud = 'C';
+      this.rec = {}
+      this.list_view();
+    },
     confirmCreate: async function(){
       // console.log('confirmCreate()');
-      let title = 'Nueva Institucion';
+      let title = 'Nuevo Religioso';
 
       if ( !this.evaluaItem() ) { 
         swal2.fire({title: title, text: 'Verique los datos ingresados: '+this.observacionesCrud });
-        return false;
       }else{
         // swal2.fire({title: title, text: 'Datos OK.'});
         this.rec.creado_usuario = this.$store.state.User_Name;
-        let url = this.host+'/instituciones/create';
-        console.log('url = ', url);
+        let url = this.host+'/religiosos/create';
+        // console.log('url = ', url);
         let options = {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -339,8 +327,8 @@ export default {
           let data = await fetch(url, options);
           let res = await data.json();
           let text = (res.status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!'; 
-          if( res.status ) this.loadInstituciones();
-          await swal2.fire({ title: 'Nueva Institucion: ', text: text });
+          if( res.status ) this.loadReligiosos();
+          await swal2.fire({ title: 'Nuevo Religioso: ', text: text });
           this.exitForm();    // Componente padre
         } catch (error) {
             console.log('Error:', error);
@@ -350,35 +338,34 @@ export default {
     updateItem(index){
       // console.log('updateItem()');
       this.crud = 'U';
-      this.rec = this.tmpInstituciones[index];
+      this.rec = this.tmpReligiosos[index];
       this.list_view();
     },
     confirmUpdate: async function(){
       // console.log('confirmUpdate()');
-      let title = 'Edita Institucion';
+      let title = 'Edita Religioso';
       if ( !this.evaluaItem() ) { 
         swal2.fire({title: title, text: 'Verique los datos ingresados: '+this.observacionesCrud });
         return false;
       }else{
         // swal2.fire({title: title, text: 'Datos OK.'});
         let data = {  
-          codInstitucion: this.rec.codInstitucion, 
-          nombreInstitucion: this.rec.nombreInstitucion,
+          codReligioso: this.rec.codReligioso, 
+          apellidosNombres: this.rec.apellidosNombres,
           direccion: this.rec.direccion,
-          tipoInstitucion: this.rec.tipoInstitucion,
+          codJerarquia: this.rec.codJerarquia,
           codDepartamento: this.rec.codDepartamento,
           codProvincia: this.rec.codProvincia,          
           codDistrito: this.rec.codDistrito,
           telefono1: this.rec.telefono1,
           telefono2: this.rec.telefono2,
-          fax: this.rec.fax,
+          movil: this.rec.movil,
           email: this.rec.email,
-          web: this.rec.web,
           modificado: new Date(),
           modificado_usuario: this.$store.state.User_Name
         };  
         // console.log('data: ', data)
-        let url = this.host+'/instituciones/update';
+        let url = this.host+'/religiosos/update';
         let options = {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -388,7 +375,7 @@ export default {
           let text = '';
           let data = await fetch(url, options);
           let res = await data.json();
-          if( res.status ) this.loadInstituciones();
+          if( res.status ) this.loadReligiosos();
           text = (res.status)? 'Modificado Satisfactoriamente.': 'Fallo modificacion!';
           await swal2.fire({title: title, text: text});
           this.exitForm();
@@ -401,16 +388,16 @@ export default {
     deleteItem(index){
       // console.log('deleteItem()');
       this.crud = 'D';
-      this.rec = this.tmpInstituciones[index];
+      this.rec = this.tmpReligiosos[index];
       this.list_view();
     },
     confirmDelete: async function(){
       // console.log('confirmDelete()');
-      let title = 'Anula Institucion';
+      let title = 'Anula Religioso';
       
       this.rec.eliminado = new Date();
       this.rec.eliminado_usuario =  this.$store.state.User_Name;
-      let url = this.host+'/instituciones/delete';
+      let url = this.host+'/religiosos/delete';
       let options = {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
@@ -420,7 +407,7 @@ export default {
         let text = '';
         let data = await fetch(url, options);
         let res = await data.json();
-        if( res.status ) this.loadInstituciones();          
+        if( res.status ) this.loadReligiosos();          
         text = (res.status)? 'Anulado Satisfactoriamente!': 'Fallo la anulacion!';
         await swal2.fire({title: title, text: text});
         disabledForm(idForm, false);
@@ -430,22 +417,23 @@ export default {
       }
 
     },
-    sellosItem(index){
-      console.log(`sellosItem(${index})`);
-      this.verSellosCrud = !this.verSellosCrud;
-      this.datosInstitucion.codInstitucion = this.tmpInstituciones[index].codInstitucion;
-      this.datosInstitucion.nombreInstitucion = this.tmpInstituciones[index].nombreInstitucion;
+    firmasItem(index){
+      console.log(`firmasItem(${index})`);
+      alert('Opcion en proceso!')
+    //   this.verFirmasCrud = !this.verFirmasCrud;
+    //   this.datosReligioso.codReligioso = this.tmpReligiosos[index].codReligioso;
+    //   this.datosReligioso.apellidosNombres = this.tmpReligiosos[index].apellidosNombres;
 
     },
-    imgSellos(index){
-      console.log(`imgSellos(${index})`);
-      this.verSellos = !this.verSellos;
-      this.datosInstitucion.codInstitucion = this.rec.codInstitucion;
-      this.datosInstitucion.nombreInstitucion = this.rec.nombreInstitucion;
+    imgFirmas(index){
+      console.log(`imgFirma(${index})`);
+      this.verFirmas = !this.verFirmas;
+      this.datosReligioso.codReligioso = this.rec.codReligioso;
+      this.datosReligioso.apellidosNombres = this.rec.apellidosNombres;
     },
-    async loadInstituciones(){
+    async loadReligiosos(){
       // console.log('loadInstituciones()');
-      let url = this.host+'/instituciones/all_rel';
+      let url = this.host+'/religiosos/all_rel';
       let options = {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
@@ -453,21 +441,21 @@ export default {
       try {
           let data = await fetch(url, options);
           let res = await data.json();
-          this.Instituciones = res[0];
-          this.tmpInstituciones = res[0];
+          this.Religiosos = res[0];
+          this.tmpReligiosos = res[0];
       } catch (error) {
           console.log('Error:', error);
       }      
 
     },
-    async loadTiposInstitucion(){
+    async loadJerarquias(){
       // console.log('loadTipoInstituciones()');
       // let self = this;
-      let url = this.host+'/tablas/tipoinstitucion/all';
+      let url = this.host+'/tablas/jerarquias/all';
       try {
         let data = await fetch(url);
         let res = await data.json();
-        this.tiposInstitucion = res;
+        this.Jerarquias = res;
       } catch (error) { console.log('Error:', error);
       }
     },      
@@ -505,11 +493,6 @@ export default {
       // console.log(`selDepartamento(${value})`);
       // let codInstitucion = value.srcElement.value;
       let codDepartamento = value;
-      // this.rec.codProvincia = '';
-      // this.rec.codDistrito = '';
-      // console.log('Valor = ', value.srcElement.value);
-      // console.log('codDepartamento = ', codDepartamento);
-      // console.log('Provincias = ', this.Provincias.length );
       this.tmpProvincias = this.Provincias.filter( ele => ele.codDepartamento == codDepartamento);
       // console.log('tmpProvinckas => ', this.tmpProvincias.length);
     },
@@ -523,17 +506,16 @@ export default {
     },
     exitForm: function(){
         this.view_content = true;
-    //   this.$router.go(-1);
     }, 
-    generaCodigo: function(){
+    generaCodigo: async function(){
       console.log('generaCodigo()');
       let self = this;
-      let url = this.host+'/instituciones/lastCode';
-      axios.get(url)
+      let url = this.host+'/religiosos/lastCode';
+      await axios.get(url)
       .then(function(response){ 
         let code = parseInt(response.data.code, 10) + 1;
-        self.rec.codInstitucion =  code+'';
-        // console.log('code=>', code)
+        self.rec.codReligioso =  code+'';
+        console.log('code=>', self.rec.codReligioso);
       })
       .catch(function(error) {
         console.log(error);
@@ -546,28 +528,22 @@ export default {
     itemBlur(){
       this.itemCurrent = 0;
     },    
-    filterProcessInst: function(value){
+    filterProcess: function(value){
       // console.log('value = ', value);
-      this.tmpInstituciones = value;
+      this.tmpReligiosos = value;
     }    
   },
    // Hooks
   created: function(){
-    this.loadInstituciones();
-    this.loadTiposInstitucion();
+    this.loadReligiosos();
+    this.loadJerarquias();
     this.loadDepartamentos();
     this.loadProvincias();
     this.loadDistritos();
 
   },
   mounted: function(){
-    console.log('mounted()');
     this.setComponent();
-    // let obj = document.getElementById('formInstitucion');
-//  obj = this.$refs.codInstitucion;
- let valor = this.$refs.codInstitucion;
- console.log('list_iew():')
- console.log('valor: ', valor);
   }   
 }
 </script>

@@ -1,32 +1,30 @@
 // tipoInstitucion.vue
 <template>
 
-<div class="content aling"  style='background: teal'>
-  <div class="content-title align-items-center" style='background: plum'>
+<div class="content"  style1='background: teal'>
+  <div class="content-title align-items-center" style1='background: plum'>
        <div class='titulo-1 align_center'>Mantenimiento de Tipo de Instituciones</div>
     <div class="headerTitle d-flex justify-content-between">
-        <!-- <div class='d-flex justify-content-start align-items-center' v-if='view_content' >
-            <button class='btn btn-sm btn_1 btn_new' @click='createItem'>Nuevo</button>
-        </div>         
-        <div class='d-flex justify-content-end' >  
-            <filtra-tabla v-if='view_content' :recordList="Instituciones" :colsSearch='searchInstituciones' @filter_Process="filterProcessInst" ></filtra-tabla>
-        </div>  -->
     </div>    
   </div>
-  <div class='content-body d-flex justify-content-between' style='background: silver' >
-      <div class='list' style='background: gray'>
-        <div class="listHead" style='background: coral'>
-            <div class="titulo-2">Lista</div>
+  <div class='content-body d-flex justify-content-between' style1='background: silver' >
+      <div class='list' style1='background: gray'>
+        <div class="listHead d-flex flex-column" style1='background: coral'>
+            <div class="titulo-2"><div>Lista</div></div>
+            <div class='d-flex justify-content-between' >  
+              <button class='btn btn-sm btn_1 btn_new' @click='createItem'>Nuevo</button>
+              <filtra-tabla :recordList="tipoInstituciones" :colsSearch='searchLista' @filter_Process="filterProcess" ></filtra-tabla>
+            </div>
         </div>
-        <div class="listBody" style='background: IndianRed'>
-            <table class='table table-sm table-bordered table-hover table-1'>
-                <thead class='rounded-top'>
-                <tr class='cabeceraTabla'>
-                    <th>Codigo<span></span></th>
-                    <th>Tipo Institucion<span></span></th>
-                    <th class='text-center'>Opciones</th>
-                </tr>
-                </thead>
+        <div class="listBody" style1='background: IndianRed'>
+          <table class='table table-sm table-bordered table-hover table-1'>
+            <thead class='rounded-top'>
+            <tr class='cabeceraTabla'>
+                <th>Codigo<span></span></th>
+                <th>Tipo Institucion<span></span></th>
+                <th class='text-center'>Opciones</th>
+            </tr>
+            </thead>
             <tbody id='bodyTable' class='' >
                 <tr v-for="(doc, index) in tmpTipoInstituciones" :key='index' clase='cuerpoTabla'  @click='detalleItem(index)' @mouseover='itemFocus(index)' @blur='itemBlur'>
                     <td style='width: 10%'> {{ doc.tipoInstitucion}} </td>
@@ -37,18 +35,18 @@
                     </td>
                 </tr>
             </tbody>
-            </table>              
+          </table>              
         </div>
-        <div class="listFoot d-flex align-items-center"  style='background: coral'>
+        <div class="listFoot d-flex align-items-center"  style1='background: coral'>
             <div class='items'>Items: {{ itemCurrent }}/{{ tmpTipoInstituciones.length }}</div>
         </div>
       </div>
-      <div class='detail' style='background: white'>
-          <div class="detailHead " style='background: SandyBrown'>
+      <div class='detail' style1='background: white'>
+          <div class="detailHead " style1='background: SandyBrown'>
               <div class='titulo-2'>Detalle</div>
           </div>
-          <div class="formulario" style='background: whitesmoke'>
-            <div class='formularioTitulo titulo_2 align_center'>{{ title_detail }} Tipo</div>  
+          <div class="formulario" style1='background: whitesmoke'>
+            <div class='formularioTitulo titulo_2 align_center'>{{ title_detail }} Tipo-Institucion</div>  
             <form id='formTipoInstitucion' class='formBase' onsubmit="return false;" novalidate autocomplete="nope" data-btnEnable='btnSave'>
                 <div class="form-row">
                     <div class="col-2 form-group"> 
@@ -73,11 +71,9 @@
           </div>
       </div>
   </div>
-  <!-- <button class='btn btn-sm btn_1 btn_new' @click='evalua'>Evalua</button>  -->
-  <div class="content-footer" style='background: aqua'>
+  <div class="content-footer" style1='background: aqua'>
     <!-- <div class='itemCurrent '>Items: {{ itemCurrent}}/{{tmpInstituciones.length}} </div> -->
   </div>
-
 </div> 
 
 </template>
@@ -110,7 +106,7 @@ export default {
         title_detail: '',
         // lenguaje: es,
         fechaHoy: new Date(),   // UTCs
-        searchInstituciones: ['tipoInstitucion','nombreTipo'],
+        searchLista: ['tipoInstitucion','nombreTipo'],
         observacionesCrud: '',
         itemCurrent: 0      
  
@@ -249,10 +245,10 @@ export default {
       console.log('this.idForm', idForm);
       document.getElementById(this.idForm).reset();
     },
-    // filterProcess: function(value){
-      // console.log('value = ', value);
-    //   this.tmpInstituciones = value;
-    // }        
+    filterProcess: function(value){
+      console.log('value = ', value);
+      this.tmpTipoInstituciones = value;
+    }        
   },
   created: function(){
     this.setComponent();
@@ -270,7 +266,7 @@ export default {
 <style scoped>
 @import url('./../assets/css/scroll_bar.css');
 .content {
-width: 80%;
+  width: 80%;
   height: 90%;  
 }
 .content-title {
@@ -284,35 +280,41 @@ width: 80%;
     margin: 0.25rem 0.1rem;
 }
 .content-footer {
-    height: 5%;
+    height: 1%;
     padding: 2px;
     margin: 0.25rem 0.1rem;
 }
 .list, .detail {
     padding-left: 0;
     padding-right: 0;
+    border: 1px solid darkgray;
 }
-.list {
+.list, .detail {
     width: 49.5%;
     /* margin: 3px; */
 }
 .listHead, .detailHead {
- height: 10%;
+ height: 14%;
 }
 .listBody {
- height: 85%;
+  height: 85%;
+  background-color: whitesmoke;
+  padding: 3px;
 }
 .listFoot {
  height: 5%;
+ background-color: dartgray;
 }
-.detail {
-    width: 49.5%;
-}
+
 .formulario {
     padding: 3px;
+     height: 0%;
+ background-color: whitesmoke;
+ border: 1px;
 }
 .formularioTitulo {
-     height: 1.5rem !important;      
+     height: 1.5rem !important;   
+     background-color: silver;   
 }
 .tabla-1 {
     padding: 3px;
@@ -322,9 +324,11 @@ width: 80%;
     font-weight: 600;
 }
 .titulo-2 {
-    height: 8%;
+  font-size: 1.1rem;
+    height: 30%;
     text-align: center;
     padding: 5px 0;
+    font-weight: 600;
 }
 
 .tabla, .formulario {
@@ -350,6 +354,9 @@ padding: 2px 3px;
 }
 tbody tr {
      height: 1.5rem !important;   
+}
+.items {
+  padding: 0 2px;
 }
 .btn_actions {
   height: 1.5rem !important;       

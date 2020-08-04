@@ -2,19 +2,20 @@
 
 export function disabledElementId(eleId, value){
 	console.log(`disabledElementId(${ eleId }, ${value})`); 
-	let sintaxis ='disableElement(eleId string , value boolean)'
+	let sintaxis ='disableElement(eleId string , value boolean)';
 
 	// console.log('Id = ', Id, 'string:', is_string(Id) );
 	if( eleId && !typeof(eleId) == 'string' ) { console.log(sintaxis+' => eleId'); return ''; }
 	let elem = document.getElementById(eleId);
-	console.dir(elem);
-	if( !elem ){ 
-		// console.log('disableElement (Element ='+eleId+'), not found.'); 
-		return null; 
-	}
-	// console.dir(elem);  
-	elem.disabled = value;     
-	// element.classList.      
+	console.log(`disabledElementI(${eleId})`, elem);
+	if( !elem || elem == null ){ 
+		console.log('disableElement(Element ='+eleId+'), not found!'); 
+		// console.log(this.$refs.codInstitucion);
+	}else{
+		console.dir('disableElement(Element ='+eleId+'), found!');  
+		elem.disabled = value;     
+		// element.classList.  
+	}    
 }
 export function disabledForm(idForm, YesNo, ElementsForm){
 	console.log(`disabledForm(${idForm}, ${YesNo}, ${ElementsForm})`);
@@ -28,11 +29,11 @@ export function disabledForm(idForm, YesNo, ElementsForm){
     }
 	let objForm = document.getElementById(idForm);
 	if( !objForm ){ console.log('Form = '+idForm+', not found.'); return null; }
-	objForm = objForm.elements;
-	console.dir(objForm);
+	// objForm = objForm.elements;
+	// console.dir(objForm);
     // if( objForm.nodeName !== 'FORM' ){ console.log('Form = '+idForm+', no es un FORM'); return null;}
     // console.dir(objForm);
-    if( !ElementsForm ){        // Todos los elementos del form (Sin parametro ElementsForm)
+    if( !ElementsForm || ElementsForm == null ){        // Todos los elementos del form (Sin parametro ElementsForm)
         for(let e=0; e < objForm.length ; e++){
             // console.log(objForm[e]);
             objForm[e].disabled = YesNo;

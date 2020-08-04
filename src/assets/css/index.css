@@ -178,7 +178,9 @@ div, form, input, table, nav {
 .void {
     color: rgb(160, 110, 110);
 }
-
+.bold {
+    font-weight: 600;
+}
 button, input, select {
     /* border: 0.066rem solid rgb(161, 158, 158) !important; */
 }

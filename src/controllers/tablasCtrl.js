@@ -26,6 +26,15 @@ router.get('/distritos/all', (req, res) => {
 });
 // --- Estado Religiosos --- //
 // --- Jerarquias --- //
+router.get('/jerarquias/all', (req, res) => {
+    console.log('tablas/jerarquias/all');
+    let sql = `SELECT * FROM jerarquias WHERE activo='S' ORDER BY nombreJerarquia`;                
+    conn.query(sql, function(err, rows){
+        if(err) console.log('err => ', err);
+        res.status(200).json(rows);
+    });
+
+});
 // --- Provincias --- //
 router.get('/provincias/all', (req, res) => {
     console.log('tablas/provincias/all');

@@ -4,8 +4,8 @@
   <div class="content-title ">
     <div class='headerTitle'>
       <div class='titulo_2 col-12'>{{ title_detail }} Documento</div>
-      Inst:{{ rec.codInstitucion }} - 
-      Rel:{{ rec.codReligioso }}
+      <!-- Inst:{{ rec.codInstitucion }} - 
+      Rel:{{ rec.codReligioso }} -->
     </div>
   </div>
   <!-- <hr> -->
@@ -236,16 +236,21 @@ export default {
         disabledForm(idForm, true);
         disabledElementId('docLeg', false);
         this.load_tmpReligiosos();
-
+        this.numSellos();
+        this.numFirmas();
       }
       if( this.crud == 'R' ) {
         disabledElementId('btnSellos', false);
         disabledElementId('btnFirmas', false);
         this.load_tmpReligiosos();
+        this.numSellos();
+        this.numFirmas();        
       }      
       if( this.crud == 'U' ) {
         disabledForm(idForm, true, ['docLeg']); // atributo 'name'
         this.load_tmpReligiosos();
+        this.numSellos();
+        this.numFirmas();        
       }
     },
     load_tmpReligiosos(){
@@ -264,6 +269,24 @@ export default {
       document.getElementById(idForm).reset();
 
     },
+    evaluaItem(){
+      // let objForm = document.getElementById(idForm);
+      // console.dir(objForm);
+      // let obs='';
+      // let evaluacion = true;
+      // if( !evalValue('codReligioso') ) { obs+='*Codigo '; evaluacion = false}
+      // if( !evalValue('apellidosNombres') ) { obs+=' *Nombre '; evaluacion = false}
+      // if( !evalString(this.rec.codJerarquia) ) {obs+=' *Jerarquia'; evaluacion = false}
+      // if( !evalString(this.rec.codDepartamento) ) {obs+=' *Departamento'; evaluacion = false}
+      // if( !evalString(this.rec.codProvincia) ) {obs+=' *Provincia'; evaluacion = false}
+      // if( !evalString(this.rec.codDistrito) ) {obs+=' *Distrito'; evaluacion = false}
+      // if( !evalValue('telefono1') ) {obs+=' *Telefono 1'; evaluacion = false}
+      // if( !evalValue('telefono2') ) {obs+=' *Telefono 2'; evaluacion = false}
+      // if( !evalValue('movil') ) {obs+=' *Movil'; evaluacion = false;}
+      // if( !evalValue('email') ) {obs+=' *Correo'; evaluacion = false;}
+      // this.observacionesCrud = obs;
+      // return evaluacion;
+    },    
     confirmCreate: async function(){
       console.log('confirmCreate()');
       // let objForm = document.getElementById(idForm);

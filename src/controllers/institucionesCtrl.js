@@ -11,7 +11,7 @@ moment.locale('es');
 router.get('/lastCode',  (req, res) => {
     console.log('instituciones/lastCode');
  
-    let sql = "SELECT CAST(codInstitucion AS UNSIGNED) AS codigo FROM Instituciones ORDER BY codigo DESC LIMIT 1";
+    let sql = "SELECT CAST(codInstitucion AS UNSIGNED) AS codigo FROM instituciones ORDER BY codigo DESC LIMIT 1";
     conn.query(sql, function(err, rows){
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
