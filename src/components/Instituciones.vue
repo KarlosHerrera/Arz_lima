@@ -44,7 +44,7 @@
   <!-- Detail -->
   <div class='detailRecord d-flex' v-else>
     <div class='col-12 content-form d-flex flex-column'>
-      <form id='formInstitucion' class='formBase' onsubmit="return false;" novalidate autocomplete="nope" :disabled='true' data-btnEnable='btnSave'>
+      <form id='formInstitucion' ref='formInstitucion' class='formBase' onsubmit="return false;" novalidate autocomplete="nope" :disabled='true' data-btnEnable='btnSave'>
           <div class="form-row justify-content-between">
             <div class="col-2 form-group">
               <label for="codInstitucion" class="formControlLabel">Codigo*</label>
@@ -267,8 +267,9 @@ export default {
       this.selProvincia(this.rec.codProvincia)
     },
     resetForm: function(){
-      console.log('this.idForm', idForm);
-      document.getElementById(this.idForm).reset();
+      // this.$refs.formTipoInstitucion.reset();
+      this.$refs[idForm].reset();
+      
     },
     evaluaItem(){
       // let objForm = document.getElementById(idForm);

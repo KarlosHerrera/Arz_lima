@@ -8,32 +8,32 @@
     </div>    
   </div>
   <div class='content-body d-flex justify-content-between' style1='background: silver' >
-      <div class='list' style1='background: gray'>
+       <div class='list' style1='background: gray'>  <!--    -->
         <div class="listHead d-flex flex-column" style1='background: coral'>
-            <div class="titulo-2"><div>Lista</div></div>
-            <div class='d-flex justify-content-between' >  
-              <button class='btn btn-sm btn_1 btn_new' @click='createItem'>Nuevo</button>
-              <filtra-tabla :recordList="tipoInstituciones" :colsSearch='searchLista' @filter_Process="filterProcess" ></filtra-tabla>
-            </div>
+          <div class="titulo-2"><div>Lista</div></div>
+          <div class='d-flex justify-content-between align-items-end' >  
+            <button class='btn btn-sm btn_1 btn_new' @click='createItem'>Nuevo</button>
+            <filtra-tabla :recordList="tipoInstituciones" :colsSearch='searchList' @filter_Process="filterProcess" ></filtra-tabla>
+          </div>
         </div>
         <div class="listBody" style1='background: IndianRed'>
           <table class='table table-sm table-bordered table-hover table-1'>
             <thead class='rounded-top'>
-            <tr class='cabeceraTabla'>
+              <tr class='cabeceraTabla'>
                 <th>Codigo<span></span></th>
                 <th>Tipo Institucion<span></span></th>
                 <th class='text-center'>Opciones</th>
-            </tr>
+              </tr>
             </thead>
             <tbody id='bodyTable' class='' >
-                <tr v-for="(doc, index) in tmpTipoInstituciones" :key='index' clase='cuerpoTabla'  @click='detalleItem(index)' @mouseover='itemFocus(index)' @blur='itemBlur'>
-                    <td style='width: 10%'> {{ doc.tipoInstitucion}} </td>
-                    <td style='width: 60%' > {{ doc.nombreTipo | frmLongMaxima(20) }} </td>
-                    <td class='d-flex justify-content-center align-items-center'>
-                        <button class='btn btn-sm btn_actions btn_1' @click='updateItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Editar</button>
-                        <button class='btn btn-sm btn_actions btn_1' @click='deleteItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Anular</button>
-                    </td>
-                </tr>
+              <tr v-for="(doc, index) in tmpTipoInstituciones" :key='index' clase='cuerpoTabla'  @click='detalleItem(index)' @mouseover='itemFocus(index)' @blur='itemBlur'>
+                <td class='align_center' style='width: 10%'> {{ doc.tipoInstitucion}} </td>
+                <td style='width: 60%' > {{ doc.nombreTipo | frmLongMaxima(20) }} </td>
+                <td class='d-flex justify-content-center align-items-center'>
+                  <button class='btn btn-sm btn_actions btn_1' @click.stop='updateItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Editar</button>
+                  <button class='btn btn-sm btn_actions btn_1' @click.stop='deleteItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Anular</button>
+                </td>
+            </tr>
             </tbody>
           </table>              
         </div>
@@ -41,33 +41,36 @@
             <div class='items'>Items: {{ itemCurrent }}/{{ tmpTipoInstituciones.length }}</div>
         </div>
       </div>
-      <div class='detail' style1='background: white'>
+      <div class='detail' style1='background: white'>  <!--    -->
           <div class="detailHead " style1='background: SandyBrown'>
               <div class='titulo-2'>Detalle</div>
           </div>
-          <div class="formulario" style1='background: whitesmoke'>
-            <div class='formularioTitulo titulo_2 align_center'>{{ title_detail }} Tipo-Institucion</div>  
-            <form id='formTipoInstitucion' class='formBase' onsubmit="return false;" novalidate autocomplete="nope" data-btnEnable='btnSave'>
+          <div class="detailBody" style1='background: whitesmoke'>
+            <div class='formularioTitulo titulo_2 d-flex justify-content-center align-items-center'>
+              <span>{{ title_detail }} Tipo-Institucion</span>
+            </div> 
+            <form id='formTipoInstitucion' ref='formTipoInstitucion' class='formBase' onsubmit="return false;" novalidate  autocomplete="nope" data-btnEnable='btnSave'>
                 <div class="form-row">
                     <div class="col-2 form-group"> 
-                        <label for="ti" class="formControlLabel">Codigo*</label>
-                        <input type="text" name="tipoInstitucion" v-model="rec.tipoInstitucion" class="form-control form-control-sm" 
-                                id="tipoInstitucion" placeholder="" required disabled
+                        <label for="tipoInstitucion" class="formControlLabel">Codigo*</label>
+                        <input type="text" name="tipoInstitucion" v-model="rec.tipoInstitucion" class="form-control form-control-sm align_center" 
+                                id="tipoInstitucion" ref='tipoInstitucion' placeholder="" required disabled
                                 @input="input($event.target)" pattern="^[0-9]{2}$" autocomplete='off'>
                         <small id="" class="form-text text-muted"></small>
+
                     </div>
                 </div> 
                 <div class="form-row">
                     <div class="col-10 form-group">
-                        <label for="nombreInstitucion" class="formControlLabel">Nombre*</label>
+                        <label for="nombreTipo" class="formControlLabel">Nombre*</label>
                         <input type="text" name='nombreTipo' v-model="rec.nombreTipo" class="form-control form-control-sm" 
-                            id='nombreTipo' placeholder="" required
+                            id='nombreTipo' ref='nombreTipo' placeholder="" required :disabled='isDisabledForm'
                             @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 -./]{1,19}$" autocomplete='off' data-upper='1c'>
                         <small id="" class="form-text text-muted"></small>
                     </div>          
                 </div>
             </form> 
-            <crud-tabla class='row' :crud="crud" @confirm_Create="confirmCreate" @confirm_Update="confirmUpdate" @confirm_Delete="confirmDelete" @exit_Form="exitForm" @reset_Form='resetForm'></crud-tabla>
+            <crud-tabla  :crud="crud" @confirm_Create="confirmCreate" @confirm_Update="confirmUpdate" @confirm_Delete="confirmDelete" @cancel_Form="cancelForm" @reset_Form='resetForm'></crud-tabla>
           </div>
       </div>
   </div>
@@ -78,8 +81,9 @@
 
 </template>
 <script>
-console.log('<< tipoInstitucion >>');    
-const idForm='';
+console.log('<< tipoInstitucion >>');  
+
+const idForm='formTipoInstitucion';
 
 import axios from 'axios';
 // import { disabledForm, disabledElementId } from '@/assets/js/lib';
@@ -99,41 +103,41 @@ export default {
   },    
   data() {
     return {
-        tipoInstituciones: [],
-        tmpTipoInstituciones: [],
-        rec: {},
-        crud: '',
-        title_detail: '',
-        // lenguaje: es,
-        fechaHoy: new Date(),   // UTCs
-        searchLista: ['tipoInstitucion','nombreTipo'],
-        observacionesCrud: '',
-        itemCurrent: 0      
+      tipoInstituciones: [],
+      tmpTipoInstituciones: [],
+      rec: {},
+      crud: '',
+      title_detail: '',
+      fechaHoy: new Date(),   // UTCs
+      searchList: ['tipoInstitucion','nombreTipo'],
+      observacionesCrud: '',
+      itemCurrent: 0,
+      isDisabledForm: true,   
  
     }
   },
   computed: { // Expone state al template
-     ...mapState(['host', 'record']),
+     ...mapState(['host']),
   },  
   methods: {
     setComponent: function(){
 
     },
     crudDetalle(){
+      // console.log('crudDetalle()');
+      this.isDisabledForm = true;
       if( this.crud == 'C' ) {
         this.title_detail = 'Nuevo'; 
-        // this.resetForm();
-        this.generaCodigo();
-        // this.rec.codInstitucion='1002';
-        // this.rec.nombreInstitucion='AAANombre de Institucion 1002';
-        // this.rec.direccion='Direccion';
-        // this.rec.tipoInstitucion='03';
+        this.resetForm();
+        this.generaCodigo(); 
       }
       if( this.crud == 'R' ) this.title_detail = 'Datos';           
       if( this.crud == 'U' ) this.title_detail = 'Edita';
       if( this.crud == 'D' ) this.title_detail = 'Anula' ;
-
-
+        if( this.crud == 'C' || this.crud == 'U') {
+          this.isDisabledForm = false;
+          this.$refs.nombreTipo.focus();
+        }
     },
     evaluaItem(){
 
@@ -147,28 +151,52 @@ export default {
       return evaluacion;
     },    
     detalleItem(index){
+      // console.log('detalleItem()');
       this.crud = 'R';
       this.rec = this.tmpTipoInstituciones[index];
       this.crudDetalle();
     },
     createItem(){
-
+      this.crud = 'C';
+      this.rec = {};
+      this.crudDetalle();
     },
-    confirmCreate(){
-
-
-    },
-    updateItem(index){
-        this.crud = 'U';
-        this.rec = this.tmpTipoInstituciones[index];
-        this.crudDetalle();
-    },
-    async confirmUpdate(){
-      let title = 'Edita Tipo Institucion';
+    async confirmCreate(){
+      let title = 'Nueva Institucion';
+      let self = this;
       if ( !this.evaluaItem() ) { 
         swal2.fire({title: title, text: 'Verique los datos ingresados: '+this.observacionesCrud });
       }else{
-        // swal2.fire({title: title, text: 'Datos OK.'});
+        this.rec.creado_usuario = this.$store.state.User_Name;
+        let url = this.host+'/tablas/tipoinstitucion/create';
+        let options = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.rec)
+        };
+        try {
+          let data = await fetch(url, options);
+          let res = await data.json();
+          let text = (res.status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!'; 
+          self.crud = '';   
+          if( res.status ) this.loadTipoInstitucion(); 
+          await swal2.fire({ title: 'Nueva Institucion: ', text: text });
+        } catch (error) {
+            console.log('Error:', error);
+        }    
+      }  
+    },
+    updateItem(index){
+      this.crud = 'U';
+      this.rec = this.tmpTipoInstituciones[index];
+      this.crudDetalle();
+    },
+    async confirmUpdate(){
+      let title = 'Edita Tipo-Institucion';
+      let self = this;
+      if ( !this.evaluaItem() ) { 
+        swal2.fire({title: title, text: 'Verique los datos ingresados: '+this.observacionesCrud });
+      }else{
         let data = {  
           tipoInstitucion: this.rec.tipoInstitucion,
           nombreTipo: this.rec.nombreTipo,
@@ -183,27 +211,47 @@ export default {
           body: JSON.stringify(data)
         };
         try {
-          let text = '';
           let data = await fetch(url, options);
           let res = await data.json();
           if( res.status ) this.loadTipoInstitucion();
-          text = (res.status)? 'Modificado Satisfactoriamente.': 'Fallo modificacion!';
+          self.crud = '';          
+          let text = (res.status)? 'Modificado Satisfactoriamente.': 'Fallo modificacion!';
           await swal2.fire({title: title, text: text});
-        //   this.exitForm();
         } catch (error) {
           console.log('Error:', error);
         }
       }
     },
-    deleteItem(){
-
+    deleteItem(index){
+      this.crud = 'D';
+      this.rec = this.tmpTipoInstituciones[index];
+      this.crudDetalle();
     },
-    confirmDelete(){
-        console.log('confirmDelete()');
-
+    async confirmDelete(){
+      let title = 'Anula Tipo-Institucion';
+      let self = this;
+      this.rec.eliminado = new Date();
+      this.rec.eliminado_usuario =  this.$store.state.User_Name;
+      let url = this.host+'/tablas/tipoinstitucion/delete';
+      let options = {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.rec)
+      };
+      try {
+        let data = await fetch(url, options);
+        let res = await data.json();
+        if( res.status ) this.loadTipoInstitucion();
+        self.crud = '';            
+        let text = (res.status)? 'Anulado Satisfactoriamente!': 'Fallo la anulacion!';
+        await swal2.fire({title: title, text: text});
+      } catch (error) {
+        console.log('Error:', error);
+      }
     },
     async loadTipoInstitucion(){
       // console.log('loadInstituciones()');
+      this.isDisabledForm = true;
       let url = this.host+'/tablas/tipoinstitucion/all';
       try {
         let data = await fetch(url);
@@ -213,48 +261,51 @@ export default {
       } catch (error) { console.log('Error:', error);
       }
     },
-    generaCodigo: function(){
+    generaCodigo: async function(){
       console.log('generaCodigo()');
       let self = this;
-      let url = this.host+'/instituciones/lastCode';
+      let url = this.host+'/tablas/tipoinstitucion/lastCode';
       axios.get(url)
       .then(function(response){ 
         let code = parseInt(response.data.code, 10) + 1;
-        self.rec.codInstitucion =  code+'';
-        // console.log('code=>', code)
+        console.log('code = ', code);
+        self.rec.tipoInstitucion =  code+'';
       })
       .catch(function(error) {
         console.log(error);
         return '-1';
       })
     },
-    exitForm: function(){
-        // this.view_content = true;
-    //   this.$router.go(-1);
+    cancelForm: function(){
+      this.crud = '';
+      this.isDisabledForm = true;      
+      this.detalleItem(this.itemCurrent-1)  // ???
     },     
     input: function(self){
       evalInput(self);
     },
     itemFocus(index){
-        this.itemCurrent = index+1;
+      this.itemCurrent = index+1;
+      this.detalleItem(index);
     },    
     itemBlur(){
-        this.itemCurrent = 0;
+      this.itemCurrent = 0;
     },
     resetForm: function(){
-      console.log('this.idForm', idForm);
-      document.getElementById(this.idForm).reset();
+      // this.$refs.formTipoInstitucion.reset();
+      this.$refs[idForm].reset();
+
     },
     filterProcess: function(value){
-      console.log('value = ', value);
       this.tmpTipoInstituciones = value;
     }        
   },
   created: function(){
+    this.loadTipoInstitucion();
     this.setComponent();
   },
   mounted: function(){
-      this.loadTipoInstitucion();
+
   }  
 }
 </script>
@@ -265,8 +316,13 @@ export default {
 
 <style scoped>
 @import url('./../assets/css/scroll_bar.css');
+/* .main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
 .content {
-  width: 80%;
+  width: 85%;
   height: 90%;  
 }
 .content-title {
@@ -296,25 +352,25 @@ export default {
 .listHead, .detailHead {
  height: 14%;
 }
-.listBody {
+.listBody , .detailBody {
   height: 85%;
-  background-color: whitesmoke;
+  background-color: whitesmoke; 
+  margin: 0 3px;   
+}
+.listBody {
   padding: 3px;
 }
 .listFoot {
- height: 5%;
+ height: 6%;
  background-color: dartgray;
 }
-
-.formulario {
-    padding: 3px;
-     height: 0%;
- background-color: whitesmoke;
- border: 1px;
+.detailBody {
+  padding: 1px;
 }
 .formularioTitulo {
-     height: 1.5rem !important;   
-     background-color: silver;   
+     height: 1.8rem !important;   
+     background-color: silver; 
+     margin: 3px;  
 }
 .tabla-1 {
     padding: 3px;
@@ -325,10 +381,11 @@ export default {
 }
 .titulo-2 {
   font-size: 1.1rem;
-    height: 30%;
-    text-align: center;
-    padding: 5px 0;
-    font-weight: 600;
+  height: 30%;
+  text-align: center;
+  padding: 5px 0;
+  font-weight: 600;
+  text-align: center;
 }
 
 .tabla, .formulario {
@@ -344,6 +401,7 @@ tbody tr td {
 padding: 2px 3px;
 }
 .formBase {
+  margin: 2px;
     padding: 3px;
 }
 .cabeceraTabla {
@@ -375,6 +433,10 @@ tbody tr {
 }
 .formGroup {
     margin: 0 3px !important;
+}
+.void_Btn:hover {
+    background-color: var(--btnBackground) !important;
+    color: var(--btnColor)  !important;
 }
 .col-1, .col-2, .col-4 {
     padding: 0;

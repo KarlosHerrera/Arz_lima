@@ -86,7 +86,8 @@ export default {
       let codInstitucion = this.datosInstitucion.codInstitucion.trim();
       // console.log('path: ', this.pathImg);
       let self = this;
-      let url = this.host+'/instituciones/sello/'+codInstitucion;
+      // let url = this.host+'/instituciones/sello/'+codInstitucion;
+      let url = this.host+'/sellos/'+codInstitucion;
       axios.get(url)
       .then(function(response){ 
         if( response.data.length == 0 ){

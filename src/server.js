@@ -18,7 +18,7 @@ const asignacionCargosCtrl = require('./controllers/asignacionCargosCtrl');
 const sacramentosCtrl = require('./controllers/sacramentosCtrl');
 const jerarquiasCtrl = require('./controllers/jerarquiasCtrl');
 const tablasCtrl = require('./controllers/tablasCtrl');
-//      const sellosCtrl = require('./controllers/sellosCtrl');
+const sellosCtrl = require('./controllers/sellosCtrl');
 
 // settings
 app.set('port', process.env.PORT || 5000);  // Configuracion de puerto (variables globales)
@@ -47,7 +47,7 @@ app.use('/asignacionCargos', asignacionCargosCtrl);
 app.use('/tablas', tablasCtrl);
 app.use('/sacramentos', sacramentosCtrl);
 app.use('/jerarquias', jerarquiasCtrl);
-// app.use('/sellos', sellosCtrl);
+app.use('/sellos', sellosCtrl);
 
 
 // Ruta temporal
@@ -74,11 +74,11 @@ app.post('/sellos/upload/', upload.single('Img1') , function(req, res){
 // settings
 
 //
-app.use('/', (req, res, next) => {
-  let fechaHoy =new Date();
-  console.log('=>', fechaHoy );
-  next();
-});
+// app.use('/', (req, res, next) => {
+//   let fechaHoy =new Date();
+//   console.log('=>', fechaHoy );
+//   next();
+// });
 
 const dbase = require('./assets/json/config_db.json');
 const db = mysql.createConnection(dbase);

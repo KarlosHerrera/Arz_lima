@@ -9,28 +9,29 @@
             <div class='titulo-2 align-items-center'> {{ datosInstitucion.codInstitucion }} - {{ datosInstitucion.nombreInstitucion }}</div>
             <div class='escape lign-items-end' @click="$emit('close')">X</div> 
         </div>      
-       <div class="modal-body"> 
+       <div class="modal-body" ref='sellos_body'> 
           <div class='noImgs' v-if='!verImgs'>Sin imagenes de sello(s)</div>
-          <b-carousel id="carouselSellos" :interval="0" controls indicators  v-if='verImgs'> 
+          <b-carousel id="carouselSellos" :interval="0" controls indicators  v-if='verImgs' ref='itmSellos' @sliding-start='slidingStart'> 
             <b-carousel-slide v-for="(itm, index) in imagenes" :key='index' :img-src="itm.sello" ></b-carousel-slide>
           </b-carousel>
        </div>
         <div class="modal-footer d-flex justify-content-between align-items-center">
-           <div class='col-1 d-flex justify-content-center' style='background: plum'>
-                <div>Items:</div>
-            </div>             
-            <div class='col-4 d-flex justify-content-center' style='background: teal'>
-                <button class="btn-crud btn btn-sm btn_1" @click="addImg">Adicionar</button>
-                <button class="btn-crud btn btn-sm btn_1" @click="confirmAdd">Confirma</button>
-            </div> 
-            <div class='col-4  d-flex justify-content-center' style='background: tomato'>
-                <button class="btn-crud btn btn-sm btn_1" @click="deleteImg">Borrar</button>
-                <button class="btn-crud btn btn-sm btn_1" @click="confirmDelete">Confirma</button>                
-            </div> 
-            <div class='col-2  d-flex justify-content-end'  style='background: tan'>
-                <button class="btnExit btn btn-sm btn_1" @click="$emit('close')">Salir</button>
+           <div class='i-itm col1-1 d-flex justify-content-start' style1='background: plum'>
+                <div>Items: {{indexImg}}/{{imagenes.length}}</div> 
             </div>
-        </div>    
+            <div class='i-add d-flex justify-content-center' style='background: teal'>
+                <button class="btn-crud btn btn-sm btn_1" v-if="verAddImg" @click="addImg">Adicionar</button>
+                <button class="btn-crud btn btn-sm btn_1" v-if="!verAddImg" @click="confirmAdd">Confirma</button>
+            </div> 
+            <div class='i-del d-flex justify-content-center' v-if1="imagenes.length>0" style='background: tomato'>
+                <button class="btn-crud btn btn-sm btn_1" v-if="verDelImg" @click="deleteImg">Borrar</button>
+                <button class="btn-crud btn btn-sm btn_1" v-if="!verDelImg" @click="confirmDelete">Confirma</button>                
+            </div>
+            <div class='i-exit d-flex justify-content-end'  style='background: tan'>
+                <button class="btnExit btn btn-sm btn_1" @click="$emit('close')">Salir</button>
+                <button class="btnCancel btn btn-sm btn_1" @click="cancel">Cancela</button>
+            </div>
+        </div>
     </div>    
   </div>    
   </div>    
@@ -55,11 +56,12 @@ export default {
   }, 
   data() {
     return {
-      acepta: false,
-      pathImg: '',
       imagenes: [],
+      pathImg: '',
       verImgs: true,
-      indexImg: 0
+      indexImg: 0,
+      verAddImg: true,
+      verDelImg: true
     }
   },
   computed: { // Expone state al template
@@ -71,25 +73,45 @@ export default {
       this.pathImg = ruta.pathSellos;
     },
     addImg(){
+      console.log('addImg()');
+      this.verAddImg = !this.verAddImg;
 
     },
     confirmAdd(){
+      console.log('confirmAdd()');
+      this.verAddImg = !this.verAddImg;
 
     },
     deleteImg(){
-
+      console.log('deleteImg()');
+       this.verDelImg = !this.verDelImg;
+      this.$refs.sellos_body.style.backgroundColor='lightblue';
+      // let list = obj.firstElementChild.firstElementChild.childNodes;
+      console.log('imagen = ', this.imagenes[ this.indexImg - 1])
+      // for(let e=0; e < list.length; e++){s
+      //   if( list[e].classList.contains('active') ){
+      //     let a = list[e].firstChild.src.split('/');
+      //     // console.log(a.length);
+      //     console.log( a[a.length - 1] );
+      //   }
+      // }
     },
     confirmDelete(){
-        console.log('confirmDelete()');
-        let sellos= document.getElementById('carouselSellos')
-        console.dir(sellos);
+      console.log('confirmDelete()');
+      this.verDelImg = !this.verDelImg;
+      let sellos= document.getElementById('carouselSellos')
+      console.dir(sellos);
+    },
+    cancel(){
+      console.log('cancel()');
+
     },
     cargaSellos: function(){
       console.log('modalSellos.cargaSellos()');
       let codInstitucion = this.datosInstitucion.codInstitucion.trim();
       // console.log('path: ', this.pathImg);
       let self = this;
-      let url = this.host+'/instituciones/sello/'+codInstitucion;
+      let url = this.host+'/sellos/'+codInstitucion;
       axios.get(url)
       .then(function(response){ 
         if( response.data.length == 0 ){
@@ -176,6 +198,10 @@ export default {
       }, 
       function(err) { console.log(err); }
       );
+    },
+    slidingStart: function(slide){
+      // console.log('slidingStart');
+      this.indexImg = slide + 1;
     }
   },
   created: function(){
@@ -208,6 +234,15 @@ export default {
   background-color: lightgray;
   margin: 5px 0;
 
+}
+.i-itm {
+  width: 12%;
+}
+.i-add, .i-del {
+  width: 35%;
+}
+.i-exit {
+  width: 12%;
 }
 .img-sello{
   width: 100%;

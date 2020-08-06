@@ -254,11 +254,10 @@ export default {
     },
     load_relation(){
       this.selDepartamento(this.rec.codDepartamento);
-      this.selProvincia(this.rec.codProvincia)
+      this.selProvincia(this.rec.codProvincia);
     },
     resetForm: function(){
-      console.log('this.idForm', idForm);
-      document.getElementById(this.idForm).reset();
+      this.$refs[idForm].reset();
     },
     evaluaItem(){
       // let objForm = document.getElementById(idForm);

@@ -4,6 +4,14 @@ const express = require('express');
 const router = express.Router();
 const conn = require('../assets/js/db_mysql.js');
 
+const  moment =require('moment');
+moment.locale('es');
+
+router.get('/', (req, res) => {
+    console.log('tablas/');
+
+});
+
 // --- Cargo Religiosos --- //
 
 // --- Departamentos --- //
@@ -46,10 +54,11 @@ router.get('/provincias/all', (req, res) => {
 });
 // --- Sacramentos --- //
 // --- Tipos de Identificacion --- //
-// --- Tipo Institucion --- //
+// ------------ Tipo Institucion ----------- //
+
 router.get('/tipoInstitucion/all', (req, res) => {
     console.log('tablas/tipoInstitucion/all');
-    let sql = `SELECT * FROM tipoinstitucion WHERE activo='S' ORDER BY nombreTipo`;                
+    let sql = `SELECT * FROM tipoinstitucion ORDER BY nombreTipo`;                
     conn.query(sql, function(err, rows){
         if(err) console.log('err => ', err);
         res.status(200).json(rows);
@@ -71,17 +80,24 @@ router.get('/tipoinstitucion/one', (req, res) => {
     res.json({
         status: 'ok',
         crud: 'read one'
-
     });
-
 });
 // Create document
 router.post('/tipoinstitucion/create', (req, res) => {
     console.log('/tablas/tipoinstitucion/create');
-    res.json({
-        status: 'ok',
-        crud: 'create'
-    });
+    let data = req.body;
+    let tipoinstitucion = data.tipoinstitucion;
+
+    conn.query('INSERT INTO tipoinstitucion SET ?', [data], function(err, rows){
+        if(err){
+            console.log('sqlMessage: ', err.sqlMessage);
+            console.log('sql: ', err.sql);
+            res.json({status: false, msg: 'Unsucessfull', tipoinstitucion: tipoinstitucion, crud: 'create'});
+        }else{
+            console.log(rows);
+            res.json({status: true, msg: 'Sucessfull', tipoinstitucion: tipoinstitucion, crud: 'create'});
+        }
+    })    
 });
 // Update document
 router.put('/tipoinstitucion/update', (req, res) => {
@@ -105,13 +121,33 @@ router.put('/tipoinstitucion/update', (req, res) => {
 // Delete one document
 router.delete('/tipoinstitucion/delete', async (req, res) => {
     console.log('/tablas/tipoinstitucion/delete');
-
-    res.json({
-        // id: id,
-        status: 'ok',
-        crud: 'delete on'
+    const data = req.body;
+    const tipoInstitucion = data.tipoInstitucion;
+    data.eliminado = moment(data.eliminado).format('YYYY-MM-DD hh:mm:ss');
+    let sql = "UPDATE tipoinstitucion SET activo = ? WHERE tipoInstitucion = ?";
+    conn.query(sql, ['N', tipoInstitucion], function(err, rows){
+        if(err){
+            console.log('sqlMessage: ', err.sqlMessage);
+            console.log('sql: ', err.sql);
+            res.json({status: false, msg: 'Unsucessfull', tipoInstitucion: tipoInstitucion, crud: 'delete'});
+        }else{
+            res.json({status: true, msg: 'Sucessfull', tipoInstitucion: tipoInstitucion, crud: 'delete'});
+        }
     });
-
+});
+router.get('/tipoinstitucion/lastCode',  (req, res) => {
+    console.log('/tablas/tipoinstitucion/lastCode');
+ 
+    let sql = "SELECT CAST(tipoinstitucion AS UNSIGNED) AS codigo FROM tipoinstitucion ORDER BY codigo DESC LIMIT 1";
+    conn.query(sql, function(err, rows){
+        if(err){
+            console.log('sqlMessage: ', err.sqlMessage);
+            console.log('sql: ', err.sql);
+            res.status(200).json({ status: false, msg: 'Insuccessfull', code:  '-1' });            
+        }
+        // if( rows.length == 0) 
+        res.status(200).json({ status: true, msg: 'Successfull', code: rows[0].codigo+'' });
+    });    
 });
 // --- Sacramentos --- //
 

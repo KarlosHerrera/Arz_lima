@@ -13,10 +13,12 @@ table {
     border-spacing: 0.214rem;   /*  espaciado entre  celdas */
     /* border: 1px solid black; */
     /* empty-cells: show; */
+ 
 }
 thead {
     background-color: inherit;
     /* position: static; */
+   
 }
 thead > tr {
     background-color: rgb(194, 192, 192);
@@ -25,6 +27,7 @@ thead > tr {
     height: 2rem;
     font-weight: 400;
     border: 1px solid blue;
+    border-radius: var(--border-radius) !important;   
 }
 tbody tr {
     height: 1.7rem;    
