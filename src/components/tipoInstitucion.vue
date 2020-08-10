@@ -7,17 +7,17 @@
     <div class="headerTitle d-flex justify-content-between">
     </div>    
   </div>
-  <div class='content-body d-flex justify-content-between' style1='background: silver' >
+  <div class='content-body d-flex justify-content-between' ref='ctnList' style1='background: silver' >
        <div class='list' style1='background: gray'>  <!--    -->
         <div class="listHead d-flex flex-column" style1='background: coral'>
           <div class="titulo-2"><div>Lista</div></div>
           <div class='d-flex justify-content-between align-items-end' >  
-            <button class='btn btn-sm btn_1 btn_new' @click='createItem'>Nuevo</button>
+            <button ref='btnNuevo' class='btn btn-sm btn_1 btn_new' @click='createItem' :disabled="disabledTable" >Nuevo</button>
             <filtra-tabla :recordList="tipoInstituciones" :colsSearch='searchList' @filter_Process="filterProcess" ></filtra-tabla>
           </div>
         </div>
-        <div class="listBody" style1='background: IndianRed'>
-          <table class='table table-sm table-bordered table-hover table-1'>
+        <div class="listBody" ref='listBody' style1='background: IndianRed'>
+          <table ref='tabla' class='table table-sm table-bordered table-hover table-1'>
             <thead class='rounded-top'>
               <tr class='cabeceraTabla'>
                 <th>Codigo<span></span></th>
@@ -30,8 +30,8 @@
                 <td class='align_center' style='width: 10%'> {{ doc.tipoInstitucion}} </td>
                 <td style='width: 60%' > {{ doc.nombreTipo | frmLongMaxima(20) }} </td>
                 <td class='d-flex justify-content-center align-items-center'>
-                  <button class='btn btn-sm btn_actions btn_1' @click.stop='updateItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Editar</button>
-                  <button class='btn btn-sm btn_actions btn_1' @click.stop='deleteItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Anular</button>
+                  <button class='btn btn-sm btn_actions btn_1' @click.stop='updateItem(index)' :disabled="doc.activo=='N' || disabledTable " :class="{void_Btn: doc.activo=='N'}">Editar</button>
+                  <button class='btn btn-sm btn_actions btn_1' @click.stop='deleteItem(index)' :disabled="doc.activo=='N'|| disabledTable  " :class="{void_Btn: doc.activo=='N'}">Anular</button>
                 </td>
             </tr>
             </tbody>
@@ -47,7 +47,7 @@
           </div>
           <div class="detailBody" style1='background: whitesmoke'>
             <div class='formularioTitulo titulo_2 d-flex justify-content-center align-items-center'>
-              <span>{{ title_detail }} Tipo-Institucion</span>
+              <span>{{ title_detail }} </span>
             </div> 
             <form id='formTipoInstitucion' ref='formTipoInstitucion' class='formBase' onsubmit="return false;" novalidate  autocomplete="nope" data-btnEnable='btnSave'>
                 <div class="form-row">
@@ -112,7 +112,8 @@ export default {
       searchList: ['tipoInstitucion','nombreTipo'],
       observacionesCrud: '',
       itemCurrent: 0,
-      isDisabledForm: true,   
+      isDisabledForm: true,
+      disabledTable: false
  
     }
   },
@@ -125,9 +126,12 @@ export default {
     },
     crudDetalle(){
       // console.log('crudDetalle()');
-      this.isDisabledForm = true;
+
+      // console.dir(this.$refs.tabla);
+      // this.isDisabledForm = true;
       if( this.crud == 'C' ) {
         this.title_detail = 'Nuevo'; 
+
         this.resetForm();
         this.generaCodigo(); 
       }
@@ -152,13 +156,17 @@ export default {
     },    
     detalleItem(index){
       // console.log('detalleItem()');
-      this.crud = 'R';
-      this.rec = this.tmpTipoInstituciones[index];
-      this.crudDetalle();
+      if( !this.disabledTable ){
+        this.crud = 'R';
+        this.rec = this.tmpTipoInstituciones[index];
+        this.crudDetalle();
+      }
     },
     createItem(){
+      console.log('nuevo=>')
       this.crud = 'C';
       this.rec = {};
+      this.disabledTable = true;
       this.crudDetalle();
     },
     async confirmCreate(){
@@ -189,6 +197,7 @@ export default {
     updateItem(index){
       this.crud = 'U';
       this.rec = this.tmpTipoInstituciones[index];
+      this.disabledTable = true;
       this.crudDetalle();
     },
     async confirmUpdate(){
@@ -217,6 +226,7 @@ export default {
           self.crud = '';          
           let text = (res.status)? 'Modificado Satisfactoriamente.': 'Fallo modificacion!';
           await swal2.fire({title: title, text: text});
+          this.disabledTable = false;
         } catch (error) {
           console.log('Error:', error);
         }
@@ -224,6 +234,7 @@ export default {
     },
     deleteItem(index){
       this.crud = 'D';
+      this.disabledTable = true;
       this.rec = this.tmpTipoInstituciones[index];
       this.crudDetalle();
     },
@@ -245,6 +256,7 @@ export default {
         self.crud = '';            
         let text = (res.status)? 'Anulado Satisfactoriamente!': 'Fallo la anulacion!';
         await swal2.fire({title: title, text: text});
+        this.disabledTable = false;
       } catch (error) {
         console.log('Error:', error);
       }
@@ -278,6 +290,7 @@ export default {
     },
     cancelForm: function(){
       this.crud = '';
+      this.disabledTable = false;
       this.isDisabledForm = true;      
       this.detalleItem(this.itemCurrent-1)  // ???
     },     
@@ -285,8 +298,10 @@ export default {
       evalInput(self);
     },
     itemFocus(index){
-      this.itemCurrent = index+1;
-      this.detalleItem(index);
+      if( !this.disabledTable ){
+        this.itemCurrent = index+1;
+        this.detalleItem(index);
+      }
     },    
     itemBlur(){
       this.itemCurrent = 0;

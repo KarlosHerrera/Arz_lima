@@ -2,6 +2,7 @@
 node_modules
 datosExtras
 /dist
+/public/media
 
 # local env files
 .env.local

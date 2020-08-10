@@ -291,7 +291,7 @@ export default {
       return evaluacion;
     },
     detalleItem(index){
-      console.log(`detalleItem(${index})`);
+      // console.log(`detalleItem(${index})`);
       this.crud = 'R';
       this.rec = this.tmpInstituciones[index];
       this.list_view();
@@ -527,7 +527,7 @@ export default {
     //   this.$router.go(-1);
     }, 
     generaCodigo: function(){
-      console.log('generaCodigo()');
+      // console.log('generaCodigo()');
       let self = this;
       let url = this.host+'/instituciones/lastCode';
       axios.get(url)
@@ -562,13 +562,13 @@ export default {
 
   },
   mounted: function(){
-    console.log('mounted()');
+    // console.log('mounted()');
     this.setComponent();
     // let obj = document.getElementById('formInstitucion');
 //  obj = this.$refs.codInstitucion;
- let valor = this.$refs.codInstitucion;
- console.log('list_iew():')
- console.log('valor: ', valor);
+//  let valor = this.$refs.codInstitucion;
+//  console.log('list_iew():')
+//  console.log('valor: ', valor);
   }   
 }
 </script>

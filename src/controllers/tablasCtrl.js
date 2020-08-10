@@ -60,6 +60,7 @@ router.get('/tipoInstitucion/all', (req, res) => {
     console.log('tablas/tipoInstitucion/all');
     let sql = `SELECT * FROM tipoinstitucion ORDER BY nombreTipo`;                
     conn.query(sql, function(err, rows){
+        // conn.release();
         if(err) console.log('err => ', err);
         res.status(200).json(rows);
     });
@@ -89,6 +90,7 @@ router.post('/tipoinstitucion/create', (req, res) => {
     let tipoinstitucion = data.tipoinstitucion;
 
     conn.query('INSERT INTO tipoinstitucion SET ?', [data], function(err, rows){
+
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             console.log('sql: ', err.sql);

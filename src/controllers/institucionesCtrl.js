@@ -44,8 +44,8 @@ router.get('/all', async (req, res) => {
     });
 
 });
-router.get('/Instituciones_min', (req, res) => {
-    console.log('Instituciones/Instituciones_min');
+router.get('/instituciones_min', (req, res) => {
+    console.log('instituciones/instituciones_min');
 
     const sql = "SELECT codInstitucion, nombreInstitucion FROM instituciones WHERE activo = 'S' ORDER BY nombreInstitucion";
     conn.query(sql, function(err, rows){
@@ -86,7 +86,7 @@ router.get('/sello/:codInstitucion', async (req, res) => {
     // console.log(`${ req.url }`);
     let codInstitucion = req.params.codInstitucion;
     // let { codInstitucion } = req.params.codInstitucion;
-    // console.log('codInstitucion = ', codInstitucion);
+    console.log('codInstitucion = ', codInstitucion);
     // codInstitucion = '132';
     let sql = `SELECT codInstitucion, consecSello, sello, creado
                 FROM sellosinstitucion 

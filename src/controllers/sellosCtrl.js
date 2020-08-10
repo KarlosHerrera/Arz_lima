@@ -1,20 +1,20 @@
 // sellosCtrl.js
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 const conn = require('../assets/js/db_mysql.js');
 // const fs = require('fs');
 
 const  moment =require('moment');
 moment.locale('es');
 
-// /sellos/:codInstitucion
 router.get('/:codInstitucion', async (req, res) => {
-    // console.log(`${ req.url }`);
+    console.log('sellos/');
     let codInstitucion = req.params.codInstitucion;
     // let { codInstitucion } = req.params.codInstitucion;
-    // console.log('codInstitucion = ', codInstitucion);
+    console.log('codInstitucion = ', codInstitucion);
     // codInstitucion = '132';
-    let sql = `SELECT codInstitucion, consecSello, sello, creado
+    let sql = `SELECT codSello, codInstitucion, sello, creado
                 FROM sellosinstitucion 
                 WHERE activo='S' AND codInstitucion = ?  
                 ORDER BY consecSello`;
@@ -26,94 +26,78 @@ router.get('/:codInstitucion', async (req, res) => {
 
 });
 
-// Get all documents
-router.get('/all', (req, res) => {
+// Delete one 
+router.delete('/delete/', async (req, res) => {
+    console.log('/sellos/delete');
 
-    conn.query(sql, function(err, rows){
-        if(err) throw err;
-        res.status(200).json(rows);
-        // res.send(rows);
-    });
+    const data = req.body;
+    const codSello = data.codSello;
+
+    data.eliminado = moment().format('YYYY-MM-DD hh:mm:ss');
+    let sql = 'UPDATE sellosinstitucion SET activo = ? WHERE codSello = ?';
+    conn.query(sql, ['N',codSello], function(err){
+        if(err){
+            console.log('sqlMessage: ', err.sqlMessage);
+            console.log('sql: ', err.sql);
+            res.json({status: false, msg: 'Unsucessfull', error: err.sqlMessage, crud: 'delete'});
+        }else{
+            res.json({status: true, msg: 'Sucessfull', codSello: codSello, crud: 'delete'});
+        }
+    }); 
 });
-// Record verify 
 
-// Create document
-router.post('/create', (req, res) => {
+// Ruta temporal
+// let pathImg = './public/media';
+let ruta = require('./../assets/json/config_img.json');
+let pathImg = ruta.pathSellos;
+
+let storage = multer.diskStorage({
+  destination: function(req, file, callback){
+    console.log('multer.destination...path = ', pathImg);
+    callback(null, pathImg);
+  },
+  filename: function(req, file, callback){
+    file = req.body.sello;    // Nombre desde en frontEnd
+    callback(null, file)   // file.originalname
+  }
+});
+let upload = multer({ storage });
+// Enviando un form, con el archivo (imgSello, es el valor del input.name)
+router.post('/create/', upload.single('imgSello') , function(req, res){
     console.log('/sellos/create');
     let data = req.body;
-    let nroDoc = data.docLegalizacion;
-    // console.log(data);
-    // const {docLegalizacion, fechaDoc, codInstitucion, codReligioso, codSacramento} = req.body;
-    // console.log('------------ body -------------');
-    // console.log(docLegalizacion, fechaDoc, codInstitucion, codReligioso, codSacramento);
 
-    data.fechaDoc = moment(data.fechaDoc).format('YYYY-MM-DD hh:mm:ss');
-    conn.query('INSERT INTO movimientoDocumento SET ?', [data], function(err, rows){
+    data.creado = moment().format('YYYY-MM-DD hh:mm:ss');
+    conn.query('INSERT INTO sellosinstitucion SET ?', [data], function(err, rows){
         console.log(rows[0]);
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             console.log('sql: ', err.sql);
-            res.json({status: false, msg: 'Unsucessfull', nroDoc: nroDoc, crud: 'create'});
+            res.json({status: false, msg: 'Unsucessfull', error: err.sqlMessage, crud: 'create'});
         }else{
-            console.log(rows);
-            res.json({status: true, msg: 'Sucessfull', nroDoc: nroDoc, crud: 'create'});
+            // console.log(rows);
+            res.json({status: true, msg: 'Sucessfull', crud: 'create'});
         }
     })
-    // res.json({
-    //     status: 'ok',
-    //     crud: 'create'
-    // });
+    // res.json({ status: true, msg: 'Ok.', file: req.imgSello});
 });
-
-// Delete one 
-router.delete('/delete/', async (req, res) => {
-    console.log('/sellos/delete');
-    // console.log(req.params);
-    // const doc= req.params.docLegalizacion;
-    const data = req.body;
-    const docLegalizacion = data.docLegalizacion;
-    data.eliminado = moment(data.eliminado).format('YYYY-MM-DD hh:mm:ss');
-    let sql = 'UPDATE movimientoDocumento SET activo = ? WHERE docLegalizacion = ?';
-    // let sql = 'DELETE FROM movimientoDocumento WHERE docLegalizacion = ?';
-    conn.query(sql, ['N',docLegalizacion], function(err){
-        if(err){
-            console.log('sqlMessage: ', err.sqlMessage);
-            console.log('sql: ', err.sql);
-            res.json({status: false, msg: 'Unsucessfull', nroDoc: docLegalizacion, crud: 'delete'});
-        }else{
-            res.json({status: true, msg: 'Sucessfull', nroDoc: docLegalizacion, crud: 'delete'});
-        }
-    }); 
-    // res.json({
-    //     // id: id,
-    //     status: 'ok',
-    //     crud: 'delete on'
-    // });
-});
-
-router.get('/subir', async (req, res) => {
-    console.log('/sellos/subir');
-    // console.log(req.params);
-    // const doc= req.params.docLegalizacion;
-    const data = req.body;
-    const codInstitucion = data.codInstitucion;
+router.get('/consecutivo/:codInstitucion', function(req, res){
+    console.log('/sellos/consecutivo/');
+    let codInstitucion = req.params.codInstitucion;
     console.log('codInstitucion=', codInstitucion);
-    let sql = 'SELECT * FROM sellosInstitucion WHERE codInstitucion= ?';
+    let sql = 'SELECT count(*) AS ultConsecutivo FROM sellosinstitucion WHERE codInstitucion=? ORDER BY codSello;';
     conn.query(sql, [codInstitucion], function(err, rows){
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             console.log('sql: ', err.sql);
-            res.json({status: false, msg: 'Unsucessfull', crud: 'delete'});
+            res.json({status: false, msg: 'Unsucessfull'});
         }else{
-            console.log(rows);
-
-
-            // Proceso de lectura de imagenes
-
-            // Envio de imagenes
-            res.json({status: true, msg: 'Sucessfull', Institucion: codInstitucion, crud: 'get', imgs: []});
+            // console.log('ultConsecutivo = ', res.json(rows[0]));
+            let ultConsecutivo = rows[0].ultConsecutivo;
+            res.json({status: true, msg: 'Sucessfull', codInstitucion: codInstitucion, ultConsecutivo: ultConsecutivo });
         }
     }); 
-});
+
+  });
 
 module.exports = router;

@@ -66,7 +66,7 @@ export default new Vuex.Store({
       // { commit, dispatch } = objetos contexto
     /// --- Religiosos
     allReligiosos: async function({ state, commit }){
-      console.log('actions.allReligiosos()');
+      // console.log('actions.allReligiosos()');
 // console.log('religiosos host: ', this.host);
       // let app = await require('./../assets/json/config_app.json');
       let url = state.host+'/religiosos/all/';
@@ -84,7 +84,7 @@ export default new Vuex.Store({
     /// ---Instituciones
     // allInstituciones: async fu nction({ commit }){
     allInstituciones: async function({ state, commit }){
-      console.log('actions.allInstituciones()');
+      // console.log('actions.allInstituciones()');
       // console.log('instituciones host: ', this.host);
       let url = state.host+'/instituciones/all/';
       // let  app = await require('./../assets/json/config_app.json');
@@ -120,18 +120,18 @@ export default new Vuex.Store({
     },     
     /// Legalizacion de Documentos
     allLegDocs: function(){
-      console.log('actions.allLegDocs()')
+      // console.log('actions.allLegDocs()')
 
-        let options = { headers: {'Access-Control-Allow-Origin' : '*'}, 'content-type': 'application/json', 'mode': 'cors'};
-        axios.get(this.host+'/movDocumentos/all/', options)
-        .then(function(data){
-          // console.log('-------->');
-          // console.log(data);
-          return data;
-        })
-        .catch(function(err){
-          console.log('Error:', err);
-        });
+      let options = { headers: {'Access-Control-Allow-Origin' : '*'}, 'content-type': 'application/json', 'mode': 'cors'};
+      axios.get(this.host+'/movDocumentos/all/', options)
+      .then(function(data){
+        // console.log('-------->');
+        // console.log(data);
+        return data;
+      })
+      .catch(function(err){
+        console.log('Error:', err);
+      });
 
     },
     /// --- Asignacion de Cargos
@@ -179,9 +179,9 @@ export default new Vuex.Store({
     },
     // Configuracion de App
     config_app: function(context){
-      console.log('store.config_app()');
+      // console.log('store.config_app()');
       let app = require('./../assets/json/config_app.json');
-      console.log('store.host: ', app.host)
+      // console.log('store.host: ', app.host)
       context.commit('setHost', app.host);
 
     }, 

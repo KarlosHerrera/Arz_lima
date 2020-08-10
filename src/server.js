@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const bodyparser = require("body-parser");
 const path = require('path')
 const cors = require('cors');
-const multer = require('multer');
+// const multer = require('multer');
 const moment = require('moment');
 const app = express();
 
@@ -21,7 +21,7 @@ const tablasCtrl = require('./controllers/tablasCtrl');
 const sellosCtrl = require('./controllers/sellosCtrl');
 
 // settings
-app.set('port', process.env.PORT || 5000);  // Configuracion de puerto (variables globales)
+app.set('port', process.env.PORT || 3000);  // Configuracion de puerto (variables globales)
 
 app.use('/', serveStatic(path.join(__dirname,'./../dist')));  // Carga 
 
@@ -48,28 +48,6 @@ app.use('/tablas', tablasCtrl);
 app.use('/sacramentos', sacramentosCtrl);
 app.use('/jerarquias', jerarquiasCtrl);
 app.use('/sellos', sellosCtrl);
-
-
-// Ruta temporal
-let pathImg = './public/media';
-let storage = multer.diskStorage({
-  destination: function(re, file, callback){
-    callback(null, pathImg);
-  },
-  filename: function(req, file, callback){
-    // let newName = '';  // req.xxxx nombre sugerido del frontEnd
-    callback(null, file.originalname)
-  }
-});
-let upload = multer({ storage });
-// Enviando un form, con el archivo
-app.post('/sellos/upload/', upload.single('Img1') , function(req, res){
-  console.log(req.body);
-  console.log(req.file);
-
-  res.json({ msg: 'Ok...', file: req.file});
-
-});
 
 // settings
 
