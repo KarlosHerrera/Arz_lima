@@ -1,4 +1,6 @@
 {
-    "pathSellos": "./../media/sellos/",
-    "pathFirmas": "./../media/firmas/"
+    "pathSellos": "/media/sellos/",
+    "serverSellos": "c:/dev/arzobispado-lima/src/media/sellos/",
+    "pathFirmas": "/media/firmas/",
+    "serverFirmas": "/media/firmas/"
 }

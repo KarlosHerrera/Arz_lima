@@ -115,7 +115,7 @@ export default {
       console.log('sellos_aws()');
       let codInstitucion = this.datosInstitucion.codInstitucion.trim();
       let self = this;
-      let url = this.host+'/instituciones/sello/'+codInstitucion;
+      let url = this.host+'/sellos/'+codInstitucion;
       axios.get(url)
       .then(function(response){ 
         if( response.data.length == 0 ){
@@ -180,8 +180,8 @@ export default {
     this.setComponent();
   },
   mounted: function(){
-    this.cargaSellos();
-    // this.sellos_aws();
+    // this.cargaSellos();
+    this.sellos_aws();
   }  
 }
 </script>

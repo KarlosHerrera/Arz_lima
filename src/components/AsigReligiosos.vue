@@ -116,7 +116,8 @@
   </div>
   <asigna-cargo :datosAsignacion="rec" v-if='verAsignacionCargo' @close='verAsignacionCargo=false' @retorno_asignacion='retornoAsignacion'></asigna-cargo>
   <desasigna-cargo :datosAsignacion="rec" v-if='verDesasignacionCargo' @close='verDesasignacionCargo=false' @retorno_desasignacion='retornoDesasignacion'></desasigna-cargo>
-  <modal-sellos :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></modal-sellos>  
+  <sellos-crud :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></sellos-crud>  
+  <!-- <modal-sellos :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></modal-sellos>   -->
   <modal-firmas :datosReligioso="datosReligioso" v-if="verFirmas" @close='verFirmas=false'></modal-firmas>  
 </div>
 </template>
@@ -130,7 +131,8 @@ moment.locale('es');
 
 import asignaCargo from '@/components/asignaCargo.vue';
 import desasignaCargo from '@/components/desasignaCargo.vue';
-import modalSellos from '@/components/modalSellos.vue';
+import SellosCrud from '@/components/SellosCrud.vue';
+// import modalSellos from '@/components/modalSellos.vue';
 import modalFirmas from '@/components/modalFirmas.vue';
 
 import { mapState } from 'vuex';
@@ -146,7 +148,8 @@ export default {
     asignaCargo,
     desasignaCargo,
     modalFirmas,
-    modalSellos
+    SellosCrud
+    // modalSellos
 
   },  
   data(){

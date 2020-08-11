@@ -90,7 +90,7 @@
 
     <hr>
     <div class="botones d-flex justify-content-end">
-      <button class='btn btn-sm btn_1 btn_detail' @click='imgFirmas'>Firmas <span class="badge badge-light"> {{ rec.num_firmas }} </span><span class="sr-only">cantidad de firmas</span></button>
+      <button class='btn btn-sm btn_1 btn_detail' @click='imgFirmas'>Firmas <span class="badge badge-light num-firmas"> {{ rec.num_firmas }} </span><span class="sr-only">cantidad de firmas</span></button>
       <button class='btn btn-sm btn_1 btn_detail' @click='view_content = true'>Salir</button>
     </div>
     </div>

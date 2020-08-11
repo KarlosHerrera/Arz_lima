@@ -41,7 +41,7 @@
             <div class='items'>Items: {{ itemCurrent }}/{{ tmpTipoInstituciones.length }}</div>
         </div>
       </div>
-      <div class='detail' style1='background: white'>  <!--    -->
+      <div class='detail' style1='background: white'>
           <div class="detailHead " style1='background: SandyBrown'>
               <div class='titulo-2'>Detalle</div>
           </div>

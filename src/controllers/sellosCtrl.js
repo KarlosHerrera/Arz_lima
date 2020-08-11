@@ -13,11 +13,10 @@ router.get('/:codInstitucion', async (req, res) => {
     let codInstitucion = req.params.codInstitucion;
     // let { codInstitucion } = req.params.codInstitucion;
     console.log('codInstitucion = ', codInstitucion);
-    // codInstitucion = '132';
-    let sql = `SELECT codSello, codInstitucion, sello, creado
+    let sql = `SELECT codSello, codInstitucion, sello
                 FROM sellosinstitucion 
                 WHERE activo='S' AND codInstitucion = ?  
-                ORDER BY consecSello`;
+                ORDER BY codSello`;
     conn.query(sql, [ codInstitucion ] ,function(err, rows){
         if(err) console.log('err => ', err);
         // console.log('rows = ', rows);
@@ -49,7 +48,7 @@ router.delete('/delete/', async (req, res) => {
 // Ruta temporal
 // let pathImg = './public/media';
 let ruta = require('./../assets/json/config_img.json');
-let pathImg = ruta.pathSellos;
+let pathImg = ruta.serverSellos;
 
 let storage = multer.diskStorage({
   destination: function(req, file, callback){

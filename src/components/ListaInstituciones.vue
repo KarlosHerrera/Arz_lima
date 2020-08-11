@@ -86,7 +86,7 @@
     </div>
     <hr>
     <div class="botones d-flex justify-content-end">
-      <button class='btn btn-sm btn_1 btn_detail' @click='imgSellos'>Sellos <span class="badge badge-light"> {{ rec.num_sellos }} </span><span class="sr-only">cantidad de sellos</span></button>
+      <button class='btn btn-sm btn_1 btn_detail' @click='imgSellos'>Sellos <span class="badge badge-light num-sellos"> {{ rec.num_sellos }} </span><span class="sr-only">cantidad de sellos</span></button>
       <button class='btn btn-sm btn_1 btn_detail' @click='view_content = true'>Salir</button> 
     </div>
     </div>
@@ -95,7 +95,8 @@
   <div class="content-footer align-items-end"  v-if='view_content'>
     <div class='itemCurrent '>Items: {{ itemCurrent}}/{{tmpInstituciones.length}} </div>
   </div>
-  <modal-sellos :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></modal-sellos>  
+  <sellos-crud :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></sellos-crud>
+  <!-- <modal-sellos :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></modal-sellos>   -->
 </div>
 </template>
 
@@ -106,15 +107,16 @@ console.log('<< ListaInstituciones.vue >>');
 import moment from 'moment';
 moment.locale('es');
 
-import modalSellos from '@/components/modalSellos.vue';
+// import modalSellos from '@/components/modalSellos.vue';
+import SellosCrud from '@/components/SellosCrud.vue';
 
 import { mapState } from 'vuex';
 
 export default {
   name: 'Instituciones',
   components: {
-    // vuejsDatepicker,
-    modalSellos
+    SellosCrud
+    // modalSellos
   },  
   data(){
     return {
@@ -149,6 +151,7 @@ export default {
       this.verSellos = !this.verSellos;
       this.datosInstitucion.codInstitucion = this.rec.codInstitucion;
       this.datosInstitucion.nombreInstitucion = this.rec.nombreInstitucion;
+       this.datosInstitucion.crud = false;
     },
     async loadInstituciones(){
       // console.log('loadInstituciones()');

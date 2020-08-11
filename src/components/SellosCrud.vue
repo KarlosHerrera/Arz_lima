@@ -13,22 +13,25 @@
       <div class="modal-body" ref='sellos_body'> 
         <div class='noImgs' v-if='imagenes.length == 0'>Sin imagenes.</div>
         <img class='newImg' ref='imagen' v-if='!verImgs'>
-        <b-carousel id="carouselSellos" :interval="0" controls indicators  v-if='verImgs' ref='itmSellos' @sliding-start='slidingStart' :img-width="500" :img-height="300">     
+        <b-carousel id="carouselSellos" :interval="0" controls indicators  v-if='verImgs' ref='itmSellos' @sliding-start='slidingStart' :img-width="500" :img-height="300" class="d-block img-fluid">     
           <b-carousel-slide v-for="(itm, index) in imagenes" :key='index' :img-src="itm.sello" img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide>
         </b-carousel>
+<!-- <b-carousel-slide img-src="media/sellos/00131-1.jpg" img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide> -->
+<!-- <img src="../media/sellos/00131-1.jpg"> -->
       </div>
-      <div class='mensaje' v-if='verMsg'>{{ messages }}</div>
+
+      <!-- <div class='mensaje' v-if='verMsg'>{{ messages }}</div> -->
       <div class="modal-footer d-flex justify-content-between align-items-center">
         <div class='i-itm col1-1 d-flex justify-content-start' style1='background: plum'>
           <div class='items'>Items: {{indexImg}}/{{imagenes.length}}</div> 
         </div>
-        <div class='i-add d-flex justify-content-center' style='background: teal'>
+        <div class='i-add d-flex justify-content-center' v-if="verDelImg" style='background: teal'>
           <button class="btn-crud btn btn-sm btn_1" v-if="verAddImg" @click="addImg"><span></span>Adicionar</button>
           <button class="btn-crud btn btn-sm btn_1" v-if="!verAddImg" @click="confirmAdd"><span></span>Confirma</button>
           <span class='d-flex align-items-center ml-2 '>{{ nameImgOld }}</span>
           <input type="file" class="d-none" id="idFile" ref='idFile' @change='verImg(this)' > 
         </div> 
-        <div class='i-del d-flex justify-content-center' v-if="imagenes.length>0" style='background: tomato'>
+        <div class='i-del d-flex justify-content-center' v-if="imagenes.length>0 && verAddImg" style='background: tomato'>
           <button class="btn-crud btn btn-sm btn_1" v-if="verDelImg" @click="deleteImg">Borrar</button>
           <button class="btn-crud btn btn-sm btn_1" v-if="!verDelImg" @click="confirmDelete">Confirma</button>                
         </div>
@@ -62,7 +65,8 @@ export default {
   props: {
     titulo: { type: String, default: 'Cabecera' },
     cuerpo: { type: String, default: 'Cuerpo' },
-    datosInstitucion: { type: Object, default: function(){ return {} } }
+    datosInstitucion: { type: Object, default: function(){ return {} } },
+    // crud: { type: Boolean, default: false }
   }, 
   data() {
     return {
@@ -88,6 +92,7 @@ export default {
     setComponent: function(){
       let ruta = require('./../assets/json/config_img.json');
       this.pathImg = ruta.pathSellos;
+      if( !this.datosInstitucion.crud ) { this.verAddImg= false, this.verDelImg = false }
     },
     addImg(){
       console.log('addImg()');
@@ -186,7 +191,7 @@ export default {
       this.$refs.sellos_body.style.borderColor='';
     },
     cargaSellos: function(){
-      console.log('modalSellos.cargaSellos()');
+      console.log('cargaSellos()');
       let codInstitucion = this.datosInstitucion.codInstitucion.trim();
       // console.log('path: ', this.pathImg);
       let self = this;
@@ -220,7 +225,7 @@ export default {
       console.log('sellos_aws()');
       let codInstitucion = this.datosInstitucion.codInstitucion.trim();
       let self = this;
-      let url = this.host+'/instituciones/sello/'+codInstitucion;
+      let url = this.host+'/sellos/'+codInstitucion;
       axios.get(url)
       .then(function(response){ 
         if( response.data.length == 0 ){
@@ -331,89 +336,4 @@ export default {
 }
 </script>
 <style scoped src="@/assets/css/modalComponent.css"></style>
-<style scoped>
-.modal-container {
-    width: 45rem;
-    height:60%;
-} 
-.modal-header {
-    height: 10%;
-    height: 8%;
-    padding: 0.40rem 0.35rem;
-}
-.modal-body {
-  /* width: 100%; */
-  height: 80%;
-  background-color: lightgray;
-  margin: 5px 0;
-
-}
-.i-itm {
-  width: 12%;
-}
-.i-add, .i-del {
-  width: 35%;
-}
-.i-exit {
-  width: 12%;
-}
-.mensaje {
-  text-align: center;
-  color: blue;
-  font-size: 1.2rem;
-}
-.img-sello{
-  width: 100%;
-  height: 100%;
-}
-.carousel-item IMG {
-  width: 100%;
-  height: 100%;
-}    
-.newImg {
-  width: 75%; 
-  height: 100%;
-}
-.titImg{
-    position: absolute;
-    top: 10px;
-    left: 10px;
-}
-.modal-footer {
-    margin: 0;
-    padding: 0;
-    height: 10%;  
-}
-.noImgs {
-  font-size: 1.5rem;
-
-}
-.titulo-1 {
-    font-size: 1.1rem;
-    font-weight: 600;
-
-}
-.items {
-  font-weight: 400;
-}
-.btn-crud {
-    width: 4.3rem;
-
-}
-.escape{
-    border: 1px solid black;
-    padding: 2px;
-}
-.escape:hover {
-    cursor: pointer;
-    background-color: rgb(165, 162, 162);
-    color: white;
-}
-.btnExit {
-   width: 5rem; 
-}
-.col-1, .col-2, .col-4 {
-    padding: 0;
-}
-
-</style>
+<style scoped src="@/assets/css/imgCrud.css"></style>

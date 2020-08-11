@@ -1,0 +1,84 @@
+/* imgCrud.css */
+.modal-container {
+    width: 45rem;
+    height:60%;
+} 
+.modal-header {
+    height: 10%;
+    height: 8%;
+    padding: 0.40rem 0.35rem;
+}
+.modal-body {
+  /* width: 100%; */
+  height: 80%;
+  background-color: lightgray;
+  margin: 5px 0;
+
+}
+.i-itm {
+  width: 12%;
+}
+.i-add, .i-del {
+  width: 35%;
+}
+.i-exit {
+  width: 12%;
+}
+.mensaje {
+  text-align: center;
+  color: blue;
+  font-size: 1.2rem;
+}
+.img-sello{
+  width: 100%;
+  height: 100%;
+}
+.carousel-item IMG {
+  width: 100%;
+  height: 100%;
+}    
+.newImg {
+  width: 75%; 
+  height: 100%;
+}
+.titImg{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+.modal-footer {
+    margin: 0;
+    padding: 0;
+    height: 10%;  
+}
+.noImgs {
+  font-size: 1.5rem;
+
+}
+.titulo-1 {
+    font-size: 1.1rem;
+    font-weight: 600;
+
+}
+.items {
+  font-weight: 400;
+}
+.btn-crud {
+    width: 4.3rem;
+
+}
+.escape{
+    border: 1px solid black;
+    padding: 2px;
+}
+.escape:hover {
+    cursor: pointer;
+    background-color: rgb(165, 162, 162);
+    color: white;
+}
+.btnExit {
+   width: 5rem; 
+}
+.col-1, .col-2, .col-4 {
+    padding: 0;
+}

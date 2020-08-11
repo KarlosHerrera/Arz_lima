@@ -35,7 +35,7 @@
           <td class=' d-flex justify-content-center align-items-center'>
             <button class='btn btn-sm btn_actions btn_1' @click='updateItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Editar</button>
             <button class='btn btn-sm btn_actions btn_1' @click='deleteItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Anular</button>
-            <button class='btn btn-sm btn_actions btn_1' @click='sellosItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Sellos</button>
+            <button class='btn btn-sm btn_actions btn_1' @click='sellosItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Sellos <span class="badge badge-light num-sellos">{{ doc.num_sellos }}</span></button>
           </td>
         </tr>
       </tbody>
@@ -166,7 +166,7 @@
     <div class='itemCurrent '>Items: {{ itemCurrent}}/{{tmpInstituciones.length}} </div>
   </div>
   <sellos-crud :datosInstitucion="datosInstitucion" v-if="verSellosCrud" @close='verSellosCrud=false'></sellos-crud>
-  <modal-sellos :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></modal-sellos>  
+  <!-- <modal-sellos :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></modal-sellos>   -->
 </div>
 </template>
 
@@ -181,7 +181,7 @@ import { evalInput, evalString, evalValue } from '@/assets/js/form';
 import moment from 'moment';
 moment.locale('es');
 
-import modalSellos from '@/components/modalSellos.vue';
+// import modalSellos from '@/components/modalSellos.vue';
 import SellosCrud from '@/components/SellosCrud.vue';
 
 import opcionesCrud from '@/components/opciones-crud.vue'
@@ -196,7 +196,7 @@ export default {
   name: 'Instituciones',
   components: {
     SellosCrud,
-    modalSellos,
+    // modalSellos,
     opcionesCrud
   },  
   data(){
@@ -436,7 +436,7 @@ export default {
       this.verSellosCrud = !this.verSellosCrud;
       this.datosInstitucion.codInstitucion = this.tmpInstituciones[index].codInstitucion;
       this.datosInstitucion.nombreInstitucion = this.tmpInstituciones[index].nombreInstitucion;
-
+      this.datosInstitucion.crud = true;
     },
     imgSellos(index){
       console.log(`imgSellos(${index})`);
@@ -629,6 +629,7 @@ padding: 0.45rem;
   width: 4rem;
 
 }
+
 thead tr {
      /* height: 1.6rem !important;  */
   /* background-color: rgb(66, 31, 31);      */

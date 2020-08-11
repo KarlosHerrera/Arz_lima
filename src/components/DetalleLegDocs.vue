@@ -51,7 +51,7 @@
             </v-select>
         </div>
         <div class="col-2 form-group align-self-end">
-         <button id='btnSellos' class='btn btn-sm btn_1 btnSellos' :disabled='!rec.codInstitucion' @click='view_sellos'>Sellos <span class="badge badge-light">{{ num_sellos }}</span></button>
+         <button id='btnSellos' class='btn btn-sm btn_1 btnSellos' :disabled='!rec.codInstitucion' @click='view_sellos'>Sellos <span class="badge badge-light num-sellos">{{ num_sellos }}</span></button>
         </div>
       </div>
       <div class="form-row">
@@ -65,7 +65,7 @@
             </v-select>          
         </div>
         <div class="col-2 form-group align-self-end">
-         <button id='btnFirmas' class='btn btn-sm btn_1 btnFirmas' :disabled='!rec.codReligioso' @click="view_firmas">Firmas <span class="badge badge-light">{{ num_firmas }}</span></button>
+         <button id='btnFirmas' class='btn btn-sm btn_1 btnFirmas' :disabled='!rec.codReligioso' @click="view_firmas">Firmas <span class="badge badge-light num-firmas">{{ num_firmas }}</span></button>
         </div>
       </div> 
       <div class="form-row">
@@ -133,7 +133,8 @@
     <opciones-crud class='' :crud="crud" @confirm_Create="confirmCreate" @confirm_Update="confirmUpdate" @confirm_Delete="confirmDelete" @exit_Form="exitForm" @reset_Form='resetForm'></opciones-crud>
 
   </div>
-<modal-sellos :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></modal-sellos>
+<sellos-crud :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></sellos-crud>
+<!-- <modal-sellos :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></modal-sellos> -->
 <modal-firmas :datosReligioso="datosReligioso" v-if="verFirmas" @close='verFirmas=false'></modal-firmas>
 
 </div>
@@ -148,7 +149,8 @@ import axios from 'axios';
 import moment from 'moment';
 moment.locale('es');
 // import modal from '@/components/modal.vue';
-import modalSellos from '@/components/modalSellos.vue';
+// import modalSellos from '@/components/modalSellos.vue';
+import SellosCrud from '@/components/SellosCrud.vue';
 import modalFirmas from '@/components/modalFirmas.vue';
 
 
@@ -170,9 +172,10 @@ const swal2 = Swal.mixin(optAlert);
 export default {
   name: 'detalleLegDoc',
   components: {
+    SellosCrud,
     opcionesCrud,
     vuejsDatepicker,
-    modalSellos,
+    // modalSellos,
     modalFirmas
   },
   data(){

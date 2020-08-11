@@ -35,7 +35,7 @@
           <td class=' d-flex justify-content-center align-items-center'>
             <button class='btn btn-sm btn_actions btn_1' @click='updateItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Editar</button>
             <button class='btn btn-sm btn_actions btn_1' @click='deleteItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Anular</button>
-            <button class='btn btn-sm btn_actions btn_1' @click='firmasItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Firmas</button>
+            <button class='btn btn-sm btn_actions btn_1' @click='firmasItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Firmas <span class="badge badge-light num-firmas"> {{ rec.num_firmas }} </span></button>
           </td>
         </tr>
       </tbody>
@@ -429,6 +429,7 @@ export default {
       this.verFirmas = !this.verFirmas;
       this.datosReligioso.codReligioso = this.rec.codReligioso;
       this.datosReligioso.apellidosNombres = this.rec.apellidosNombres;
+      this.datosReligioso.crud = true;
     },
     async loadReligiosos(){
       // console.log('loadInstituciones()');

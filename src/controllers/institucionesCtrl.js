@@ -85,9 +85,7 @@ router.post('/instituciones/:id', async (req, res) => {
 router.get('/sello/:codInstitucion', async (req, res) => {
     // console.log(`${ req.url }`);
     let codInstitucion = req.params.codInstitucion;
-    // let { codInstitucion } = req.params.codInstitucion;
-    console.log('codInstitucion = ', codInstitucion);
-    // codInstitucion = '132';
+
     let sql = `SELECT codInstitucion, consecSello, sello, creado
                 FROM sellosinstitucion 
                 WHERE activo='S' AND codInstitucion = ?  
@@ -104,8 +102,7 @@ router.get('/sello/:codInstitucion', async (req, res) => {
 router.post('/create', async (req, res) => {
     console.log('/instituciones/create');
     // const {username, fullname, role, password, mobile} = req.body;
-    // console.log('------------ body ---------------');
-    // console.log(username, fullname, role, password, mobile);
+
     let data = req.body;
     let codInstitucion = data.codInstitucion;
     console.log('Data =>', data);
@@ -147,10 +144,7 @@ router.put('/update', (req, res) => {
             res.json({status: true, msg: 'Sucessfull', codInstitucion: codInstitucion, crud: 'update'});
         }
     }); 
-    // res.json({
-    //     status: 'ok',
-    //     crud: 'update'
-    // });
+
 });
 // Delete one document
 router.delete('/delete', async (req, res) => {

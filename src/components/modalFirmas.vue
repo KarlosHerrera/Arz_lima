@@ -57,7 +57,6 @@ export default {
     cargaFirmas: function(){
       // console.log('modalFirmas.cargaFirmas()');
       let codReligioso = this.datosReligioso.codReligioso.trim();
-      // console.log('codReligioso = ', codReligioso );
       let self = this;
       let url = this.host+'/religiosos/firmas/'+codReligioso;
       axios.get(url)

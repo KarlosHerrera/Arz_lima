@@ -1,5 +1,4 @@
 // religiososRouter.js
-
 const express = require('express');
 const router = express.Router();
 const conn = require('../assets/js/db_mysql.js');
@@ -91,29 +90,7 @@ router.post('/id', async (req, res) => {
     });
 
 });
-// Get one document
-// router.get('/:id', (req, res) => {
-router.get('/one', async (req, res) => {
-    // console.log('get:id');
-    // let id = req.params;
-    // console.log('params: ', id);
-    // const id = req.body._id;
-    // try {
-    //     // let oCondition = { active: true };
-    //     // const users = await User.find({ _id : id });
-    //     res.json(users);
-    // } catch (err) {
-    //     // res.status(500).json({ message: err.message });
-    //     res.status(500).json([]);
-    // }    
-    // res.json({
-    //     status: 'ok',
-    //     crud: 'read one',
-    //     id: id,
-    //     fullname
-    // });
 
-});
 // Create document
 router.post('/create', async (req, res) => {
     console.log('/religiosos/create');
@@ -177,13 +154,11 @@ router.delete('/delete', async (req, res) => {
 router.get('/firmas/:codReligioso', async (req, res) => {
     // console.log(`${ req.url }`);
     let codReligioso = req.params.codReligioso;
-    // let { codReligioso } = req.params.codReligioso;
-    // console.log('codReligioso = ', codReligioso);
-    // let codReligioso = '131'
-    let sql = `SELECT codReligioso, consecFirma, firma, creado
+
+    let sql = `SELECT codFirmas, codReligioso, firma
                 FROM firmareligiosos 
                 WHERE activo='S' AND codReligioso= ?  
-                ORDER BY consecFirma`;
+                ORDER BY codFirmas`;
     conn.query(sql, [ codReligioso ] ,function(err, rows){
         if(err) console.log('err => ', err);
         console.log('rows = ', rows);
