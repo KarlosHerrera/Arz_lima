@@ -25,17 +25,17 @@
         <div class='i-itm col1-1 d-flex justify-content-start' style1='background: plum'>
           <div class='items'>Items: {{indexImg}}/{{imagenes.length}}</div> 
         </div>
-        <div class='i-add d-flex justify-content-center' v-if="verDelImg" style='background: teal'>
+        <div class='i-add d-flex justify-content-center' v-if="verDelImg" style='background: lightblue'>
           <button class="btn-crud btn btn-sm btn_1" v-if="verAddImg" @click="addImg"><span></span>Adicionar</button>
           <button class="btn-crud btn btn-sm btn_1" v-if="!verAddImg" @click="confirmAdd"><span></span>Confirma</button>
           <span class='d-flex align-items-center ml-2 '>{{ nameImgOld }}</span>
           <input type="file" class="d-none" id="idFile" ref='idFile' @change='verImg(this)' > 
         </div> 
-        <div class='i-del d-flex justify-content-center' v-if="imagenes.length>0 && verAddImg" style='background: tomato'>
+        <div class='i-del d-flex justify-content-center' v-if="imagenes.length>0 && verAddImg" style='background: red'>
           <button class="btn-crud btn btn-sm btn_1" v-if="verDelImg" @click="deleteImg">Borrar</button>
           <button class="btn-crud btn btn-sm btn_1" v-if="!verDelImg" @click="confirmDelete">Confirma</button>                
         </div>
-        <div class='i-exit d-flex justify-content-end'  style1='background: tan'>
+        <div class='i-exit d-flex justify-content-end'  style1='background: orange'>
             <button class="btnExit btn btn-sm btn_1" v-if='verSalir' @click="$emit('close')">Salir</button>
             <button class="btnCancel btn btn-sm btn_1" v-if='!verSalir' @click="cancel">Cancela</button>
         </div>
@@ -125,7 +125,8 @@ export default {
           let res = await data.json();
           if( res.status ) {
             self.nameImgOld = '';
-            this.cargaSellos()
+            // this.cargaSellos()
+              this.sellos_aws();
           }
           let text = (res.status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!'; 
           await swal2.fire({ title: 'Nuevo Sello ', text: text });      
@@ -157,7 +158,10 @@ export default {
       try {
         let data = await fetch(url, options);
         let res = await data.json();
-        if( res.status ) this.cargaSellos();          
+        if( res.status ) {
+          // this.cargaSellos()
+            this.sellos_aws();
+        }
         let text = (res.status)? 'Anulado Satisfactoriamente!': 'Fallo la anulacion!';
         await swal2.fire({title: 'Elimina Sello', text: text});
       } catch (error) {
@@ -187,7 +191,8 @@ export default {
       console.log('cancel()');
       this.verAddImg = true;
       this.verDelImg = true;
-      this.verSalir = true;    
+      this.verSalir = true;   
+      this.nameImgOld = '';
       this.$refs.sellos_body.style.borderColor='';
     },
     cargaSellos: function(){
@@ -330,8 +335,8 @@ export default {
     this.setComponent();
   },
   mounted: function(){
-    this.cargaSellos();
-    // this.sellos_aws();
+    // this.cargaSellos();
+    this.sellos_aws();
   }  
 }
 </script>

@@ -264,7 +264,7 @@ export default {
       // console.dir(objForm);
       let obs='';
       let evaluacion = true;
-      if( !evalValue('codReligioso') ) { obs+='*Codigo '; evaluacion = false}
+      // if( !evalValue('codReligioso') ) { obs+='*Codigo '; evaluacion = false}
       if( !evalValue('apellidosNombres') ) { obs+=' *Nombre '; evaluacion = false}
       if( !evalString(this.rec.codJerarquia) ) {obs+=' *Jerarquia'; evaluacion = false}
       if( !evalString(this.rec.codDepartamento) ) {obs+=' *Departamento'; evaluacion = false}

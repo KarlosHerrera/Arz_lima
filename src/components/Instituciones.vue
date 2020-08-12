@@ -276,7 +276,7 @@ export default {
       // console.dir(objForm);
       let obs='';
       let evaluacion = true;
-      if( !evalValue('codInstitucion') ) { obs+='*Codigo '; evaluacion = false}
+      // if( !evalValue('codInstitucion') ) { obs+='*Codigo '; evaluacion = false}
       if( !evalValue('nombreInstitucion') ) { obs+=' *Nombre '; evaluacion = false}
       if( !evalString(this.rec.tipoInstitucion) ) {obs+=' *Tipo'; evaluacion = false}
       if( !evalString(this.rec.codDepartamento) ) {obs+=' *Departamento'; evaluacion = false}
