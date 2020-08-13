@@ -5,7 +5,7 @@
   <div class="modal-wrapper">
     <div class="modal-container">
       <div class="modal-header d-flex justify-content-between align-items-center">
-          <div class='titulo-1 align-items-left'>Religiosos</div>
+          <div class='titulo-1 align-items-left'>Religioso</div>
           <div class='titulo-2 align-items-center'> {{ datosReligioso.codReligioso }} - {{ datosReligioso.apellidosNombres }}</div>
           <div class='escape lign-items-end' @click="$emit('close')">X</div>
       </div>
