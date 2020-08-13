@@ -6,7 +6,7 @@
           <div class='titulo_2' v-if='view_content'>Consulta de Religiosos</div>
           <div class='titulo_2' v-if='!view_content'>Datos de Religioso</div>
           <div class='d-flex justify-content-end' >  
-            <filtra-tabla v-if='view_content' :recordList="Religiosos_min" :colsSearch='searchReligiosos' @filter_Process="filterProcessInst" ></filtra-tabla>
+            <filtra-tabla v-if='view_content' :recordList="Religiosos_min" :colsSearch='searchReligiosos' @filter_Process="filterProcessRel" ></filtra-tabla>
           </div>
 
     </div>    
@@ -99,7 +99,8 @@
   <div class="content-footer align-items-end"  v-if='view_content'>
     <div class='itemCurrent '>Items: {{ itemCurrent}}/{{tmpReligiosos.length}} </div>
   </div>
- <modal-firmas :datosReligioso="datosReligioso" v-if="verFirmas" @close='verFirmas=false'></modal-firmas>  
+ <firmas-crud :datosReligioso="datosReligioso" v-if="verFirmas" @close='verFirmas=false'></firmas-crud>  
+ <!-- <modal-firmas :datosReligioso="datosReligioso" v-if="verFirmas" @close='verFirmas=false'></modal-firmas>   -->
 </div>
 </template>
 
@@ -110,14 +111,16 @@ console.log('<< ListaReligiosos.vue >>');
 import moment from 'moment';
 moment.locale('es');
 
-import modalFirmas from '@/components/modalFirmas.vue';
+// import modalFirmas from '@/components/modalFirmas.vue';
+import FirmasCrud from '@/components/FirmasCrud.vue';
 
 import { mapState } from 'vuex';
 
 export default {
-  name: 'Religiosos',
+  name: 'ListaReligiosos',
   components: {
-    modalFirmas
+    FirmasCrud
+    // modalFirmas
   },  
   data(){
     return {
@@ -151,7 +154,8 @@ export default {
       console.log(`imgFirmas(${index})`);
       this.verFirmas = !this.verFirmas;
       this.datosReligioso.codReligioso = this.rec.codReligioso;
-      this.datosReligioso.nombreReligioso = this.rec.apellidosNombres;
+      this.datosReligioso.apellidosNombres = this.rec.apellidosNombres;
+      this.datosReligioso.crud = false;
     },
     async loadReligiosos(){
       // console.log('loadReligiosos()');
@@ -178,7 +182,7 @@ export default {
     itemBlur(){
       this.itemCurrent = 0;
     },    
-    filterProcessInst: function(value){
+    filterProcessRel: function(value){
       // console.log('value = ', value);
       this.tmpReligiosos = value;
     }    
@@ -206,7 +210,7 @@ export default {
 .content-body {
   height: 84%;
   border: 1px solid gray;
-    margin: 0.25rem 0.1rem;
+  margin: 0.25rem 0.1rem;
 }
 .content-footer {
     height: 5%;

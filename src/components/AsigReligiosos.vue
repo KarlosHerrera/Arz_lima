@@ -118,7 +118,8 @@
   <desasigna-cargo :datosAsignacion="rec" v-if='verDesasignacionCargo' @close='verDesasignacionCargo=false' @retorno_desasignacion='retornoDesasignacion'></desasigna-cargo>
   <sellos-crud :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></sellos-crud>  
   <!-- <modal-sellos :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></modal-sellos>   -->
-  <modal-firmas :datosReligioso="datosReligioso" v-if="verFirmas" @close='verFirmas=false'></modal-firmas>  
+  <firmas-crud :datosReligioso="datosReligioso" v-if="verFirmas" @close='verFirmas=false'></firmas-crud>  
+  <!-- <modal-firmas :datosReligioso="datosReligioso" v-if="verFirmas" @close='verFirmas=false'></modal-firmas>   -->
 </div>
 </template>
 
@@ -133,7 +134,8 @@ import asignaCargo from '@/components/asignaCargo.vue';
 import desasignaCargo from '@/components/desasignaCargo.vue';
 import SellosCrud from '@/components/SellosCrud.vue';
 // import modalSellos from '@/components/modalSellos.vue';
-import modalFirmas from '@/components/modalFirmas.vue';
+import FirmasCrud from '@/components/FirmasCrud.vue';
+// import modalFirmas from '@/components/modalFirmas.vue';
 
 import { mapState } from 'vuex';
 
@@ -147,7 +149,8 @@ export default {
     // vuejsDatepicker,
     asignaCargo,
     desasignaCargo,
-    modalFirmas,
+    // modalFirmas,
+    FirmasCrud,
     SellosCrud
     // modalSellos
 
@@ -263,7 +266,7 @@ export default {
       console.log('imgFirmas()');
       this.verFirmas = !this.verFirmas;
       this.datosReligioso.codReligioso = this.tmpReligiosos[index].codReligioso;
-      this.datosReligioso.nombreReligioso = this.tmpReligiosos[index].apellidosNombres;
+      this.datosReligioso.apellidosNombres = this.tmpReligiosos[index].apellidosNombres;
 
     },
     async loadReligiosos(){

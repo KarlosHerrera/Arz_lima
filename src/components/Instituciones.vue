@@ -569,6 +569,8 @@ export default {
 //  let valor = this.$refs.codInstitucion;
 //  console.log('list_iew():')
 //  console.log('valor: ', valor);
+// console.log('process.env.__basedir ==>', process.env.__basedir);
+
   }   
 }
 </script>

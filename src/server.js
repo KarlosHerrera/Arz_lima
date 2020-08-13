@@ -19,12 +19,14 @@ const sacramentosCtrl = require('./controllers/sacramentosCtrl');
 const jerarquiasCtrl = require('./controllers/jerarquiasCtrl');
 const tablasCtrl = require('./controllers/tablasCtrl');
 const sellosCtrl = require('./controllers/sellosCtrl');
+const firmasCtrl = require('./controllers/firmasCtrl');
 
 // settings
 app.set('port', process.env.PORT || 3000);  // Configuracion de puerto (variables globales)
 
 app.use('/', serveStatic(path.join(__dirname,'./../dist')));  // Carga 
 
+// console.log('server.js  __dirname ==>', __dirname);
 // middleware
 app.use(express.json());
 app.use(morgan('dev'));
@@ -32,7 +34,10 @@ app.use(cors());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());     // application/json
 app.use(express.static(path.join(__dirname, './public')));
-
+// global.__basedir =  __dirname;
+// console.log('global.__basedir ===>', global.__basedir);
+// process.env.__basedir = __dirname;
+// console.log("express.static(path.join(__dirname, './public')) =>>", express.static(path.join(__dirname, './public')) );
 //
 app.use('/', (req, res, next) => {
   let fechaHoy =new Date();
@@ -48,6 +53,7 @@ app.use('/tablas', tablasCtrl);
 app.use('/sacramentos', sacramentosCtrl);
 app.use('/jerarquias', jerarquiasCtrl);
 app.use('/sellos', sellosCtrl);
+app.use('/firmas', firmasCtrl);
 
 // settings
 

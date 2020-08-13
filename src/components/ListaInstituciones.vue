@@ -113,7 +113,7 @@ import SellosCrud from '@/components/SellosCrud.vue';
 import { mapState } from 'vuex';
 
 export default {
-  name: 'Instituciones',
+  name: 'ListaInstituciones',
   components: {
     SellosCrud
     // modalSellos
@@ -151,7 +151,7 @@ export default {
       this.verSellos = !this.verSellos;
       this.datosInstitucion.codInstitucion = this.rec.codInstitucion;
       this.datosInstitucion.nombreInstitucion = this.rec.nombreInstitucion;
-       this.datosInstitucion.crud = false;
+      this.datosInstitucion.crud = false;
     },
     async loadInstituciones(){
       // console.log('loadInstituciones()');
@@ -206,7 +206,7 @@ export default {
 .content-body {
   height: 84%;
   border: 1px solid gray;
-    margin: 0.25rem 0.1rem;
+  margin: 0.25rem 0.1rem;
 }
 .content-footer {
     height: 5%;

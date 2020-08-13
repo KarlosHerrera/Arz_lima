@@ -4,33 +4,43 @@
   <div class="modal-mask">
   <div class="modal-wrapper">
     <div class="modal-container">
-        <div class="modal-header d-flex justify-content-between align-items-center">
-            <div class='titulo-1 align-items-left'>Institucion</div>
-            <div class='titulo-2 align-items-center'> {{ datosInstitucion.codInstitucion }} - {{ datosInstitucion.nombreInstitucion }}</div>
-            <div class='escape lign-items-end' @click="$emit('close')">X</div> 
-        </div>      
-       <div class="modal-body"> 
-          <div class='noImgs' v-if='!verImgs'>Sin imagenes de sello(s)</div>
-          <b-carousel id="carouselSellos" :interval="0" controls indicators  v-if='verImgs'> 
-            <b-carousel-slide v-for="(itm, index) in imagenes" :key='index' :img-src="itm.sello" ></b-carousel-slide>
-          </b-carousel>
-       </div>
-        <div class="modal-footer d-flex justify-content-between align-items-center">
-           <div class='col-1 d-flex justify-content-center' style='background: plum'>
-                <div>Items:</div>
-            </div>             
-            <div class='col-4 d-flex justify-content-center' style='background: teal'>
-                <button class="btn-crud btn btn-sm btn_1" @click="addImg">Adicionar</button>
-                <button class="btn-crud btn btn-sm btn_1" @click="confirmAdd">Confirma</button>
-            </div> 
-            <div class='col-4  d-flex justify-content-center' style='background: tomato'>
-                <button class="btn-crud btn btn-sm btn_1" @click="deleteImg">Borrar</button>
-                <button class="btn-crud btn btn-sm btn_1" @click="confirmDelete">Confirma</button>                
-            </div> 
-            <div class='col-2  d-flex justify-content-end'  style='background: tan'>
-                <button class="btnExit btn btn-sm btn_1" @click="$emit('close')">Salir</button>
-            </div>
-        </div>    
+      <div class="modal-header d-flex justify-content-between align-items-center">
+          <div class='titulo-1 align-items-left'>Religiosos</div>
+          <div class='titulo-2 align-items-center'> {{ datosReligioso.codReligioso }} - {{ datosReligioso.apellidosNombres }}</div>
+          <div class='escape lign-items-end' @click="$emit('close')">X</div>
+      </div>
+          
+      <div class="modal-body" ref='sellos_body'> 
+        <div class='noImgs' v-if='imagenes.length == 0'>Sin imagenes.</div>
+        <img class='newImg' ref='imagen' src='' v-if='!verImgs'>
+        <b-carousel id="carouselFirmas" :interval="0" controls indicators  v-if='verImgs' ref='itmFirmas' @sliding-start='slidingStart' :img-width="500" :img-height="300" class="d-block img-fluid">     
+          <b-carousel-slide v-for="(itm, index) in imagenes" :key='index' :img-src="itm.firma" img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide>
+        </b-carousel>
+<!-- <b-carousel-slide img-src="media/sellos/00131-1.jpg" img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide> -->
+<!-- <img src="../media/sellos/00131-1.jpg"> -->
+      </div>
+
+      <div class='mensaje' v-if='verMsg'>{{ messages }}</div>
+      <div class="modal-footer d-flex justify-content-between align-items-center">
+        <div class='i-itm col1-1 d-flex justify-content-start' style1='background: plum'>
+          <div class='items'>Items: {{indexImg}}/{{imagenes.length}}</div> 
+        </div>
+        <div class='i-add d-flex justify-content-center' v-if="verDelImg" style1='background: lightblue'>
+          <button class="btn-crud btn btn-sm btn_1" v-if="verAddImg" @click="addImg"><span></span>Adicionar</button>
+          <button class="btn-crud btn btn-sm btn_1" v-if="!verAddImg" @click="confirmAdd"><span></span>Confirma</button>
+          <!-- <span class='d-flex align-items-center ml-2 '>{{ nameImgOld }}</span> -->
+          <input type="file" class="d-none" id="idFile" ref='idFile' @change='verImg(this)' > 
+        </div> 
+        <div class='i-del d-flex justify-content-center' v-if="imagenes.length>0 && verAddImg" style1='background: red'>
+          <button class="btn-crud btn btn-sm btn_1" v-if="verDelImg" @click="deleteImg">Borrar</button>
+          <button class="btn-crud btn btn-sm btn_1" v-if="!verDelImg" @click="confirmDelete">Confirma</button>                
+        </div>
+        <div class='i-exit d-flex justify-content-end'  style1='background: orange'>
+            <button class="btnExit btn btn-sm btn_1" v-if='verSalir' @click="$emit('close')">Salir</button>
+            <button class="btnCancel btn btn-sm btn_1" v-if='!verSalir' @click="cancel">Cancela</button>
+        </div>
+
+      </div>
     </div>    
   </div>    
   </div>    
@@ -39,27 +49,40 @@
 
 </template>
 <script>
-console.log('<< sellos-crud.vue >>');    
+console.log('<< firmas-crud.vue >>');    
 
 import axios from 'axios';
 import { mapState } from 'vuex';
 
+// import Swal from 'sweetalert2';
+// let optAlert = require('@/assets/json/opt_swal2.json');
+// const swal2 = Swal.mixin(optAlert);
+
 const s3 = require('@/assets/js/aws_connection.js');
 
 export default {
-  name: 'sellos-crud',
+  name: 'firmas-crud',
   props: {
     titulo: { type: String, default: 'Cabecera' },
     cuerpo: { type: String, default: 'Cuerpo' },
-    datosInstitucion: { type: Object, default: function(){ return {} } }
+    datosReligioso: { type: Object, default: function(){ return {} } },
+    // crud: { type: Boolean, default: false }
   }, 
   data() {
     return {
-      acepta: false,
-      pathImg: '',
       imagenes: [],
+      pathImg: '',
       verImgs: true,
-      indexImg: 0
+      indexImg: 0,
+      verAddImg: true,
+      verDelImg: true,
+      verSalir: true,
+      imgTmp: '',
+      verNewImg: false,
+      nameImgOld: '',
+      nameImgNew: '',
+      messages: '',
+      verMsg: true
     }
   },
   computed: { // Expone state al template
@@ -68,43 +91,140 @@ export default {
   methods: {
     setComponent: function(){
       let ruta = require('./../assets/json/config_img.json');
-      this.pathImg = ruta.pathSellos;
+      this.pathImg = ruta.pathFirmas;
+      if( !this.datosReligioso.crud ) { this.verAddImg= false, this.verDelImg = false }
     },
     addImg(){
+      console.log('addImg()');
+      this.verAddImg = !this.verAddImg;
+      this.verSalir = false;
+      this.$refs.idFile.click();
 
     },
-    confirmAdd(){
+    async confirmAdd(){
+      console.log('confirmAdd()');
+      this.verNewImg = false; 
+      this.verAddImg = !this.verAddImg;
+      this.verMsg = false;
+      let self = this;
+      let input = this.$refs.idFile;
+
+      let formSello = new FormData();
+      formSello.append('codReligioso', this.datosReligioso.codReligioso);
+      formSello.append('firma', this.nameImgNew);
+      formSello.append('creado_usuario', this.$store.state.User_Name);
+      formSello.append('imgFirma', input.files[0]);
+
+      let url = this.host+'/firmas/create';
+      let options = {
+          method: 'POST',
+          //headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          // headers: { 'Content-Type': 'multipart/form-data' },
+          // headers: { 'Content-Type': 'application/json' },
+          body: formSello
+      };
+      try {
+          let data = await fetch(url, options);
+          let res = await data.json();
+          if( res.status ) {
+            self.nameImgOld = '';
+            this.cargaFirmas()
+            // this.firmas_aws();
+          }
+          let text = (res.status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!';
+          this.verMensaje(text);
+          // await swal2.fire({ title: 'Nuevo Sello ', text: text });      
+      } catch (error) {
+          console.log('Error:', error);
+      } 
 
     },
     deleteImg(){
+      console.log('deleteImg()');
+      this.verDelImg = false;
+      this.verSalir = false;
+      this.$refs.sellos_body.style.borderColor='red';
 
     },
-    confirmDelete(){
-        console.log('confirmDelete()');
-        let sellos= document.getElementById('carouselSellos')
-        console.dir(sellos);
+    async confirmDelete(){
+      console.log('confirmDelete()');
+      this.verDelImg = !this.verDelImg;
+      let data = {};
+
+      data.codSello = this.imagenes[this.indexImg -1].codSello;
+      data.eliminado_usuario = this.$store.state.User_Name;
+      let url = this.host+'/firmas/delete';
+      let options = {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      };
+      try {
+        let data = await fetch(url, options);
+        let res = await data.json();
+        if( res.status ) {
+          this.cargaFirmas()
+          // this.firmas_aws();
+        }
+        let text = (res.status)? 'Anulado Satisfactoriamente!': 'Fallo la anulacion!';
+        this.verMensaje(text);
+        // await swal2.fire({title: 'Elimina Sello', text: text});
+      } catch (error) {
+        console.log('Error:', error);
+      }
+
     },
-    cargaSellos: function(){
-      console.log('modalSellos.cargaSellos()');
-      let codInstitucion = this.datosInstitucion.codInstitucion.trim();
+    async verImg(){
+      console.log('verImg()');
+      // let self = this;
+      this.verAddImg = false;
+      this.verNewImg = true;
+      let source = this.$refs.imagen;
+      let input = this.$refs.idFile;   
+      console.log('source: ', source);
+      this.consecutivoFirma();
+     
+      // this.verMensaje(mensaje);
+      if (input.files && input.files[0]) { 
+        let reader = new FileReader();
+        reader.onload = function(e) {
+          // console.log('dentro de reader...')
+          this.messages = this.nameImgNew;
+          source.src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]); // convert to base64 string
+      }
+    },    
+    cancel(){
+      console.log('cancel()');
+      this.verAddImg = true;
+      this.verDelImg = true;
+      this.verSalir = true;  
+      this.verNewImg = false; 
+      this.nameImgOld = '';
+      this.$refs.sellos_body.style.borderColor='';
+    },
+    cargaFirmas: function(){
+      console.log('cargaFirmas()');
+      let codReligioso = this.datosReligioso.codReligioso.trim();
       // console.log('path: ', this.pathImg);
       let self = this;
-      let url = this.host+'/instituciones/sello/'+codInstitucion;
+      let url = this.host+'/firmas/'+codReligioso;
       axios.get(url)
       .then(function(response){ 
         if( response.data.length == 0 ){
           self.verImgs = false;
+          self.indexImg= 0;
         }else{
           self.verImgs = true;
+          self.indexImg= 1;
           let tmp = [];
-          // console.log('imagenes.sellos = ', response.data);
           response.data.forEach(function(img){
-            img.sello = self.pathImg+img.sello.trim();  // Ruta de la imagen
-            // img.sello = path+img.sello;
+            img.firma = self.pathImg+img.firma.trim();  // Ruta de la imagen
+            // img.firma = path+img.firma;
             tmp.push(img);
           })
           self.imagenes = tmp;  // Array de rutas
-          // console.log('imagenes => ', self.imagenes);
         }
       })
       .catch(function(error) {
@@ -113,26 +233,28 @@ export default {
       }) 
 
     },
-    sellos_aws: function(){
-      console.log('sellos_aws()');
-      let codInstitucion = this.datosInstitucion.codInstitucion.trim();
+    firmas_aws: function(){
+      console.log('firmas_aws()');
+      let codReligioso = this.datosReligioso.codReligioso.trim();
       let self = this;
-      let url = this.host+'/instituciones/sello/'+codInstitucion;
+      let url = this.host+'/firmas/'+codReligioso;
       axios.get(url)
       .then(function(response){ 
         if( response.data.length == 0 ){
           console.log('sin imagenes...');
           self.verImgs = false;
+          self.indexImg= 0;
         }else{
           self.verImgs = false;
+          self.indexImg= 1;
           let params = {
             Bucket: 'arz-lima',
-            Key: 'sellos/'
+            Key: 'firmas/'
           };  
           response.data.forEach(function(img){
-            params.Key = 'sellos/'+img.sello;
-            img.sello = self.loadImgS3_2(img.sello);
-            // console.log(img.sello);
+            params.Key = 'firmas/'+img.firma;
+            img.firma = self.loadImgS3_2(img.firma);
+            // console.log(img.firma);
           });
             
         }
@@ -147,7 +269,7 @@ export default {
       console.log(`loadImgS3_1(${imgName})`);
       let params = {
         Bucket: 'arz-lima',
-        Key: 'sellos/'+imgName
+        Key: 'firmas/'+imgName
       };
       // ----- GetObject, DeleteObject, PutObject
       s3.getObject(params, function(err, data) {
@@ -167,84 +289,71 @@ export default {
       let self = this;
       let params = {
         Bucket: 'arz-lima',
-        Key: 'sellos/'+imgName
+        Key: 'firmas/'+imgName
       };  
       let promise = s3.getSignedUrlPromise('getObject', params);
       promise.then(function(url) {
         // console.log('The URL is: ', url);
-        self.imagenes.push({sello: url});
+        self.imagenes.push({firma: url});
       }, 
       function(err) { console.log(err); }
       );
+    },
+    slidingStart: function(slide){
+      // console.log('slidingStart');
+      this.indexImg = slide + 1;
+    },
+    async consecutivoFirma(){
+      console.log('consecutivoFirma()');
+      let codReligioso = this.datosReligioso.codReligioso.trim();
+      let self = this;
+      let url = this.host+'/firmas/consecutivo/'+codReligioso;
+      await axios.get(url)
+      .then(function(res){ 
+        if(res.status){
+          try {
+            let code = res.data.ultConsecutivo + 1;
+            let consecutivoImg = code+'';
+            let input = self.$refs.idFile;  
+            self.nameImgOld = input.files[0].name;
+            // New Name
+            let aFile = input.files[0].name.split('.');
+            let extensionImg = aFile[aFile.length - 1];
+            code = '00000'+self.datosReligioso.codReligioso;
+            self.nameImgNew = code.substring(code.length - 5)+'-'+consecutivoImg+'.'+extensionImg;
+            // console.log('self.nameImgNew ', self.nameImgNew )
+            self.messages = `Nombre Original: `+self.nameImgOld+`   `+`Autogenerado: `+self.nameImgNew;
+
+          }catch(err){
+            console.log('Error: ', err);
+          }
+
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+        return '-1';
+      })       
+
+    },
+    verMensaje(texto){
+      console.log(`verMensaje(${texto})`);
+      this.verMsg = true;
+      let segundos = 4000;
+      setTimeout(function(){
+        this.messages = texto;
+      }, segundos);
+      this.verMsg = false;
     }
   },
   created: function(){
     this.setComponent();
   },
   mounted: function(){
-    //   document.getElementById('imgIndex').addEventListener('slide.bs.carousel', function(evt){
-    //       console.log('Event - slide.bs.carousel');
-    //       this.indexImg = evt.from;
-    //   });
-    this.cargaSellos();
-    // this.sellos_aws();
+    this.cargaFirmas();
+    // this.firmas_aws();
   }  
 }
 </script>
 <style scoped src="@/assets/css/modalComponent.css"></style>
-<style scoped>
-.modal-container {
-    width: 45rem;
-    height:55%;
-} 
-.modal-header {
-    height: 10%;
-    height: 8%;
-    padding: 0.5rem 0.35rem;
-}
-.modal-body {
-  /* width: 100%; */
-  height: 80%;
-  background-color: lightgray;
-  margin: 5px 0;
-
-}
-.img-sello{
-  width: 100%;
-  height: 100%;
-}
-.modal-footer {
-    margin: 0;
-    padding: 0;
-    height: 10%;  
-}
-.noImgs {
-  font-size: 1.5rem;
-
-}
-.titulo-1 {
-    font-size: 1.1rem;
-    font-weight: 600;
-
-}
-.btn-crud {
-    width: 4.3rem;
-
-}
-.escape{
-    border: 1px solid black;
-    padding: 2px;
-}
-.escape:hover {
-    cursor: pointer;
-    background-color: rgb(165, 162, 162);
-    color: white;
-}
-.btnExit {
-   width: 4.3rem; 
-}
-.col-1, .col-2, .col-4 {
-    padding: 0;
-}
-
-</style>
+<style scoped src="@/assets/css/imgCrud.css"></style>

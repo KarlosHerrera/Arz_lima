@@ -134,8 +134,9 @@
 
   </div>
 <sellos-crud :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></sellos-crud>
+<firmas-crud :datosReligioso="datosReligioso" v-if="verFirmas" @close='verFirmas=false'></firmas-crud>  
 <!-- <modal-sellos :datosInstitucion="datosInstitucion" v-if="verSellos" @close='verSellos=false'></modal-sellos> -->
-<modal-firmas :datosReligioso="datosReligioso" v-if="verFirmas" @close='verFirmas=false'></modal-firmas>
+<!-- <modal-firmas :datosReligioso="datosReligioso" v-if="verFirmas" @close='verFirmas=false'></modal-firmas> -->
 
 </div>
 </template>
@@ -151,7 +152,8 @@ moment.locale('es');
 // import modal from '@/components/modal.vue';
 // import modalSellos from '@/components/modalSellos.vue';
 import SellosCrud from '@/components/SellosCrud.vue';
-import modalFirmas from '@/components/modalFirmas.vue';
+import FirmasCrud from '@/components/FirmasCrud.vue';
+// import modalFirmas from '@/components/modalFirmas.vue';
 
 
 import vuejsDatepicker from 'vuejs-datepicker';
@@ -173,10 +175,11 @@ export default {
   name: 'detalleLegDoc',
   components: {
     SellosCrud,
+    FirmasCrud,
     opcionesCrud,
     vuejsDatepicker,
     // modalSellos,
-    modalFirmas
+    // modalFirmas
   },
   data(){
     return {

@@ -12,7 +12,7 @@
           
       <div class="modal-body" ref='sellos_body'> 
         <div class='noImgs' v-if='imagenes.length == 0'>Sin imagenes.</div>
-        <img class='newImg' ref='imagen' v-if='!verImgs'>
+        <img class='newImg' ref='imagen' src='' v-if='!verImgs'>
         <b-carousel id="carouselSellos" :interval="0" controls indicators  v-if='verImgs' ref='itmSellos' @sliding-start='slidingStart' :img-width="500" :img-height="300" class="d-block img-fluid">     
           <b-carousel-slide v-for="(itm, index) in imagenes" :key='index' :img-src="itm.sello" img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide>
         </b-carousel>
@@ -20,18 +20,18 @@
 <!-- <img src="../media/sellos/00131-1.jpg"> -->
       </div>
 
-      <!-- <div class='mensaje' v-if='verMsg'>{{ messages }}</div> -->
+      <div class='mensaje' v-if='verMsg'>{{ messages }}</div>
       <div class="modal-footer d-flex justify-content-between align-items-center">
         <div class='i-itm col1-1 d-flex justify-content-start' style1='background: plum'>
           <div class='items'>Items: {{indexImg}}/{{imagenes.length}}</div> 
         </div>
-        <div class='i-add d-flex justify-content-center' v-if="verDelImg" style='background: lightblue'>
+        <div class='i-add d-flex justify-content-center' v-if="verDelImg" style1='background: lightblue'>
           <button class="btn-crud btn btn-sm btn_1" v-if="verAddImg" @click="addImg"><span></span>Adicionar</button>
           <button class="btn-crud btn btn-sm btn_1" v-if="!verAddImg" @click="confirmAdd"><span></span>Confirma</button>
-          <span class='d-flex align-items-center ml-2 '>{{ nameImgOld }}</span>
+          <!-- <span class='d-flex align-items-center ml-2 '>{{ nameImgOld }}</span> -->
           <input type="file" class="d-none" id="idFile" ref='idFile' @change='verImg(this)' > 
         </div> 
-        <div class='i-del d-flex justify-content-center' v-if="imagenes.length>0 && verAddImg" style='background: red'>
+        <div class='i-del d-flex justify-content-center' v-if="imagenes.length>0 && verAddImg" style1='background: red'>
           <button class="btn-crud btn btn-sm btn_1" v-if="verDelImg" @click="deleteImg">Borrar</button>
           <button class="btn-crud btn btn-sm btn_1" v-if="!verDelImg" @click="confirmDelete">Confirma</button>                
         </div>
@@ -54,9 +54,9 @@ console.log('<< sellos-crud.vue >>');
 import axios from 'axios';
 import { mapState } from 'vuex';
 
-import Swal from 'sweetalert2';
-let optAlert = require('@/assets/json/opt_swal2.json');
-const swal2 = Swal.mixin(optAlert);
+// import Swal from 'sweetalert2';
+// let optAlert = require('@/assets/json/opt_swal2.json');
+// const swal2 = Swal.mixin(optAlert);
 
 const s3 = require('@/assets/js/aws_connection.js');
 
@@ -82,7 +82,7 @@ export default {
       nameImgOld: '',
       nameImgNew: '',
       messages: '',
-      verMsg: false
+      verMsg: true
     }
   },
   computed: { // Expone state al template
@@ -99,10 +99,13 @@ export default {
       this.verAddImg = !this.verAddImg;
       this.verSalir = false;
       this.$refs.idFile.click();
+
     },
     async confirmAdd(){
       console.log('confirmAdd()');
+      this.verNewImg = false; 
       this.verAddImg = !this.verAddImg;
+      this.verMsg = false;
       let self = this;
       let input = this.$refs.idFile;
 
@@ -125,11 +128,12 @@ export default {
           let res = await data.json();
           if( res.status ) {
             self.nameImgOld = '';
-            // this.cargaSellos()
-              this.sellos_aws();
+            this.cargaSellos()
+            // this.sellos_aws();
           }
-          let text = (res.status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!'; 
-          await swal2.fire({ title: 'Nuevo Sello ', text: text });      
+          let text = (res.status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!';
+          this.verMensaje(text);
+          // await swal2.fire({ title: 'Nuevo Sello ', text: text });      
       } catch (error) {
           console.log('Error:', error);
       } 
@@ -159,11 +163,12 @@ export default {
         let data = await fetch(url, options);
         let res = await data.json();
         if( res.status ) {
-          // this.cargaSellos()
-            this.sellos_aws();
+          this.cargaSellos()
+          // this.sellos_aws();
         }
         let text = (res.status)? 'Anulado Satisfactoriamente!': 'Fallo la anulacion!';
-        await swal2.fire({title: 'Elimina Sello', text: text});
+        this.verMensaje(text);
+        // await swal2.fire({title: 'Elimina Sello', text: text});
       } catch (error) {
         console.log('Error:', error);
       }
@@ -176,12 +181,15 @@ export default {
       this.verNewImg = true;
       let source = this.$refs.imagen;
       let input = this.$refs.idFile;   
-
+      console.log('source: ', source);
       this.consecutivoSello();
+     
+      // this.verMensaje(mensaje);
       if (input.files && input.files[0]) { 
         let reader = new FileReader();
         reader.onload = function(e) {
-          console.log('source: ', source);
+          // console.log('dentro de reader...')
+          this.messages = this.nameImgNew;
           source.src = e.target.result;
         }
         reader.readAsDataURL(input.files[0]); // convert to base64 string
@@ -191,7 +199,8 @@ export default {
       console.log('cancel()');
       this.verAddImg = true;
       this.verDelImg = true;
-      this.verSalir = true;   
+      this.verSalir = true;  
+      this.verNewImg = false; 
       this.nameImgOld = '';
       this.$refs.sellos_body.style.borderColor='';
     },
@@ -210,14 +219,12 @@ export default {
           self.verImgs = true;
           self.indexImg= 1;
           let tmp = [];
-          // console.log('imagenes.sellos = ', response.data);
           response.data.forEach(function(img){
             img.sello = self.pathImg+img.sello.trim();  // Ruta de la imagen
             // img.sello = path+img.sello;
             tmp.push(img);
           })
           self.imagenes = tmp;  // Array de rutas
-          // console.log('imagenes => ', self.imagenes);
         }
       })
       .catch(function(error) {
@@ -304,15 +311,22 @@ export default {
       await axios.get(url)
       .then(function(res){ 
         if(res.status){
-          let code = res.data.ultConsecutivo + 1;
-          let consecutivoImg = code+'';
-          let input = self.$refs.idFile;  
-          self.nameImgOld = input.files[0].name;
-          // New Name
-          let aFile = input.files[0].name.split('.');
-          let extensionImg = aFile[aFile.length - 1];
-          code = '00000'+self.datosInstitucion.codInstitucion;
-          self.nameImgNew = code.substring(code.length - 5)+'-'+consecutivoImg+'.'+extensionImg;          
+          try {
+            let code = res.data.ultConsecutivo + 1;
+            let consecutivoImg = code+'';
+            let input = self.$refs.idFile;  
+            self.nameImgOld = input.files[0].name;
+            // New Name
+            let aFile = input.files[0].name.split('.');
+            let extensionImg = aFile[aFile.length - 1];
+            code = '00000'+self.datosInstitucion.codInstitucion;
+            self.nameImgNew = code.substring(code.length - 5)+'-'+consecutivoImg+'.'+extensionImg;
+            // console.log('self.nameImgNew ', self.nameImgNew )
+            self.messages = `Nombre Original: `+self.nameImgOld+`   `+`Autogenerado: `+self.nameImgNew;
+
+          }catch(err){
+            console.log('Error: ', err);
+          }
 
         }
       })
@@ -323,20 +337,21 @@ export default {
 
     },
     verMensaje(texto){
+      console.log(`verMensaje(${texto})`);
       this.verMsg = true;
-      let segundos = 3000;
+      let segundos = 4000;
       setTimeout(function(){
-        this.messages = texto
+        this.messages = texto;
       }, segundos);
-      this.verMsg = true;
+      this.verMsg = false;
     }
   },
   created: function(){
     this.setComponent();
   },
   mounted: function(){
-    // this.cargaSellos();
-    this.sellos_aws();
+    this.cargaSellos();
+    // this.sellos_aws();
   }  
 }
 </script>

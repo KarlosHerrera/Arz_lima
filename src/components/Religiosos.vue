@@ -35,7 +35,7 @@
           <td class=' d-flex justify-content-center align-items-center'>
             <button class='btn btn-sm btn_actions btn_1' @click='updateItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Editar</button>
             <button class='btn btn-sm btn_actions btn_1' @click='deleteItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Anular</button>
-            <button class='btn btn-sm btn_actions btn_1' @click='firmasItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Firmas <span class="badge badge-light num-firmas"> {{ rec.num_firmas }} </span></button>
+            <button class='btn btn-sm btn_actions btn_1' @click='firmasItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Firmas <span class="badge badge-light num-firmas"> {{ doc.num_firmas }} </span></button>
           </td>
         </tr>
       </tbody>
@@ -156,8 +156,8 @@
   <div class="content-footer align-items-end"  v-if='view_content'>
     <div class='itemCurrent '>Items: {{ itemCurrent}}/{{tmpReligiosos.length}} </div>
   </div>
-  <firmas-crud :datosReligioso="datosRweligioso" v-if="verFirmasCrud" @close='verFirmasCrud=false'></firmas-crud>
-  <modal-firmas :datosReligioso="datosReligioso" v-if="verFirmas" @close='verFirmas=false'></modal-firmas>  
+  <firmas-crud :datosReligioso="datosReligioso" v-if="verFirmasCrud" @close='verFirmasCrud=false'></firmas-crud>
+  <!-- <modal-firmas :datosReligioso="datosReligioso" v-if="verFirmas" @close='verFirmas=false'></modal-firmas>   -->
 </div>
 </template>
 
@@ -172,7 +172,7 @@ import { evalInput, evalString, evalValue } from '@/assets/js/form';
 import moment from 'moment';
 moment.locale('es');
 
-import modalFirmas from '@/components/modalFirmas.vue';
+// import modalFirmas from '@/components/modalFirmas.vue';
 import FirmasCrud from '@/components/FirmasCrud.vue';
 
 import opcionesCrud from '@/components/opciones-crud.vue'
@@ -187,7 +187,7 @@ export default {
   name: 'Religiosos',
   components: {
     FirmasCrud,
-    modalFirmas,
+    // modalFirmas,
     opcionesCrud
   },  
   data(){
@@ -418,10 +418,9 @@ export default {
     },
     firmasItem(index){
       console.log(`firmasItem(${index})`);
-      alert('Opcion en proceso!')
-    //   this.verFirmasCrud = !this.verFirmasCrud;
-    //   this.datosReligioso.codReligioso = this.tmpReligiosos[index].codReligioso;
-    //   this.datosReligioso.apellidosNombres = this.tmpReligiosos[index].apellidosNombres;
+      this.verFirmasCrud = !this.verFirmasCrud;
+      this.datosReligioso.codReligioso = this.tmpReligiosos[index].codReligioso;
+      this.datosReligioso.apellidosNombres = this.tmpReligiosos[index].apellidosNombres;
 
     },
     imgFirmas(index){
