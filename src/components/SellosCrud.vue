@@ -11,13 +11,15 @@
       </div>
           
       <div class="modal-body" ref='sellos_body'> 
-        <div class='noImgs' v-if='imagenes.length == 0'>Sin imagenes.</div>
+        <!-- <div class='noImgs' v-if='imagenes.length == 0 && !verImgs'>Sin imagenes.</div> -->
         <img class='newImg' ref='imagen' src='' v-if='!verImgs'>
-        <b-carousel id="carouselSellos" :interval="0" controls indicators  v-if='verImgs' ref='itmSellos' @sliding-start='slidingStart' :img-width="500" :img-height="300" class="d-block img-fluid">     
+        <!-- <b-carousel id="carouselSellos" :interval="0" controls indicators  v-if='verImgs' ref='itmSellos' @sliding-start='slidingStart' :img-width="600" :img-height="500" class="d-block img-fluid">      -->
+        <b-carousel id="carouselSellos" :interval="0" controls indicators  v-if='verImgs' ref='itmSellos' @sliding-start='slidingStart' :img-width="600" class="d-block img-fluid">     
           <b-carousel-slide v-for="(itm, index) in imagenes" :key='index' :img-src="itm.sello" img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide>
+          <!-- <b-carousel-slide v-for="(itm, index) in imagenes" :key='index' :img-src='itm.sello' img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide> -->
         </b-carousel>
 <!-- <b-carousel-slide img-src="media/sellos/00131-1.jpg" img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide> -->
-<!-- <img src="../media/sellos/00131-1.jpg"> -->
+<!-- <img src={{ imagenes[0].sellos }} > -->
       </div>
 
       <div class='mensaje' v-if='verMsg'>{{ messages }}</div>
@@ -82,7 +84,7 @@ export default {
       nameImgOld: '',
       nameImgNew: '',
       messages: '',
-      verMsg: true
+      verMsg: false
     }
   },
   computed: { // Expone state al template
@@ -184,11 +186,10 @@ export default {
       console.log('source: ', source);
       this.consecutivoSello();
      
-      // this.verMensaje(mensaje);
       if (input.files && input.files[0]) { 
         let reader = new FileReader();
         reader.onload = function(e) {
-          // console.log('dentro de reader...')
+          console.log('dentro de reader.......................');
           this.messages = this.nameImgNew;
           source.src = e.target.result;
         }
@@ -201,6 +202,7 @@ export default {
       this.verDelImg = true;
       this.verSalir = true;  
       this.verNewImg = false; 
+      this.verMsg = true;
       this.nameImgOld = '';
       this.$refs.sellos_body.style.borderColor='';
     },
@@ -322,7 +324,8 @@ export default {
             code = '00000'+self.datosInstitucion.codInstitucion;
             self.nameImgNew = code.substring(code.length - 5)+'-'+consecutivoImg+'.'+extensionImg;
             // console.log('self.nameImgNew ', self.nameImgNew )
-            self.messages = `Nombre Original: `+self.nameImgOld+`   `+`Autogenerado: `+self.nameImgNew;
+            self.verMsg = true;
+            self.messages = `Nombre Original: `+self.nameImgOld; //+`   `+`Autogenerado: `+self.nameImgNew;
 
           }catch(err){
             console.log('Error: ', err);
@@ -337,13 +340,14 @@ export default {
 
     },
     verMensaje(texto){
-      console.log(`verMensaje(${texto})`);
+      // console.log(`verMensaje(${texto})`);
+      let self = this;
       this.verMsg = true;
       let segundos = 4000;
+      this.messages = texto;
       setTimeout(function(){
-        this.messages = texto;
+        self.verMsg = false;
       }, segundos);
-      this.verMsg = false;
     }
   },
   created: function(){
@@ -352,6 +356,7 @@ export default {
   mounted: function(){
     this.cargaSellos();
     // this.sellos_aws();
+        // this.verMensaje("text de prueba");
   }  
 }
 </script>

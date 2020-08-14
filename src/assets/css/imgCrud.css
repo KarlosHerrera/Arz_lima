@@ -44,7 +44,7 @@
 }    
 .newImg {
   width: 75%; 
-  height: 100%;
+  /* height: 100%; */
 }
 .titImg{
     position: absolute;

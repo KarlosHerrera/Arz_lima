@@ -337,13 +337,14 @@ export default {
 
     },
     verMensaje(texto){
-      console.log(`verMensaje(${texto})`);
+      // console.log(`verMensaje(${texto})`);
+      let self = this;
       this.verMsg = true;
       let segundos = 4000;
+      this.messages = texto;
       setTimeout(function(){
-        this.messages = texto;
+        self.verMsg = false;
       }, segundos);
-      this.verMsg = false;
     }
   },
   created: function(){
