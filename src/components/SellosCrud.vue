@@ -14,7 +14,7 @@
         <!-- <div class='noImgs' v-if='imagenes.length == 0 && !verImgs'>Sin imagenes.</div> -->
         <img class='newImg' ref='imagen' src='' v-if='!verImgs'>
         <!-- <b-carousel id="carouselSellos" :interval="0" controls indicators  v-if='verImgs' ref='itmSellos' @sliding-start='slidingStart' :img-width="600" :img-height="500" class="d-block img-fluid">      -->
-        <b-carousel id="carouselSellos" :interval="0" controls indicators  v-if='verImgs' ref='itmSellos' @sliding-start='slidingStart' :img-width="600" class="d-block img-fluid">     
+        <b-carousel id="carouselSellos" :interval="0" controls indicators  v-if='verImgs' ref='itmSellos' @sliding-start='slidingStart' :img-width="600" class="d-block img-fluid" style="max-height: 370px;">     
           <b-carousel-slide v-for="(itm, index) in imagenes" :key='index' :img-src="itm.sello" img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide>
           <!-- <b-carousel-slide v-for="(itm, index) in imagenes" :key='index' :img-src='itm.sello' img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide> -->
         </b-carousel>
@@ -68,7 +68,6 @@ export default {
     titulo: { type: String, default: 'Cabecera' },
     cuerpo: { type: String, default: 'Cuerpo' },
     datosInstitucion: { type: Object, default: function(){ return {} } },
-    // crud: { type: Boolean, default: false }
   }, 
   data() {
     return {
@@ -122,7 +121,6 @@ export default {
           method: 'POST',
           //headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           // headers: { 'Content-Type': 'multipart/form-data' },
-          // headers: { 'Content-Type': 'application/json' },
           body: formSello
       };
       try {
@@ -130,7 +128,7 @@ export default {
           let res = await data.json();
           if( res.status ) {
             self.nameImgOld = '';
-            this.cargaSellos()
+            // this.cargaSellos()
             // this.sellos_aws();
           }
           let text = (res.status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!';

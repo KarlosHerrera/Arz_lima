@@ -10,7 +10,7 @@
         </div>         
 
         <div class='d-flex justify-content-end' >  
-            <filtra-tabla v-if='view_content' :recordList="Instituciones" :colsSearch='searchInstituciones' @filter_Process="filterProcessInst" ></filtra-tabla>
+            <filtra-tabla v-if='view_content' :recordList="Instituciones" :colsSearch='searchInstituciones' @filter_Process="filterProcess" ></filtra-tabla>
         </div>
     </div>    
   </div>
@@ -442,6 +442,7 @@ export default {
       this.verSellos = !this.verSellos;
       this.datosInstitucion.codInstitucion = this.rec.codInstitucion;
       this.datosInstitucion.nombreInstitucion = this.rec.nombreInstitucion;
+      
     },
     async loadInstituciones(){
       // console.log('loadInstituciones()');
@@ -546,7 +547,7 @@ export default {
     itemBlur(){
       this.itemCurrent = 0;
     },    
-    filterProcessInst: function(value){
+    filterProcess: function(value){
       // console.log('value = ', value);
       this.tmpInstituciones = value;
     }    

@@ -47,8 +47,6 @@ router.delete('/delete/', async (req, res) => {
     }); 
 });
 
-// Ruta temporal
-// let pathImg = './public/media';
 let ruta = require('../assets/json/config_img.json');
 let pathImg  = path.join(__dirname, '../..', './public', ruta.serverFirmas);
 console.log('multer.pathImg ==>', pathImg);
@@ -75,10 +73,10 @@ router.post('/create/', upload.single('imgFirma') , function(req, res){
 
     data.creado = moment().format('YYYY-MM-DD hh:mm:ss');
     conn.query('INSERT INTO firmareligiosos SET ?', [data], function(err, rows){
-        console.log(rows[0]);
+        // console.log(rows[0]);
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
-            console.log('sql: ', err.sql);
+            console.log('sql= ', err.sql);
             res.json({status: false, msg: 'Unsucessfull', error: err.sqlMessage, crud: 'create'});
         }else{
             // console.log(rows);

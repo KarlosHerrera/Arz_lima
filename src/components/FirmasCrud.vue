@@ -10,7 +10,7 @@
           <div class='escape lign-items-end' @click="$emit('close')">X</div>
       </div>
           
-      <div class="modal-body" ref='sellos_body'> 
+      <div class="modal-body" ref='firmas_body'> 
         <div class='noImgs' v-if='imagenes.length == 0'>Sin imagenes.</div>
         <img class='newImg' ref='imagen' src='' v-if='!verImgs'>
         <b-carousel id="carouselFirmas" :interval="0" controls indicators  v-if='verImgs' ref='itmFirmas' @sliding-start='slidingStart' :img-width="500" :img-height="300" class="d-block img-fluid">     
@@ -66,7 +66,6 @@ export default {
     titulo: { type: String, default: 'Cabecera' },
     cuerpo: { type: String, default: 'Cuerpo' },
     datosReligioso: { type: Object, default: function(){ return {} } },
-    // crud: { type: Boolean, default: false }
   }, 
   data() {
     return {
@@ -82,7 +81,7 @@ export default {
       nameImgOld: '',
       nameImgNew: '',
       messages: '',
-      verMsg: true
+      verMsg: false
     }
   },
   computed: { // Expone state al template
@@ -109,26 +108,25 @@ export default {
       let self = this;
       let input = this.$refs.idFile;
 
-      let formSello = new FormData();
-      formSello.append('codReligioso', this.datosReligioso.codReligioso);
-      formSello.append('firma', this.nameImgNew);
-      formSello.append('creado_usuario', this.$store.state.User_Name);
-      formSello.append('imgFirma', input.files[0]);
+      let formFirma = new FormData();
+      formFirma.append('codReligioso', this.datosReligioso.codReligioso);
+      formFirma.append('firma', this.nameImgNew);
+      formFirma.append('creado_usuario', this.$store.state.User_Name);
+      formFirma.append('imgFirma', input.files[0]);
 
       let url = this.host+'/firmas/create';
       let options = {
           method: 'POST',
           //headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           // headers: { 'Content-Type': 'multipart/form-data' },
-          // headers: { 'Content-Type': 'application/json' },
-          body: formSello
+          body: formFirma
       };
       try {
           let data = await fetch(url, options);
           let res = await data.json();
           if( res.status ) {
             self.nameImgOld = '';
-            this.cargaFirmas()
+            // this.cargaFirmas()
             // this.firmas_aws();
           }
           let text = (res.status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!';
@@ -143,7 +141,7 @@ export default {
       console.log('deleteImg()');
       this.verDelImg = false;
       this.verSalir = false;
-      this.$refs.sellos_body.style.borderColor='red';
+      this.$refs.firmas_body.style.borderColor='red';
 
     },
     async confirmDelete(){
@@ -151,7 +149,7 @@ export default {
       this.verDelImg = !this.verDelImg;
       let data = {};
 
-      data.codSello = this.imagenes[this.indexImg -1].codSello;
+      data.codFirmas = this.imagenes[this.indexImg -1].codFirmas;
       data.eliminado_usuario = this.$store.state.User_Name;
       let url = this.host+'/firmas/delete';
       let options = {
@@ -201,8 +199,9 @@ export default {
       this.verDelImg = true;
       this.verSalir = true;  
       this.verNewImg = false; 
+      this.verMsg = true;      
       this.nameImgOld = '';
-      this.$refs.sellos_body.style.borderColor='';
+      this.$refs.firmas_body.style.borderColor='';
     },
     cargaFirmas: function(){
       console.log('cargaFirmas()');
@@ -319,10 +318,11 @@ export default {
             // New Name
             let aFile = input.files[0].name.split('.');
             let extensionImg = aFile[aFile.length - 1];
-            code = '00000'+self.datosReligioso.codReligioso;
-            self.nameImgNew = code.substring(code.length - 5)+'-'+consecutivoImg+'.'+extensionImg;
+            code = '0000000'+self.datosReligioso.codReligioso;
+            self.nameImgNew = code.substring(code.length - 7)+'-'+consecutivoImg+'.'+extensionImg;
             // console.log('self.nameImgNew ', self.nameImgNew )
-            self.messages = `Nombre Original: `+self.nameImgOld+`   `+`Autogenerado: `+self.nameImgNew;
+            self.verMsg = true;
+            self.messages = `Nombre Original: `+self.nameImgOld; //+`   `+`Autogenerado: `+self.nameImgNew;
 
           }catch(err){
             console.log('Error: ', err);
