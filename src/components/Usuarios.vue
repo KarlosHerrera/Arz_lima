@@ -1,16 +1,15 @@
-// Instituciones.vue
+// Usuarios.vue
 <template>
 <div class="content d-flex flex-column">
   <div class="content-title">
-        <div class='titulo_2 align_center' v-if='view_content'>Mantenimiento de Instituciones</div>   
-        <div class='titulo_2 align_center' v-if='!view_content'>{{title_detail}} Institucion</div>
+        <div class='titulo_2 align_center' v-if='view_content'>Mantenimiento de Usuarios</div>   
+        <div class='titulo_2 align_center' v-if='!view_content'>{{title_detail}} Usuario</div>
     <div class="headerTitle d-flex justify-content-between">
         <div class='d-flex justify-content-start align-items-center' v-if='view_content' >
             <button class='btn btn-sm btn_1 btn_new' @click='createItem'>Nuevo</button>
         </div>         
-
         <div class='d-flex justify-content-end' >  
-            <filtra-tabla v-if='view_content' :recordList="Instituciones" :colsSearch='searchList' @filter_Process="filterProcess" ></filtra-tabla>
+            <filtra-tabla v-if='view_content' :recordList="Usuarios" :colsSearch='searchList' @filter_Process="filterProcess" ></filtra-tabla>
         </div>
     </div>    
   </div>
@@ -19,19 +18,19 @@
     <table class='table table-sm table-bordered table-hover table_1'>
       <thead class='rounded-top'>
         <tr>
-           <th>Cod.<span></span></th>
+           <th>Usuario<span></span></th>
+          <th>Nombre<span></span></th>
+          <th>Rol<span></span></th>
           <th>Institucion<span></span></th>
-          <th>Tipo Institucion<span></span></th>
-          <th>Direccion<span></span></th>
           <th class='text-center'>Opciones</th>
         </tr>
       </thead>
       <tbody id='bodyTable' class='' >
-        <tr v-for="(doc, index) in tmpInstituciones" :key='index' @dblclick='detalleItem(index)' @mouseover='itemFocus(index)' @blur='itemBlur'>
-          <td> {{ doc.codInstitucion}} </td>
-          <td> {{ doc.nombreInstitucion | frmLongMaxima(40) }} </td>
-          <td> {{ doc.nombreTipo | frmLongMaxima(15) }} </td>
-          <td> {{ doc.direccion | frmLongMaxima(30) }} </td>
+        <tr v-for="(doc, index) in tmpUsuarios" :key='index' @dblclick='detalleItem(index)' @mouseover='itemFocus(index)' @blur='itemBlur'>
+          <td> {{ doc.usuario}} </td>
+          <td> {{ doc.nombreUsuario | frmLongMaxima(40) }} </td>
+          <td> {{ doc.Rol | frmLongMaxima(15) }} </td>
+          <td> {{ doc.Institucion | frmLongMaxima(30) }} </td>
           <td class=' d-flex justify-content-center align-items-center'>
             <button class='btn btn-sm btn_actions btn_1' @click='updateItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Editar</button>
             <button class='btn btn-sm btn_actions btn_1' @click='deleteItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Anular</button>
@@ -44,7 +43,7 @@
   <!-- Detail -->
   <div class='detailRecord d-flex' v-else>
     <div class='col-12 content-form d-flex flex-column'>
-      <form id='formInstitucion' ref='formInstitucion' class='formBase' onsubmit="return false;" novalidate autocomplete="nope" :disabled='true' data-btnEnable='btnSave'>
+      <form id='formUsuarios' ref='formUsuarios' class='formBase' onsubmit="return false;" novalidate autocomplete="nope" :disabled='true' data-btnEnable='btnSave'>
           <div class="form-row justify-content-between">
             <div class="col-2 form-group">
               <label for="codInstitucion" class="formControlLabel">Codigo*</label>
@@ -163,16 +162,16 @@
   </div>
   <!-- <button class='btn btn-sm btn_1 btn_new' @click='evalua'>Evalua</button>  -->
   <div class="content-footer align-items-end"  v-if='view_content'>
-    <div class='itemCurrent '>Items: {{ itemCurrent}}/{{tmpInstituciones.length}} </div>
+    <div class='itemCurrent '>Items: {{ itemCurrent}}/{{tmpUsuarios.length}} </div>
   </div>
   <sellos-crud :datosInstitucion="datosInstitucion" v-if="verSellosCrud" @close='verSellosCrud=false'></sellos-crud>
 </div>
 </template>
 
 <script>
-console.log('<< Instituciones.vue >>');
+console.log('<< Usuarios.vue >>');
 
-const idForm = 'formInstitucion';
+const idForm = 'formUsuarios';
 import axios from 'axios';
 import { disabledForm, disabledElementId } from '@/assets/js/lib';
 import { evalInput, evalString, evalValue } from '@/assets/js/form';
@@ -181,7 +180,7 @@ import moment from 'moment';
 moment.locale('es');
 
 // import modalSellos from '@/components/modalSellos.vue';
-import SellosCrud from '@/components/SellosCrud.vue';
+// import SellosCrud from '@/components/SellosCrud.vue';
 
 import opcionesCrud from '@/components/opciones-crud.vue'
 
@@ -192,33 +191,24 @@ const swal2 = Swal.mixin(optAlert);
 import { mapState } from 'vuex';
 
 export default {
-  name: 'Instituciones',
+  name: 'Usuarios',
   components: {
-    SellosCrud,
+    // SellosCrud,
     // modalSellos,
     opcionesCrud
   },  
   data(){
     return {
+      Usuarios: [],
+      tmpUsuarios: [],
       Instituciones: [],
-      tmpInstituciones: [],
-      tiposInstitucion: [],
-      Departamentos: [],
-      Provincias: [],
-      tmpProvincias: [],
-      Distritos: [],
-      tmpDistritos: [],
-      rec: {},
       crud: '',
       title_detail: '',
       // lenguaje: es,
       fechaHoy: new Date(),   // UTCs
-      verSellos: false,
-      verSellosCrud: false,
       codInstitucion: '',
-      nombreInstitucion: '',
-      datosInstitucion: {},      
-      searchList: ['codInstitucion','nombreInstitucion','nombreTipo','direccion'],
+      nombreInstitucion: '',    
+      searchList: ['usuario','nombreUsuario','rolUsuario','nombreInstitucion'],
       view_content: true,
       itemCurrent: 0,
       observacionesCrud: '',
@@ -292,7 +282,7 @@ export default {
     detalleItem(index){
       // console.log(`detalleItem(${index})`);
       this.crud = 'R';
-      this.rec = this.tmpInstituciones[index];
+      this.rec = this.tmpUsuarios[index];
       this.list_view();
     },
     createItem(){
@@ -307,8 +297,8 @@ export default {
       let id = this.rec.codDepartamento;
       // if( evalValue( id ) ) evaluacion = false;
       if( evalString(id) ) evaluacion = false;
-      if( evalValue('1321')) evaluacion = false;
-      let title = 'Evaluando: '+id;
+
+      let title = 'Evaluando: ';
       if ( evaluacion ) { 
         swal2.fire({title: title, text: 'Verique los datos ingresados.'});
         return false;
@@ -320,15 +310,14 @@ export default {
     },
     confirmCreate: async function(){
       // console.log('confirmCreate()');
-      let title = 'Nueva Institucion';
+      let title = 'Nuevo Usuario';
 
       if ( !this.evaluaItem() ) { 
         swal2.fire({title: title, text: 'Verique los datos ingresados: '+this.observacionesCrud });
-        return false;
       }else{
         // swal2.fire({title: title, text: 'Datos OK.'});
         this.rec.creado_usuario = this.$store.state.User_Name;
-        let url = this.host+'/instituciones/create';
+        let url = this.host+'/usuarios/create';
         console.log('url = ', url);
         let options = {
           method: 'POST',
@@ -339,8 +328,11 @@ export default {
           let data = await fetch(url, options);
           let res = await data.json();
           let text = (res.status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!'; 
-          if( res.status ) this.loadInstituciones();
-          await swal2.fire({ title: 'Nueva Institucion: ', text: text });
+          if( res.status ) {
+              
+              this.loadUsuarios();
+            }
+          await swal2.fire({ title: title, text: text });
           this.exitForm();    // Componente padre
         } catch (error) {
             console.log('Error:', error);
@@ -350,15 +342,14 @@ export default {
     updateItem(index){
       // console.log('updateItem()');
       this.crud = 'U';
-      this.rec = this.tmpInstituciones[index];
+      this.rec = this.tmpUsuarios[index];
       this.list_view();
     },
     confirmUpdate: async function(){
       // console.log('confirmUpdate()');
-      let title = 'Edita Institucion';
+      let title = 'Edita Usuario';
       if ( !this.evaluaItem() ) { 
         swal2.fire({title: title, text: 'Verique los datos ingresados: '+this.observacionesCrud });
-        return false;
       }else{
         // swal2.fire({title: title, text: 'Datos OK.'});
         let data = {  
@@ -378,18 +369,20 @@ export default {
           modificado_usuario: this.$store.state.User_Name
         };  
         // console.log('data: ', data)
-        let url = this.host+'/instituciones/update';
+        let url = this.host+'/usuarios/update';
         let options = {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         };
         try {
-          let text = '';
           let data = await fetch(url, options);
           let res = await data.json();
-          if( res.status ) this.loadInstituciones();
-          text = (res.status)? 'Modificado Satisfactoriamente.': 'Fallo modificacion!';
+          if( res.status ) {
+            this.loadUsuarios();
+
+          }   
+          let text = (res.status)? 'Modificado Satisfactoriamente.': 'Fallo modificacion!';
           await swal2.fire({title: title, text: text});
           this.exitForm();
         } catch (error) {
@@ -401,27 +394,29 @@ export default {
     deleteItem(index){
       // console.log('deleteItem()');
       this.crud = 'D';
-      this.rec = this.tmpInstituciones[index];
+      this.rec = this.tmpUsuarios[index];
       this.list_view();
     },
     confirmDelete: async function(){
       // console.log('confirmDelete()');
-      let title = 'Anula Institucion';
+      let title = 'Anula Usuario';
       
       this.rec.eliminado = new Date();
       this.rec.eliminado_usuario =  this.$store.state.User_Name;
-      let url = this.host+'/instituciones/delete';
+      let url = this.host+'/usuarios/delete';
       let options = {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(this.rec)
       };
       try {
-        let text = '';
         let data = await fetch(url, options);
         let res = await data.json();
-        if( res.status ) this.loadInstituciones();          
-        text = (res.status)? 'Anulado Satisfactoriamente!': 'Fallo la anulacion!';
+        if( res.status ){
+
+            this.loadUsuarios();    
+        }       
+        let text = (res.status)? 'Anulado Satisfactoriamente!': 'Fallo la anulacion!';
         await swal2.fire({title: title, text: text});
         disabledForm(idForm, false);
         this.exitForm();
@@ -430,23 +425,9 @@ export default {
       }
 
     },
-    sellosItem(index){
-      console.log(`sellosItem(${index})`);
-      this.verSellosCrud = !this.verSellosCrud;
-      this.datosInstitucion.codInstitucion = this.tmpInstituciones[index].codInstitucion;
-      this.datosInstitucion.nombreInstitucion = this.tmpInstituciones[index].nombreInstitucion;
-      this.datosInstitucion.crud = true;
-    },
-    imgSellos(index){
-      console.log(`imgSellos(${index})`);
-      this.verSellos = !this.verSellos;
-      this.datosInstitucion.codInstitucion = this.rec.codInstitucion;
-      this.datosInstitucion.nombreInstitucion = this.rec.nombreInstitucion;
-      
-    },
-    async loadInstituciones(){
-      // console.log('loadInstituciones()');
-      let url = this.host+'/instituciones/all_rel';
+    async loadUsuarios(){
+      // console.log('loadUsuarios()');
+      let url = this.host+'/usuarios/all';
       let options = {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
@@ -454,17 +435,17 @@ export default {
       try {
           let data = await fetch(url, options);
           let res = await data.json();
-          this.Instituciones = res[0];
-          this.tmpInstituciones = res[0];
+          this.Usuarios = res[0];
+          this.tmpUsuarios = res[0];
       } catch (error) {
           console.log('Error:', error);
       }      
 
     },
-    async loadTiposInstitucion(){
+    async loadInstituciones(){
       // console.log('loadTipoInstituciones()');
       // let self = this;
-      let url = this.host+'/tablas/tipoinstitucion/all';
+      let url = this.host+'/instituciones/instituciones_min';
       try {
         let data = await fetch(url);
         let res = await data.json();
@@ -472,53 +453,6 @@ export default {
       } catch (error) { console.log('Error:', error);
       }
     },      
-    async loadDepartamentos(){
-      // console.log('loadInstituciones()');
-      let url = this.host+'/tablas/departamentos/all';
-      try {
-        let data = await fetch(url);
-        let res = await data.json();
-        this.Departamentos = res;
-      } catch (error) { console.log('Error:', error);
-      }
-    },
-    async loadProvincias(){
-      // console.log('loadInstituciones()');
-      let url = this.host+'/tablas/provincias/all';
-      try {
-        let data = await fetch(url);
-        let res = await data.json();
-        this.Provincias = res;
-      } catch (error) { console.log('Error:', error);
-      }
-    }, 
-    async loadDistritos(){
-      // console.log('loadInstituciones()');
-      let url = this.host+'/tablas/distritos/all';
-      try {
-        let data = await fetch(url);
-        let res = await data.json();
-        this.Distritos = res;
-      } catch (error) { console.log('Error:', error);
-      }
-    },
-    selDepartamento(value){
-      // console.log(`selDepartamento(${value})`);
-      // let codInstitucion = value.srcElement.value;
-      let codDepartamento = value;
-      // this.rec.codProvincia = '';
-      // this.rec.codDistrito = '';
-      // console.log('Valor = ', value.srcElement.value);
-      // console.log('codDepartamento = ', codDepartamento);
-      // console.log('Provincias = ', this.Provincias.length );
-      this.tmpProvincias = this.Provincias.filter( ele => ele.codDepartamento == codDepartamento);
-      // console.log('tmpProvinckas => ', this.tmpProvincias.length);
-    },
-    selProvincia(value){
-      // console.log(`selProvincia(${value})`);
-      let codProvincia = value;
-      this.tmpDistritos = this.Distritos.filter( ele => ele.codProvincia == codProvincia);
-    },
     input: function(self){
       evalInput(self);
     },
@@ -549,28 +483,17 @@ export default {
     },    
     filterProcess: function(value){
       // console.log('value = ', value);
-      this.tmpInstituciones = value;
+      this.tmpUsuarios = value;
     }    
   },
    // Hooks
   created: function(){
+    this.loadUsuarios();
     this.loadInstituciones();
-    this.loadTiposInstitucion();
-    this.loadDepartamentos();
-    this.loadProvincias();
-    this.loadDistritos();
-
   },
   mounted: function(){
     // console.log('mounted()');
     this.setComponent();
-    // let obj = document.getElementById('formInstitucion');
-//  obj = this.$refs.codInstitucion;
-//  let valor = this.$refs.codInstitucion;
-//  console.log('list_iew():')
-//  console.log('valor: ', valor);
-// console.log('process.env.__basedir ==>', process.env.__basedir);
-
   }   
 }
 </script>

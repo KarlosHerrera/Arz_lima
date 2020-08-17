@@ -8,6 +8,7 @@
           <div class='titulo-1 align-items-left'>Institucion</div>
           <div class='titulo-2 align-items-center'> {{ datosInstitucion.codInstitucion }} - {{ datosInstitucion.nombreInstitucion }}</div>
           <div class='escape lign-items-end' @click="$emit('close')">X</div>
+          
       </div>
           
       <div class="modal-body" ref='sellos_body'> 
@@ -15,11 +16,12 @@
         <img class='newImg' ref='imagen' src='' v-if='!verImgs'>
         <!-- <b-carousel id="carouselSellos" :interval="0" controls indicators  v-if='verImgs' ref='itmSellos' @sliding-start='slidingStart' :img-width="600" :img-height="500" class="d-block img-fluid">      -->
         <b-carousel id="carouselSellos" :interval="0" controls indicators  v-if='verImgs' ref='itmSellos' @sliding-start='slidingStart' :img-width="600" class="d-block img-fluid" style="max-height: 370px;">     
-          <b-carousel-slide v-for="(itm, index) in imagenes" :key='index' :img-src="itm.sello" img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide>
+          <b-carousel-slide v-for="(itm, index) in imagenes" v-bind:key="index" v-bind:img-src='itm' img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide>
           <!-- <b-carousel-slide v-for="(itm, index) in imagenes" :key='index' :img-src='itm.sello' img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide> -->
         </b-carousel>
 <!-- <b-carousel-slide img-src="media/sellos/00131-1.jpg" img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide> -->
-<!-- <img src={{ imagenes[0].sellos }} > -->
+
+<!-- <img :src='imagenes[1].sello' > -->
       </div>
 
       <div class='mensaje' v-if='verMsg'>{{ messages }}</div>
@@ -354,7 +356,6 @@ export default {
   mounted: function(){
     this.cargaSellos();
     // this.sellos_aws();
-        // this.verMensaje("text de prueba");
   }  
 }
 </script>

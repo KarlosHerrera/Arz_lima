@@ -150,10 +150,8 @@ import axios from 'axios';
 import moment from 'moment';
 moment.locale('es');
 // import modal from '@/components/modal.vue';
-// import modalSellos from '@/components/modalSellos.vue';
 import SellosCrud from '@/components/SellosCrud.vue';
 import FirmasCrud from '@/components/FirmasCrud.vue';
-// import modalFirmas from '@/components/modalFirmas.vue';
 
 
 import vuejsDatepicker from 'vuejs-datepicker';
@@ -177,9 +175,7 @@ export default {
     SellosCrud,
     FirmasCrud,
     opcionesCrud,
-    vuejsDatepicker,
-    // modalSellos,
-    // modalFirmas
+    vuejsDatepicker
   },
   data(){
     return {
@@ -215,8 +211,6 @@ export default {
     // ...mapMutations(['setRecord']),  
     setComponent: function(){
       // console.log('setComponent()');
-      // this.rec = this.$store.state.record;
-      // let par = this.$route.params.crud;
       this.rec = this.record;
       this.formMethod ='';
       if( this.crud == 'C' ) { // Create

@@ -15,11 +15,11 @@ const religiososCtrl = require('./controllers/religiososCtrl');
 const institucionesCtrl = require('./controllers/institucionesCtrl');
 const movDocumentosCtrl = require('./controllers/movDocumentosCtrl');
 const asignacionCargosCtrl = require('./controllers/asignacionCargosCtrl');
-const sacramentosCtrl = require('./controllers/sacramentosCtrl');
 const jerarquiasCtrl = require('./controllers/jerarquiasCtrl');
 const tablasCtrl = require('./controllers/tablasCtrl');
 const sellosCtrl = require('./controllers/sellosCtrl');
 const firmasCtrl = require('./controllers/firmasCtrl');
+const usuariosCtrl = require('./controllers/usuariosCtrl');
 
 // settings
 app.set('port', process.env.PORT || 3000);  // Configuracion de puerto (variables globales)
@@ -50,10 +50,10 @@ app.use('/instituciones', institucionesCtrl);
 app.use('/movDocumentos', movDocumentosCtrl);
 app.use('/asignacionCargos', asignacionCargosCtrl);
 app.use('/tablas', tablasCtrl);
-app.use('/sacramentos', sacramentosCtrl);
 app.use('/jerarquias', jerarquiasCtrl);
 app.use('/sellos', sellosCtrl);
 app.use('/firmas', firmasCtrl);
+// app.use('/usuarios', usuariosCtrl);
 
 // settings
 

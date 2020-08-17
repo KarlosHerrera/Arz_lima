@@ -4,11 +4,6 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import Home from '@/components/Home';
-// import Trips from '../views/Docs';
-
-// import Religiosos from '@/componentes/Religiosos';
-// import Users from '@/components/Login';
-// import Insttituciones from '@/componenets/Insttituciones';
 
 import Tablas from '@/components/Tablas';
 import Consultas from '@/components/Consultas';
@@ -19,12 +14,13 @@ import ListaLegDocs from '../components/ListaLegDocs';
 import DetalleLegDocs from '../components/DetalleLegDocs';
 import Instituciones from '@/components/Instituciones';
 import Religiosos from '@/components/Religiosos';
+import Usuarios from '@/components/Usuarios';
 
+import tipoInstitucion from '../components/tipoInstitucion';
+import cargoReligioso from '../components/cargoReligioso';
 import Jerarquias from '../components/Jerarquias';
 import Sacramentos from '../components/Sacramentos';
-import tipoInstitucion from '../components/tipoInstitucion';
-
-
+import Identificacion from '../components/tipoIdentificacion';
 
 
 Vue.use(VueRouter)
@@ -46,11 +42,6 @@ const routes = [
 //     path: '/login',
 //     name: 'Login',
 //     component: Login
-//   },
-//   {
-//     path: '/users',
-//     name: 'Users',
-//     component: Users
 //   },
   {
     path: '/institucionesLista',
@@ -98,11 +89,17 @@ const routes = [
   name: 'religiosos',
   component: Religiosos,
   },
+   
   {
     path: '/tipoInstitucion',
     name: 'tipoInstitucion',
     component: tipoInstitucion
   },  
+  {
+    path: '/cargoReligioso',
+    name: 'cargoReligioso',
+    component: cargoReligioso
+  },   
   {
     path: '/sacramentos',
     name: 'sacramentos',
@@ -113,8 +110,16 @@ const routes = [
     name: 'jerarquias',
     component: Jerarquias
   },  
-
-
+  {
+    path: '/tipoidentificacion',
+    name: 'tipoidentificacion',
+    component: Identificacion
+  },  
+  {
+    path: '/usuarios',
+    name: 'Usuarios',
+    component: Usuarios
+  }
 ]
 
 const router = new VueRouter({

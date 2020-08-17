@@ -62,7 +62,7 @@ export default {
   },
   data() {
       return {
-        listOptionsPerfil: [{dsc: 'SignOut', action: '/login'}, {dsc: 'Perfil', action: '/LegDocumentos'}, {dsc: 'Users', action: '/AsigReligiosos'}, {dsc: 'Exit', action: '/exit'}],
+        listOptionsPerfil: [{dsc: 'SignOut', action: '/login'}, {dsc: 'Perfil', action: '/LegDocumentos'}, {dsc: 'Users', action: '/usuarios'}, {dsc: 'Exit', action: '/exit'}],
         roleView: false
       }
   },

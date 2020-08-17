@@ -15,7 +15,7 @@
            <div></div>
         </li>
         <li class="nav-item">
-          <router-link  class="nav-link subMenu_items" to="/CargoReligiosos">Cargos Religiosos</router-link>
+          <router-link  class="nav-link subMenu_items" to="/cargoReligioso">Cargos Religiosos</router-link>
           <div></div>
         </li>
         <li class="nav-item">
