@@ -12,8 +12,8 @@
         <div class="listHead d-flex flex-column">
           <div class="titulo-2"><div>Lista</div></div>
           <div class='d-flex justify-content-between align-items-end' >  
-            <button ref='btnNuevo' class='btn btn-sm btn_1 btn_new' @click='createItem' :disabled="disabledTable" >Nuevo</button>
-            <filtra-tabla :recordList="Identificaciones" :colsSearch='searchList' @filter_Process="filterProcess" ></filtra-tabla>
+            <button ref='btnNuevo' class='btn btn-sm btn_1 btn_new' @click='createItem' :disabled="disabledTable">Nuevo</button>
+            <filtra-tabla :recordList="Identificaciones" :colsSearch='searchList' @filter_Process="filterProcess"></filtra-tabla>
           </div>
         </div>
         <div class="listBody table_overflow_y scroll_1" ref='listBody' >

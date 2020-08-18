@@ -27,35 +27,34 @@
       </thead>
       <tbody id='bodyTable' class='' >
         <tr v-for="(doc, index) in tmpUsuarios" :key='index' @dblclick='detalleItem(index)' @mouseover='itemFocus(index)' @blur='itemBlur'>
-          <td> {{ doc.usuario}} </td>
-          <td> {{ doc.nombreUsuario | frmLongMaxima(40) }} </td>
-          <td> {{ doc.Rol | frmLongMaxima(15) }} </td>
-          <td> {{ doc.Institucion | frmLongMaxima(30) }} </td>
+          <td> {{ doc.usuario }} </td>
+          <td> {{ doc.nombreUsuario }} </td>
+          <td> {{ doc.rolUsuario | frmLongMaxima(15) }} </td>
+          <td> {{ doc.nombreInstitucion | frmLongMaxima(40) }} </td>
           <td class=' d-flex justify-content-center align-items-center'>
-            <button class='btn btn-sm btn_actions btn_1' @click='updateItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Editar</button>
-            <button class='btn btn-sm btn_actions btn_1' @click='deleteItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Anular</button>
-            <button class='btn btn-sm btn_actions btn_1' @click='sellosItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Sellos <span class="badge badge-light num-sellos">{{ doc.num_sellos }}</span></button>
+            <button class='btn btn-sm btn_actions btn_1' @click='updateItem(index)' :class="{void_Btn: doc.activo=='N'}">Editar</button>
+            <button class='btn btn-sm btn_actions btn_1' @click='deleteItem(index)' :class="{void_Btn: doc.activo=='N'}">Anular</button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
   <!-- Detail -->
-  <div class='detailRecord d-flex' v-else>
-    <div class='col-12 content-form d-flex flex-column'>
+  <div class='detailRecord d-flex justify-content-center' v-else>
+    <div class='col-8 content-form d-flex flex-column'>
       <form id='formUsuarios' ref='formUsuarios' class='formBase' onsubmit="return false;" novalidate autocomplete="nope" :disabled='true' data-btnEnable='btnSave'>
           <div class="form-row justify-content-between">
             <div class="col-2 form-group">
-              <label for="codInstitucion" class="formControlLabel">Codigo*</label>
-              <input  type="text" name="codInstitucion" v-model="rec.codInstitucion" class="form-control form-control-sm bold" 
-                       ref='codInstitucion' placeholder=""  disabled
-                      @input="input($event.target)" pattern="^[1-9]{1}[0-9]{1,2}$" autocomplete='off' required>
+              <label for="usuario" class="formControlLabel">Usuario*</label>
+              <input  type="text" name="codInstitucion" v-model="rec.usuario" class="form-control form-control-sm" 
+                      id='usuario' ref='usuario' placeholder=""  required :disabled="this.crud != 'C'"
+                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 -]{1,9}$" autocomplete='off' data-upper='1c'>
               <small id="" class="form-text text-muted"></small>
             </div>
             <div class="col-6 form-group">
-              <label for="" class="formControlLabel">Tipo*</label>
-              <v-select v-model="rec.tipoInstitucion" label="nombreTipo" id='tipoInstitucion'
-              :options="tiposInstitucion" :reduce="ele => ele.tipoInstitucion" placeholder=''
+              <label for="" class="formControlLabel">Rol*</label>
+              <v-select v-model="rec.rolUsuario" label="rolUsuario" :disabled="disabledForm"
+              :options="Roles" :reduce="ele => ele.rolUsuario" placeholder=''
               :clearable="false" class='miClase'
               >
               <div slot="no-options">No existen opciones!</div>
@@ -64,107 +63,68 @@
           </div> 
 
           <div class="form-row">
-              <div class="col-12 form-group">
-                  <label for="nombreInstitucion" class="formControlLabel">Nombre*</label>
-                    <input type="text" name='nombreInstitucion' v-model="rec.nombreInstitucion" class="form-control form-control-sm" 
-                      id='nombreInstitucion' placeholder="" required
-                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 -./]{1,59}$" autocomplete='off' data-upper='1c'>
-                  <small id="" class="form-text text-muted"></small>
-              </div>          
+            <div class="col-12 form-group">
+              <label for="nombreInstitucion" class="formControlLabel">Nombre*</label>
+                <input type="text" name='nombreUsuario' v-model="rec.nombreUsuario" class="form-control form-control-sm" 
+                  id='nombreUsuario' placeholder="" required :disabled="disabledForm"
+                  @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 -./]{1,39}$" autocomplete='off' data-upper='1c'>
+              <small id="" class="form-text text-muted"></small>
+            </div>          
           </div>             
           <div class="form-row">
-              <div class="col-12 form-group">
-                  <label for="direccion" class="formControlLabel">Direccion*</label>
-                    <input type="text" name='direccion' v-model="rec.direccion" class="form-control form-control-sm" 
-                      id='direccion' placeholder="" required
-                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 #-.()/]{1,99}$" autocomplete='off' data-upper='1c'>
-                  <small id="" class="form-text text-muted"></small>
-              </div>          
-          </div>  
+            <div class="col-12 form-group">
+                <label for="codInstitucion" class="formControlLabel">Institucion</label>
+                <v-select v-model="rec.codInstitucion" label="nombreInstitucion" :disabled="disabledForm"
+                :options="Instituciones" :reduce="ele => ele.codInstitucion" placeholder=''
+                :clearable="false" class='miClase'
+                >
+                <div slot="no-options">No existen opciones!</div>
+                </v-select>
+            </div>
+          </div>
           <div class="form-row">
-              <div class="col-12 form-group">
-                  <label for="departamento" class="formControlLabel">Departamento*</label>
-                  <v-select v-model="rec.codDepartamento" label="nombreDepartamento" required
-                  :options="Departamentos" :reduce="ele => ele.codDepartamento" placeholder=''
-                  :clearable="false" @input="selDepartamento" class='miClase'
-                  >
-                  <div slot="no-options">No existen opciones!</div>
-                  </v-select>
-              </div>
+            <div class="col-3 form-group">
+              <label for="mvil" class="formControlLabel">Movil</label>
+              <input type="text" name='movil' v-model="rec.movil" class="form-control form-control-sm"
+                    id='movil' placeholder="" :disabled="disabledForm"
+                  @input="input($event.target)" pattern="^[1-9]{1}[0-9-]{5,9}$" autocomplete='off'>
+              <small id="" class="form-text text-muted"></small>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="col-12 form-group">
+              <label for="email" class="formControlLabel">Correo</label>
+              <input type="text" name='email' v-model="rec.email" class="form-control form-control-sm"
+                  id='email' placeholder="" :disabled="disabledForm"
+                  @input="input($event.target)" pattern1="[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}" autocomplete='off'>
+              <small id="" class="form-text text-muted"></small>
+            </div>
+          </div>
+          <div class="form-row justify-content-between" v-if=" this.crud != 'C' ">
+            <div class="col-3 form-group">
+              <label for="clave" class="formControlLabel">Clave*</label>
+              <input type="text" name='clave' v-model="rec.clave" class="form-control form-control-sm"
+                  id='clave' placeholder="" required
+                  @input="input($event.target)" pattern="^[1-9]{1}[0-9]{5,9}$" autocomplete='off'>
+              <small id="" class="form-text text-muted"></small>
+            </div>
+            <div class="col-3 form-group">
+              <label for="claveConfirma" class="formControlLabel">Confirm Clave*</label>
+              <input type="text" name='claveConfirma' v-model="rec.claveConfirma" class="form-control form-control-sm" 
+                id='claveConfirma' placeholder="" required
+                  @input="input($event.target)" pattern="^[1-9]{1}[0-9]{5,9}$" autocomplete='off'>
+              <small id="" class="form-text text-muted"></small>
+            </div>
 
           </div>
-          <div class="form-row">
-              <div class="col-12 form-group">
-                  <label for="provincia" class="formControlLabel">Provincia*</label>
-                  <v-select v-model="rec.codProvincia" label="nombreProvincia" required
-                  :options="tmpProvincias" :reduce="ele => ele.codProvincia" placeholder=''
-                  :clearable="false" @input="selProvincia" class='miClase'
-                  >
-                  <div slot="no-options">No existen opciones!</div>
-                  </v-select>
-              </div>
-          </div>       
-          <div class="form-row">
-              <div class="col-12 form-group">
-                  <label for="distrito" class="formControlLabel">Distrito*</label>
-                  <v-select v-model="rec.codDistrito" label="nombreDistrito" required
-                  :options="tmpDistritos" :reduce="ele => ele.codDistrito" placeholder=''
-                  :clearable="false" class='miClase'
-                  >
-                  <div slot="no-options">No existen opciones!</div>
-                  </v-select>
-              </div>
-          </div>   
-          <div class="form-row justify-content-between">
-              <div class="col-3 form-group">
-                  <label for="telefono1" class="formControlLabel">Telefono 1</label>
-                  <input type="text" name='telefono1' v-model="rec.telefono1" class="form-control form-control-sm"
-                      id='telefono1' placeholder=""
-                      @input="input($event.target)" pattern="^[1-9]{1}[0-9]{5,9}$" autocomplete='off'>
-                  <small id="" class="form-text text-muted"></small>
-              </div>
-              <div class="col-3 form-group">
-                  <label for="telefono2" class="formControlLabel">Telefono 2</label>
-                  <input type="text" name='telefono2' v-model="rec.telefono2" class="form-control form-control-sm" 
-                    id='telefono2' placeholder=""
-                      @input="input($event.target)" pattern="^[1-9]{1}[0-9]{5,9}$" autocomplete='off'>
-                  <small id="" class="form-text text-muted"></small>
-              </div>
-              <div class="col-3 form-group">
-                  <label for="fax" class="formControlLabel">Fax</label>
-                  <input type="text" name='fax' v-model="rec.fax" class="form-control form-control-sm"
-                        id='fax' placeholder=""
-                      @input="input($event.target)" pattern="^[1-9]{1}[0-9-]{5,9}$" autocomplete='off'>
-                  <small id="" class="form-text text-muted"></small>
-              </div>
-          </div>
-          <div class="form-row">
-              <div class="col-12 form-group">
-                  <label for="email" class="formControlLabel">Correo</label>
-                  <input type="text" name='email' v-model="rec.email" class="form-control form-control-sm"
-                      id='email' placeholder=""
-                      @input="input($event.target)" pattern1="[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}" autocomplete='off'>
-                  <small id="" class="form-text text-muted"></small>
-              </div>
-          </div> 
-          <div class="form-row">
-              <div class="col-12 form-group">
-                  <label for="web" class="formControlLabel">Pagina web</label>
-                  <input type="text" name='web' v-model="rec.web" class="form-control form-control-sm"
-                      id='web' placeholder=""
-                      @input="input($event.target)" pattern1="/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/" autocomplete='off'>
-                  <small id="" class="form-text text-muted"></small>
-              </div>
-          </div> 
       </form> 
       <opciones-crud class='row' :crud="crud" @confirm_Create="confirmCreate" @confirm_Update="confirmUpdate" @confirm_Delete="confirmDelete" @exit_Form="exitForm" @reset_Form='resetForm'></opciones-crud>
     </div>
   </div>
-  <!-- <button class='btn btn-sm btn_1 btn_new' @click='evalua'>Evalua</button>  -->
   <div class="content-footer align-items-end"  v-if='view_content'>
     <div class='itemCurrent '>Items: {{ itemCurrent}}/{{tmpUsuarios.length}} </div>
   </div>
-  <sellos-crud :datosInstitucion="datosInstitucion" v-if="verSellosCrud" @close='verSellosCrud=false'></sellos-crud>
 </div>
 </template>
 
@@ -172,15 +132,12 @@
 console.log('<< Usuarios.vue >>');
 
 const idForm = 'formUsuarios';
-import axios from 'axios';
+
 import { disabledForm, disabledElementId } from '@/assets/js/lib';
 import { evalInput, evalString, evalValue } from '@/assets/js/form';
 
 import moment from 'moment';
 moment.locale('es');
-
-// import modalSellos from '@/components/modalSellos.vue';
-// import SellosCrud from '@/components/SellosCrud.vue';
 
 import opcionesCrud from '@/components/opciones-crud.vue'
 
@@ -193,8 +150,6 @@ import { mapState } from 'vuex';
 export default {
   name: 'Usuarios',
   components: {
-    // SellosCrud,
-    // modalSellos,
     opcionesCrud
   },  
   data(){
@@ -202,17 +157,16 @@ export default {
       Usuarios: [],
       tmpUsuarios: [],
       Instituciones: [],
+      Roles: [],
       crud: '',
       title_detail: '',
       // lenguaje: es,
-      fechaHoy: new Date(),   // UTCs
-      codInstitucion: '',
-      nombreInstitucion: '',    
+      fechaHoy: new Date(),   // UTCs 
       searchList: ['usuario','nombreUsuario','rolUsuario','nombreInstitucion'],
       view_content: true,
       itemCurrent: 0,
       observacionesCrud: '',
-      isHabForm: true
+      disabledForm: true,
     }
   },  
   computed: { // Expone state al template
@@ -224,36 +178,28 @@ export default {
     list_view(){
  
       if( this.crud == 'C' ) {
-        this.title_detail = 'Nueva'; 
-        // this.resetForm();
-        this.generaCodigo();
-        // this.rec.codInstitucion='1002';
-        // this.rec.nombreInstitucion='AAANombre de Institucion 1002';
-        // this.rec.direccion='Direccion';
-        // this.rec.tipoInstitucion='03';
+        this.title_detail = 'Nuevo'; 
+        this.disabledForm = false;
+        this.resetForm();
+
       }
       if( this.crud == 'R' ) this.title_detail = 'Datos';           
       if( this.crud == 'U' ) this.title_detail = 'Edita';
       if( this.crud == 'D' ) this.title_detail = 'Anula' ;
       if( this.crud == 'R' ) {
         // disabledElementId('btnSellos', false);
-        this.load_relation();
+        // this.load_relation();
       }
       if( this.crud == 'U') {
+        this.disabledForm = false;
         disabledElementId('codInstitucion', true);
         disabledForm(idForm, true, ['codInstitucion']); // atributo 'name'
-        this.load_relation();
       }
       if( this.crud == 'D' ) {
         disabledForm(idForm, true); // atributo 'name'
-        this.load_relation();
       }
       this.view_content = false;
 
-    },
-    load_relation(){
-      this.selDepartamento(this.rec.codDepartamento);
-      this.selProvincia(this.rec.codProvincia)
     },
     resetForm: function(){
       // this.$refs.formTipoInstitucion.reset();
@@ -265,17 +211,17 @@ export default {
       // console.dir(objForm);
       let obs='';
       let evaluacion = true;
-      // if( !evalValue('codInstitucion') ) { obs+='*Codigo '; evaluacion = false}
-      if( !evalValue('nombreInstitucion') ) { obs+=' *Nombre '; evaluacion = false}
-      if( !evalString(this.rec.tipoInstitucion) ) {obs+=' *Tipo'; evaluacion = false}
-      if( !evalString(this.rec.codDepartamento) ) {obs+=' *Departamento'; evaluacion = false}
-      if( !evalString(this.rec.codProvincia) ) {obs+=' *Provincia'; evaluacion = false}
-      if( !evalString(this.rec.codDistrito) ) {obs+=' *Distrito'; evaluacion = false}
-      if( !evalValue('telefono1') ) {obs+=' *Telefono 1'; evaluacion = false}
-      if( !evalValue('telefono2') ) {obs+=' *Telefono 2'; evaluacion = false}
-      if( !evalValue('fax') ) {obs+=' *Fax'; evaluacion = false;}
-      if( !evalValue('email') ) {obs+=' *Correo'; evaluacion = false;}
-      if( !evalValue('web') ) {obs+=' *Pagina WEB'; evaluacion = false;}
+      if( this.crud == 'C'){
+        if( !evalValue('usuario') ) { obs+='*Usuario '; evaluacion = false}
+        if( !evalValue('clave') ) {obs+=' *Clave'; evaluacion = false;}
+        if( !evalValue('claveConfirma') ) {obs+=' *Confirma Clave'; evaluacion = false;}
+      }
+      if( !evalValue('nombreUsuario') ) { obs+=' *Nombre '; evaluacion = false}
+      if( !evalString(this.rec.rolUsuario) ) { obs+=' *Rol '; evaluacion = false}
+      if( !evalString(this.rec.codInstitucion) ) {obs+=' *Institucion'; evaluacion = false}
+      if( !evalValue('movil') ) {obs+=' Movil'; evaluacion = false;}
+      if( !evalValue('email') ) {obs+=' Correo'; evaluacion = false;}
+
       this.observacionesCrud = obs;
       return evaluacion;
     },
@@ -301,10 +247,8 @@ export default {
       let title = 'Evaluando: ';
       if ( evaluacion ) { 
         swal2.fire({title: title, text: 'Verique los datos ingresados.'});
-        return false;
       }else{
         swal2.fire({title: title, text: 'Datos OK.'});
-
       }      
 
     },
@@ -315,14 +259,23 @@ export default {
       if ( !this.evaluaItem() ) { 
         swal2.fire({title: title, text: 'Verique los datos ingresados: '+this.observacionesCrud });
       }else{
-        // swal2.fire({title: title, text: 'Datos OK.'});
-        this.rec.creado_usuario = this.$store.state.User_Name;
+        let data = {
+          usuario: this.rec.usuario,
+          rolUsuario: this.rec.rolUsuario,
+          nombreUsuario: this.rec.nombreUsuario,
+          codInstitucion: this.rec.codInstitucion, 
+          movil: this.rec.movil,
+          email: this.rec.email,
+          clave: this.rec.clave,
+          creado_usuario: this.$store.state.User_Name
+        }; 
+
         let url = this.host+'/usuarios/create';
         console.log('url = ', url);
         let options = {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(this.rec)
+          body: JSON.stringify(data)
         };
         try {
           let data = await fetch(url, options);
@@ -351,20 +304,13 @@ export default {
       if ( !this.evaluaItem() ) { 
         swal2.fire({title: title, text: 'Verique los datos ingresados: '+this.observacionesCrud });
       }else{
-        // swal2.fire({title: title, text: 'Datos OK.'});
-        let data = {  
+        let data = {
+          usuario: this.rec.usuario,
+          nombreUsuario: this.rec.nombreUsuario,
+          rolUsuario: this.rec.rolUsuario,
           codInstitucion: this.rec.codInstitucion, 
-          nombreInstitucion: this.rec.nombreInstitucion,
-          direccion: this.rec.direccion,
-          tipoInstitucion: this.rec.tipoInstitucion,
-          codDepartamento: this.rec.codDepartamento,
-          codProvincia: this.rec.codProvincia,          
-          codDistrito: this.rec.codDistrito,
-          telefono1: this.rec.telefono1,
-          telefono2: this.rec.telefono2,
-          fax: this.rec.fax,
+          movil: this.rec.movil,
           email: this.rec.email,
-          web: this.rec.web,
           modificado: new Date(),
           modificado_usuario: this.$store.state.User_Name
         };  
@@ -380,7 +326,6 @@ export default {
           let res = await data.json();
           if( res.status ) {
             this.loadUsuarios();
-
           }   
           let text = (res.status)? 'Modificado Satisfactoriamente.': 'Fallo modificacion!';
           await swal2.fire({title: title, text: text});
@@ -400,21 +345,22 @@ export default {
     confirmDelete: async function(){
       // console.log('confirmDelete()');
       let title = 'Anula Usuario';
-      
-      this.rec.eliminado = new Date();
-      this.rec.eliminado_usuario =  this.$store.state.User_Name;
+         let data = {
+          usuario: this.rec.usuario,
+          eliminado: new Date(),
+          eliminado_usuario: this.$store.state.User_Name
+      };
       let url = this.host+'/usuarios/delete';
       let options = {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.rec)
+        body: JSON.stringify(data)
       };
       try {
         let data = await fetch(url, options);
         let res = await data.json();
         if( res.status ){
-
-            this.loadUsuarios();    
+          this.loadUsuarios();    
         }       
         let text = (res.status)? 'Anulado Satisfactoriamente!': 'Fallo la anulacion!';
         await swal2.fire({title: title, text: text});
@@ -435,8 +381,8 @@ export default {
       try {
           let data = await fetch(url, options);
           let res = await data.json();
-          this.Usuarios = res[0];
-          this.tmpUsuarios = res[0];
+          this.Usuarios = res;
+          this.tmpUsuarios = this.Usuarios;
       } catch (error) {
           console.log('Error:', error);
       }      
@@ -444,36 +390,29 @@ export default {
     },
     async loadInstituciones(){
       // console.log('loadTipoInstituciones()');
-      // let self = this;
       let url = this.host+'/instituciones/instituciones_min';
       try {
         let data = await fetch(url);
         let res = await data.json();
-        this.tiposInstitucion = res;
+        this.Instituciones = res;
       } catch (error) { console.log('Error:', error);
       }
-    },      
+    },
+    async loadRoles(){
+      // console.log('loadTipoInstituciones()');
+      let url = this.host+'/usuarios/roles';
+      try {
+        let data = await fetch(url);
+        let res = await data.json();
+        this.Roles = res;
+      } catch (error) { console.log('Error:', error);
+      }
+    },          
     input: function(self){
       evalInput(self);
     },
     exitForm: function(){
         this.view_content = true;
-    //   this.$router.go(-1);
-    }, 
-    generaCodigo: function(){
-      // console.log('generaCodigo()');
-      let self = this;
-      let url = this.host+'/instituciones/lastCode';
-      axios.get(url)
-      .then(function(response){ 
-        let code = parseInt(response.data.code, 10) + 1;
-        self.rec.codInstitucion =  code+'';
-        // console.log('code=>', code)
-      })
-      .catch(function(error) {
-        console.log(error);
-        return '-1';
-      })
     },       
     itemFocus(index){
       this.itemCurrent = index+1;
@@ -482,7 +421,6 @@ export default {
       this.itemCurrent = 0;
     },    
     filterProcess: function(value){
-      // console.log('value = ', value);
       this.tmpUsuarios = value;
     }    
   },
@@ -490,6 +428,7 @@ export default {
   created: function(){
     this.loadUsuarios();
     this.loadInstituciones();
+    this.loadRoles();
   },
   mounted: function(){
     // console.log('mounted()');
@@ -580,12 +519,7 @@ select > option:hover {
   color: #1B517E; 
   cursor: pointer; 
 }
-/* -------- -- Media Queries --------*/
-/* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) {  /* lg */
-}  /*  End lg */  
-
-/* Extra large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px) {  /* xl */
-}   /*  End xl */
+.vs--disabled {
+  background-color: red  !important;
+}
 </style>

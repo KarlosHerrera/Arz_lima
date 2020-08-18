@@ -53,7 +53,7 @@ app.use('/tablas', tablasCtrl);
 app.use('/jerarquias', jerarquiasCtrl);
 app.use('/sellos', sellosCtrl);
 app.use('/firmas', firmasCtrl);
-// app.use('/usuarios', usuariosCtrl);
+app.use('/usuarios', usuariosCtrl);
 
 // settings
 

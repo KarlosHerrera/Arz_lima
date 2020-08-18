@@ -9,7 +9,11 @@ moment.locale('es');
 
 router.get('/all', (req, res) => {
     console.log('/usuarios/all');
-    let sql = `SELECT * FROM usuarios ORDER BY usuario`;                
+    let sql = `SELECT usuario, nombreUsuario, usuarios.codInstitucion, instituciones.nombreInstitucion, rolUsuario
+                FROM usuarios 
+                LEFT JOIN Instituciones ON instituciones.codInstitucion = usuarios.codInstitucion
+                WHERE usuarios.activo='S' 
+                ORDER BY usuario`;                
     conn.query(sql, function(err, rows){
         // conn.release();
         if(err) console.log('err => ', err);
@@ -46,7 +50,7 @@ router.post('/create', (req, res) => {
 });
 // Update document
 router.put('/update', (req, res) => {
-    console.log('/tablas/usuarios/update');
+    console.log('/usuarios/update');
     const data = req.body;
     const usuario = data.usuario;
     delete data.usuario;
@@ -64,13 +68,13 @@ router.put('/update', (req, res) => {
 });
 // Delete one document
 router.delete('/delete', async (req, res) => {
-    console.log('/tablas/usuarios/delete');
+    console.log('/usuarios/delete');
     const data = req.body;
     const usuario = data.usuario;
     data.activo = 'N'
     data.eliminado = moment().format('YYYY-MM-DD hh:mm:ss');
-    let sql = "UPDATE usuarios SET ? WHERE usuario = ?";
-    conn.query(sql, [data, usuario], function(err, rows){
+    let sql = "UPDATE usuarios SET activo = ? WHERE usuario = ?";
+    conn.query(sql, ['N', usuario], function(err, rows){
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             console.log('sql: ', err.sql);
@@ -81,7 +85,7 @@ router.delete('/delete', async (req, res) => {
     });
 });
 router.get('/lastCode',  (req, res) => {
-    console.log('/tablas/usuarios/lastCode');
+    console.log('/usuarios/lastCode');
  
     let sql = "SELECT CAST(usuario  AS UNSIGNED) AS codigo FROM usuarios ORDER BY codigo DESC LIMIT 1";
     conn.query(sql, function(err, rows){
@@ -93,3 +97,15 @@ router.get('/lastCode',  (req, res) => {
         res.status(200).json({ status: true, msg: 'Successfull', code: rows[0].codigo+'' });
     });    
 });     // End usuarios
+router.get('/roles', (req, res) => {
+    console.log('/usuarios/roles');
+
+    let sql = `SELECT rolUsuario FROM rolesUsuarios ORDER BY nivel`;    
+    conn.query(sql, function(err, rows){ 
+        if(err) console.log('err => ', err);
+        res.status(200).json(rows);
+    });
+
+});
+
+module.exports = router;
