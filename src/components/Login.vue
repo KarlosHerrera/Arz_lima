@@ -1,81 +1,202 @@
-//  Login.vue
-// Para este proposito, crear una ventana modal(estructura) y en el cuerpo el form
-// activar el modal desde la carga del componente y solo cerrarlo con un boton.
-// https://www.youtube.com/watch?v=4pKWDPxS2SA
+// Login.vue
 <template>
-<div class="container content">
-    <div class='titleProps'> Login</div> 
-    <div class="row ">
-        <form id='formLogin' action="/postsign" method='POST' class='col login' onsubmit="return false" novalidate autocomplete="nope" data-btnEnable='login'>
-            <div class="form-row row">
-                <div class="col form-group">
-                    <label for="user" class="formControlLabel">User*</label>
-                    <input type="text" name="username" class="form-control form-control-sm" id="user" placeholder="User"
-                             @input="input($event.target)" pattern="^[a-zA-Z]{4}[a-z0-9-_]{1,9}$" required autofocus size="20">
-                    <!-- <small id="userError" class="form-text text-muted">Inicia minimo 4 caracteres y finaliza con digito(s) numericos</small> -->
-                    <small id="userError" class="form-text text-muted">Must start with 5 letters and end with at least 1 number</small>
+<transition name="modal">
+  <div class="modal-mask">
+  <div class="modal-wrapper">
+    <div class="modal-container">
+      <div class="modal-header d-flex justify-content-between align-items-center">
+          <div class='titulo-1 align-items-center'>Acceso al Sistema</div>
+          <div class='escape align-items-end' @click="$emit('close')">X</div>  
+      </div>    
+      <div class="modal-body" ref='modal_body'> 
+        <form id='formLogin' ref='formLogin' class='formBase' onsubmit="return false;" novalidate autocomplete="nope" :disabled='true' data-btnEnable='btnAceptar'>
+            <div class="form-row ">
+                <div class="col-10 form-group d-flex align-items-center">
+                <div class="col-3 label align_right">Usuario</div>
+                <input  type="text" name="codInstitucion" v-model="usuario" class="col-8 form-control form-control-sm" @keyup.enter="tecla_tab($event.target)"
+                        id='usuario' ref='usuario' placeholder=""  required
+                        @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 _-]{4,9}$" autocomplete='off' data-upper='1c'>
                 </div>
             </div>
-            <div class="form-row row">
-                <div class="col form-group">
-                    <label for="password" class="formControlLabel">Password*</label>
-                    <input type="text" name='passw' class="form-control form-control-sm" id="password" placeholder="Password"
-                             @input="input($event.target)" pattern="^[A-Za-z]{4,}[0-9]{1,4}$" required size="230">
-                    <!-- <small id="passwordError" class="form-text text-muted">Inicia minimo 4 caracteres y finaliza con uno o mas digitos</small> -->
-                    <small id="passwordError" class="form-text text-muted">Must start with 4 letters and end with at least 1 number</small>
+            <div class="form-row">
+                <div class="col-10 form-group d-flex align-items-center">
+                <div class="col-3 label align_right">Contraseña</div>
+                <input type="text" name='clave' v-model="clave" class="col-8 form-control form-control-sm"
+                    id='clave' ref='clave' placeholder="" required 
+                    @input="input($event.target)" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,10}$" autocomplete='off'>
                 </div>
             </div>
-        </form>
-    </div>
-    <div class='row d-flex'>
-        <button id='login' class="btn boton btn-sm btn_1 col" disabled @click="login()">Login</button>
-        <button class="btn boton btn-sm btn_1 col" @click="exitLogin()">Exit</button>
-    </div>
+            <div class='col-7 claveOlvidada align_right'>Contraseña olvidada?</div>
+        <div class='mensaje d-flex justify-content-center align-items-end' v-if='verMsg'>{{ messages }}</div>
+        </form> 
+      </div>
+      <div class="modal-footer d-flex justify-content-center align-items-center">
+        <button class="btnAceptar btn btn-sm btn_1" @click="aceptar">Aceptar</button>
+        <button class="btnExit btn btn-sm btn_1" @click="salir">Salir</button>
+      </div>
+    </div>    
+  </div>    
+  </div>    
 
+</transition>    
 
-</div>
 </template>
-
 <script>
-console.log('Login.vue');
+console.log('<< login.vue >>');    
 
-import { mapMutations }  from 'vuex';
-
-import { evalInput } from '@/assets/js/form';
-
-// import Swal from 'sweetalert2';
-// let optAlert = require('../assets/json/opt_swal2.json');
-// const swal2 = Swal.mixin(optAlert);
+import { mapState } from 'vuex';
+import { evalInput, evalValue } from '@/assets/js/form';
 
 export default {
-    name: 'login',
-    computed: {
-        ...mapMutations(['setUser'])
+  name: 'Login',
+  props: {
+    titulo: { type: String, default: 'Cabecera' },
+    cuerpo: { type: String, default: 'Cuerpo' }
+  },
+  data() {
+    return {
+        usuario: '',
+        clave: '',
+        verMsg: true,
+        messages: ''
+    }
+  },
+  computed: {
+     ...mapState(['host']),
+  },  
+  methods: {
+    setComponent: function(){
+
     },
-    methods: {
-        login: function(){
-            console.log('login()');
-            // this.$router.push('/');
-            // Validacion de Form
-            // Existencia de user (server)
+    evaluaItem(){
+      console.log(' evaluaItem()');
+      let obs='';
+      let evaluacion = true;
+      if( !evalValue('usuario') ) { obs+='*Usuario '; evaluacion = false}
+      if( !evalValue('clave') ) {obs+=' *Clave'; evaluacion = false}
+      if( !evaluacion ){
+          this.messages = 'Verique: '+obs;
+      }
+      return evaluacion;
+    },    
+    async aceptar(){
+      console.log('aceptar()')
+      let self = this;
+      if ( !this.evaluaItem() ) { 
+        this.verMsg = true;
+      }else{
+        let data = {
+        usuario: this.usuario,
+        clave: this.clave,
+        }; 
+        let url = this.host+'/usuarios/login/';
+        let options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        };
+        try {
+            let data = await fetch(url, options);
+            let res = await data.json();
+            console.log('acceso =>', res.acceso);
+            if( res.acceso ){
+                self.messages = '';
+                // console.log('usuario => ', res.usuario)
+                this.$store.dispatch('setUser', res.usuario);
+            }else{
+                self.messages ='Usuario o contraseña no valida!'; 
+                this.$store.dispatch('setUser', '');
+            }
+        } catch (error) {
+            console.log('Error:', error);
+        }             
+      }
+    }, 
+    salir(){
+      console.log('salir()');
+      location.href="/home.html";
 
+        // if (confirm("Esta seguro?")) {
+          // window.close();
+        // }
 
-        },
-         exitLogin: function(){
-            console.log('exitLogin()');
-            location.href="/home.html";
-        },
-        input: function(self){
-            // console.log('evalInput method.')
-            evalInput(self);
-        },        
-    }  
+    },
+    input: function(self){
+      evalInput(self);
+      this.messages = '';
+    },    
+  },
+  created: function(){
+    this.setComponent();
+  },
+  mounted: function(){
 
+  }  
 }
 </script>
-
+<style scoped src="@/assets/css/modalComponent.css"></style>
+<style scoped src="@/assets/css/crud.css"></style>
 <style scoped>
-.login {
-    width: 50%;
+.modal-container {
+    width: 40%;
+    height: 30%;
+} 
+.modal-header {
+    height: 10%;
+    padding: 0.40rem 0.35rem;
+}
+.modal-body {
+  /* width: 100%; */
+  height: 75%;
+  background-color: lightgray;
+  margin: 0;
+  padding: 0;
+
+}
+.modal-footer {
+    margin: 0;
+    padding: 0;
+    height: 15%;  
+}
+#formLogin {
+    width: 100%;
+    border: 0;
+    margin: 2px;
+    padding: 10px;
+
+}
+.form-row {
+    margin-bottom: 10px;
+}
+.label {
+    padding: 0 4px;
+    margin-right: 3px;
+}
+.claveOlvidada {
+    font-size: .9rem;
+    color: darkgray;
+  /* font-weight: 400;    */
+}
+.mensaje {
+    color: red;
+    height: 3rem;
+    text-align: center;
+}
+.titulo-1 {
+    font-size: 1.1rem;
+    font-weight: 600;
+
+}
+.btnAceptar, .btnExit {
+   width: 10rem; 
+}
+.escape{
+    border: 1px solid black;
+    padding: 2px;
+}
+.escape:hover {
+    cursor: pointer;
+    background-color: rgb(165, 162, 162);
+    color: white;
 }
 </style>

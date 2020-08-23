@@ -4,6 +4,7 @@ datosExtras
 backup
 /dist
 /public/media
+session-store
 
 # local env files
 .env.local

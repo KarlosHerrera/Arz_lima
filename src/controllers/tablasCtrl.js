@@ -7,10 +7,10 @@ const conn = require('../assets/js/db_mysql.js');
 const  moment =require('moment');
 moment.locale('es');
 
-router.get('/', (req, res) => {
-    console.log('tablas/???');
+// router.get('/', (req, res) => {
+//     console.log('tablas/???');
 
-});
+// });
 
 // --- Departamentos --- //
 router.get('/departamentos/all', (req, res) => {
@@ -105,7 +105,7 @@ router.delete('/jerarquias/delete', async (req, res) => {
     data.activo = 'N'
     data.eliminado = moment().format('YYYY-MM-DD hh:mm:ss');
     let sql = "UPDATE jerarquias SET ? WHERE codJerarquia = ?";
-    conn.query(sql, [data, codJerarquia], function(err, rows){
+    conn.query(sql, [data, codJerarquia], function(err){
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             console.log('sql: ', err.sql);
@@ -131,7 +131,7 @@ router.get('/jerarquias/lastCode',  (req, res) => {
 // --- Sacramentos --- //
 router.get('/sacramentos/all', (req, res) => {
     console.log('tablas/sacramentos/all');
-    let sql = `SELECT * FROM sacramentos ORDER BY nombreSacramento`;                
+    let sql = `SELECT * FROM sacramentos WHERE activo='S' ORDER BY nombreSacramento `;                
     conn.query(sql, function(err, rows){
         // conn.release();
         if(err) console.log('err => ', err);
@@ -190,7 +190,7 @@ router.delete('/sacramentos/delete', async (req, res) => {
     data.activo = 'N'
     data.eliminado = moment().format('YYYY-MM-DD hh:mm:ss');
     let sql = "UPDATE sacramentos SET ? WHERE codSacramento = ?";
-    conn.query(sql, [data, codSacramento], function(err, rows){
+    conn.query(sql, [data, codSacramento], function(err){
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             console.log('sql: ', err.sql);
@@ -276,7 +276,7 @@ router.delete('/tipoidentificacion/delete', async (req, res) => {
     data.activo = 'N'
     data.eliminado = moment().format('YYYY-MM-DD hh:mm:ss');
     let sql = "UPDATE tipoidentificacion SET ? WHERE codIdentificacion = ?";
-    conn.query(sql, [data, codIdentificacion], function(err, rows){
+    conn.query(sql, [data, codIdentificacion], function(err){
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             console.log('sql: ', err.sql);
@@ -372,7 +372,7 @@ router.delete('/tipoinstitucion/delete', async (req, res) => {
     data.activo = 'N'
     data.eliminado = moment(data.eliminado).format('YYYY-MM-DD hh:mm:ss');
     let sql = "UPDATE tipoinstitucion SET ? WHERE tipoInstitucion = ?";
-    conn.query(sql, [data, tipoInstitucion], function(err, rows){
+    conn.query(sql, [data, tipoInstitucion], function(err){
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             console.log('sql: ', err.sql);
@@ -459,7 +459,7 @@ router.delete('/cargoreligioso/delete', async (req, res) => {
     data.activo = 'N';
     data.eliminado = moment(data.eliminado).format('YYYY-MM-DD hh:mm:ss');
     let sql = "UPDATE cargoreligioso SET ? WHERE codCargo = ?";
-    conn.query(sql, [data, codCargo], function(err, rows){
+    conn.query(sql, [data, codCargo], function(err){
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             console.log('sql: ', err.sql);

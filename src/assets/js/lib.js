@@ -2,23 +2,23 @@
 
 export function disabledElementId(eleId, value){
 	console.log(`disabledElementId(${ eleId }, ${value})`); 
-	let sintaxis ='disableElement(eleId string , value boolean)';
+	let sintaxis ='disableElementId(eleId string , value boolean)';
 
 	// console.log('Id = ', Id, 'string:', is_string(Id) );
 	if( eleId && !typeof(eleId) == 'string' ) { console.log(sintaxis+' => eleId'); return ''; }
 	let elem = document.getElementById(eleId);
-	console.log(`disabledElementI(${eleId})`, elem);
+	// console.log(`disabledElementId(${eleId})`, elem);
 	if( !elem || elem == null ){ 
 		console.log('disableElement(Element ='+eleId+'), not found!'); 
 		// console.log(this.$refs.codInstitucion);
 	}else{
-		console.dir('disableElement(Element ='+eleId+'), found!');  
+		// console.dir('disableElement(Element ='+eleId+'), found!');  
 		elem.disabled = value;     
 		// element.classList.  
 	}    
 }
 export function disabledForm(idForm, YesNo, ElementsForm){
-	console.log(`disabledForm(${idForm}, ${YesNo}, ${ElementsForm})`);
+	// console.log(`disabledForm(${idForm}, ${YesNo}, ${ElementsForm})`);
     //  Habilita/Deshabilita (YesNo = boolean), todos los elementos del form () o una lista especifica (ElementsForm)
     // console.log('disabledForm('+idForm+')');
 	// console.log('boolean: ', YesNo);

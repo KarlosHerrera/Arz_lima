@@ -49,7 +49,7 @@
             <div class="col-2 form-group">
               <label for="codReligioso" class="formControlLabel">Codigo*</label>
               <input  type="text" name="codReligioso" v-model="rec.codReligioso" class="form-control form-control-sm" 
-                      id="codReligioso" placeholder=""  disabled
+                      id="codReligioso" placeholder="" disabled
                       @input="input($event.target)" pattern="^[1-9]{1}[0-9]{1,2}$" autocomplete='off' required>
               <small id="" class="form-text text-muted"></small>
             </div>
@@ -57,7 +57,7 @@
               <label for="" class="formControlLabel">Jerarquia*</label>
               <v-select v-model="rec.codJerarquia" label="nombreJerarquia" id='codJerarquia'
               :options="Jerarquias" :reduce="ele => ele.codJerarquia" placeholder=''
-              :clearable="false" class='miClase'
+              :clearable="false" class='miClase' :disabled="disabledForm"
               >
               <div slot="no-options">No existen opciones!</div>
               </v-select> 
@@ -68,7 +68,7 @@
               <div class="col-12 form-group">
                   <label for="nombreReligioso" class="formControlLabel">Nombre*</label>
                     <input type="text" name='nombreInstitucion' v-model="rec.apellidosNombres" class="form-control form-control-sm" 
-                      id='apellidosNombres' placeholder="" required
+                      id='apellidosNombres' placeholder="" required :disabled="disabledForm"
                       @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 -./]{1,59}$" autocomplete='off' data-upper='1c'>
                   <small id="" class="form-text text-muted"></small>
               </div>          
@@ -77,7 +77,7 @@
               <div class="col-12 form-group">
                   <label for="direccion" class="formControlLabel">Direccion*</label>
                     <input type="text" name='direccion' v-model="rec.direccion" class="form-control form-control-sm" 
-                      id='direccion' placeholder="" required
+                      id='direccion' placeholder="" required :disabled="disabledForm"
                       @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 #-.()/]{1,99}$" autocomplete='off' data-upper='1c'>
                   <small id="" class="form-text text-muted"></small>
               </div>          
@@ -87,7 +87,7 @@
                   <label for="departamento" class="formControlLabel">Departamento*</label>
                   <v-select v-model="rec.codDepartamento" label="nombreDepartamento" required
                   :options="Departamentos" :reduce="ele => ele.codDepartamento" placeholder=''
-                  :clearable="false" @input="selDepartamento" class='miClase'
+                  :clearable="false" @input="selDepartamento" class='miClase' :disabled="disabledForm"
                   >
                   <div slot="no-options">No existen opciones!</div>
                   </v-select>
@@ -99,7 +99,7 @@
                   <label for="provincia" class="formControlLabel">Provincia*</label>
                   <v-select v-model="rec.codProvincia" label="nombreProvincia" required
                   :options="tmpProvincias" :reduce="ele => ele.codProvincia" placeholder=''
-                  :clearable="false" @input="selProvincia" class='miClase'
+                  :clearable="false" @input="selProvincia" class='miClase' :disabled="disabledForm"
                   >
                   <div slot="no-options">No existen opciones!</div>
                   </v-select>
@@ -110,7 +110,7 @@
                   <label for="distrito" class="formControlLabel">Distrito*</label>
                   <v-select v-model="rec.codDistrito" label="nombreDistrito" required
                   :options="tmpDistritos" :reduce="ele => ele.codDistrito" placeholder=''
-                  :clearable="false" class='miClase'
+                  :clearable="false" class='miClase' :disabled="disabledForm"
                   >
                   <div slot="no-options">No existen opciones!</div>
                   </v-select>
@@ -120,21 +120,21 @@
               <div class="col-3 form-group">
                   <label for="telefono1" class="formControlLabel">Telefono 1</label>
                   <input type="text" name='telefono1' v-model="rec.telefono1" class="form-control form-control-sm"
-                      id='telefono1' placeholder=""
+                      id='telefono1' placeholder="" :disabled="disabledForm"
                       @input="input($event.target)" pattern="^[1-9]{1}[0-9]{5,9}$" autocomplete='off'>
                   <small id="" class="form-text text-muted"></small>
               </div>
               <div class="col-3 form-group">
                   <label for="telefono2" class="formControlLabel">Telefono 2</label>
                   <input type="text" name='telefono2' v-model="rec.telefono2" class="form-control form-control-sm" 
-                    id='telefono2' placeholder=""
+                    id='telefono2' placeholder="" :disabled="disabledForm"
                       @input="input($event.target)" pattern="^[1-9]{1}[0-9]{5,9}$" autocomplete='off'>
                   <small id="" class="form-text text-muted"></small>
               </div>
               <div class="col-3 form-group">
                   <label for="movil" class="formControlLabel">Movil</label>
                   <input type="text" name='fax' v-model="rec.movil" class="form-control form-control-sm"
-                        id='movil' placeholder=""
+                        id='movil' placeholder="" :disabled="disabledForm"
                       @input="input($event.target)" pattern="^[1-9]{1}[0-9-]{5,9}$" autocomplete='off'>
                   <small id="" class="form-text text-muted"></small>
               </div>
@@ -143,8 +143,8 @@
               <div class="col-12 form-group">
                   <label for="email" class="formControlLabel">Correo</label>
                   <input type="text" name='email' v-model="rec.email" class="form-control form-control-sm"
-                      id='email' placeholder=""
-                      @input="input($event.target)" pattern1="[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}" autocomplete='off'>
+                      id='email' placeholder="" :disabled="disabledForm"
+                      @input="input($event.target)" pattern="^[A-Za-z0-9%+-]+@[A-Za-z0-9-]+.+.[A-Za-z]{2,4}$" autocomplete='off'>
                   <small id="" class="form-text text-muted"></small>
               </div>
           </div> 
@@ -213,7 +213,8 @@ export default {
       searchReligioso: ['codReligioso','apellidosNombres','nombreJerarquia','direccion'],
       view_content: true,
       itemCurrent: 0,
-      observacionesCrud: ''
+      observacionesCrud: '',
+      disabledForm: true
     }
   },  
   computed: { // Expone state al template
@@ -230,6 +231,7 @@ export default {
       if( this.crud == 'C' ) {
         this.title_detail = 'Nuevo'; 
         // this.resetForm();
+        this.disabledForm = false;
         this.generaCodigo();
         // this.rec.codInstitucion='1002';
         // this.rec.nombreInstitucion='AAANombre de Institucion 1002';
@@ -241,15 +243,18 @@ export default {
       if( this.crud == 'D' ) this.title_detail = 'Anula' ;
       if( this.crud == 'R' ) {
         // disabledElementId('btnSellos', false);
+        this.disabledForm = true;
         this.load_relation();
       }
       if( this.crud == 'U') {
         disabledElementId('codReligioso', true);
+        this.disabledForm = false;
         disabledForm(idForm, true, ['codReligioso']); // atributo 'name'
         this.load_relation();
       }
       if( this.crud == 'D' ) {
         disabledForm(idForm, true); // atributo 'name'
+        this.disabledForm = true;
         this.load_relation();
       }
         this.view_content = false;

@@ -11,7 +11,7 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <router-link class="nav-link" to="/LegDocumentos">Legalizacion</router-link>
+              <router-link class="nav-link" to="/LegDocumentos" v-if='true' >Legalizacion</router-link>
               <div></div>
             </li>
             <li class="nav-item">
@@ -27,8 +27,10 @@
               <div></div>
             </li>
             <li class="nav-item ">
-              <div class='icon_ctn' @click='userRole()' v-if="User_Name == '' "><i class="far fa-user icon_user"></i></div>
-              <div class='icon_ctn' @click="userRole()" v-if="User_Name != '' "><i class="icon_user">R</i></div>
+              <div class='icon_ctn' @click='userRole()' v-if="User_Name == '' "><i class="far fa-user icon_user"></i>?</div>
+              <div class='icon_ctn' @click="userRole()" v-if="User_Name != '' " data-toggle="tooltip" data-placement="right" :title="userCurrent">
+                <i class="icon_user">{{ iconUser }}</i>
+              </div>
               <!-- <router-link class="nav-link icon_ctn" to='' @click='ok' v-if="User_Name == '' "><i class="far fa-user icon_user"></i></router-link> -->
               <!-- <router-link class="nav-link icon_ctn" to='' @click='ok' v-if="User_Name != '' "><i class="icon_user">R</i></router-link> -->
               <!-- <router-link class="nav-link icon_ctn" to="/login" v-if="User_Name != '' "><i class="icon_user">R</i></router-link> -->
@@ -62,8 +64,10 @@ export default {
   },
   data() {
       return {
-        listOptionsPerfil: [{dsc: 'SignOut', action: '/login'}, {dsc: 'Perfil', action: '/LegDocumentos'}, {dsc: 'Users', action: '/usuarios'}, {dsc: 'Exit', action: '/exit'}],
-        roleView: false
+        iconUser: '?',
+        listOptionsPerfil: [{dsc: 'Cerrar-Sesion', action: '/logout'}, {dsc: 'Perfil-Usuario', action: '/perfilusuario'}, {dsc: 'Usuarios', action: '/usuarios'}, {dsc: 'Salir', action: '/exit'}, {dsc: 'Iniciar-Sesion', action: '/login'}, {dsc: 'Cambio-Clave', action: '/cambioClave'}],
+        roleView: false,
+        userCurrent: 'Sin Usuario'
       }
   },
   computed: {
@@ -106,7 +110,7 @@ export default {
     actionRole: function(index){
         console.log(`mixin.actionRole( ${index} )`);
         let action = this.listOptionsPerfil[index].action;
-        console.log(this.listOptionsPerfil);
+        // console.log(this.listOptionsPerfil);
         console.log('ruta = ', action);
         this.$router.push(action)
         .catch(function(){
@@ -126,6 +130,13 @@ export default {
         });
 
         this.optionsView = false;
+    },
+    currentUser(){
+      this.iconUser = this.$store.state.User_Name.substr(0,1);
+    },
+    viewCurrentUser(obj){
+      console.log('viewCurrentUser()');
+      console.dir(obj);
     }
   },
   created(){
@@ -140,6 +151,8 @@ export default {
     // }
     // console.log(this.$store.state.User_Name);
     // console.log('===>', this.userRole() );
+    this.userCurrent = this.$store.state.User_Name;
+    this.currentUser();
   }
 }
 </script>
@@ -164,8 +177,8 @@ export default {
     /* border-color: blue; */
 }
 .icon_user {
-  width: 1.50rem;
-  height: 1.50rem;
+  width: 1.4rem;
+  height: 1.4rem;
   border-radius: 50%;
   line-height: 1.53rem;
   background-color: rgb(206, 193, 193);
@@ -195,5 +208,15 @@ export default {
     border-bottom-style: solid;
     border-bottom-color: var(--font-color_hover);
 }
-
+.dropdown-menu {
+  padding: 0 2px;
+}
+.dropdown-item {
+  margin: 1.9px 0;
+  padding: 3.75px 1.2rem;
+}
+.dropdown-item:hover {
+  background-color: rgb(235, 232, 232);
+  color: black;
+}
 </style>

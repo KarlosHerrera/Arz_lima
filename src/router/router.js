@@ -15,6 +15,10 @@ import DetalleLegDocs from '../components/DetalleLegDocs';
 import Instituciones from '@/components/Instituciones';
 import Religiosos from '@/components/Religiosos';
 import Usuarios from '@/components/Usuarios';
+import LogIn from '@/components/Login';
+import LogOut from '@/components/Logout';
+import perfilUsuario from '@/components/perfilUsuario';
+import cambioClave from '@/components/cambioClave';
 
 import tipoInstitucion from '../components/tipoInstitucion';
 import cargoReligioso from '../components/cargoReligioso';
@@ -38,11 +42,6 @@ const routes = [
     //   }      
     // }
   },
-//   {
-//     path: '/login',
-//     name: 'Login',
-//     component: Login
-//   },
   {
     path: '/institucionesLista',
     name: 'Instituciones',
@@ -119,7 +118,27 @@ const routes = [
     path: '/usuarios',
     name: 'Usuarios',
     component: Usuarios
-  }
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: LogIn
+  },
+  {
+    path: '/logout',
+    name: 'Logout',
+    component: LogOut
+  },
+  {
+    path: '/perfilusuario',
+    name: 'perfilUsuario',
+    component: perfilUsuario
+  },
+  {
+    path: '/cambioclave',
+    name: 'cambioclave',
+    component: cambioClave
+  },        
 ]
 
 const router = new VueRouter({

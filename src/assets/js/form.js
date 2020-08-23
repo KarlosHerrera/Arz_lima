@@ -69,7 +69,7 @@ export function evalInput(obj){
 	}
 }
 export function evalValue(id){
-	console.log(`evalValue(${id})`);
+	// console.log(`evalValue(${id})`);
 	if( !id || id == null || !typeof(Id) == 'string') return false;	
 	let obj = document.getElementById(id);
 	if( !obj ) return false;

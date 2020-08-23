@@ -156,13 +156,19 @@ div, form, input, table, nav {
 }
 
 /*  Button */
-.btn_1  {
+.btn_1, .btn_viewPass  {
     background-color: var(--btnBackground) !important;
     color: var(--btnColor)  !important;
     border: 0.1rem 0.2rem;
     padding: 0.07rem 0.2rem;
-    margin: 0 0.07rem;
+  margin: 0 0.07rem;
     border-radius: var(--border-radius) !important;     
+}
+.btn_viewPass {
+    margin: 0.3rem 0.07rem;    
+}
+.b-icon {
+    margin: 0.1rem;
 }
 .btn_1:hover {
     background-color: var(--btnBackgroundHover) !important;
@@ -175,6 +181,7 @@ div, form, input, table, nav {
     transform: scale(.95);
     box-shadow:  none;
 }
+
 .void {
     color: rgb(160, 110, 110);
 }
@@ -187,6 +194,7 @@ div, form, input, table, nav {
     color: lighgray;
     border: 1px solid rgb(151, 150, 150);
   }
+input:focus{ outline: none ;}  
 button, input, select {
     /* border: 0.066rem solid rgb(161, 158, 158) !important; */
 }

@@ -33,7 +33,7 @@ router.get('/min', (req, res) => {
 });
 // Create document
 router.post('/create', (req, res) => {
-    console.log('/tablas/usuarios/create');
+    console.log('/usuarios/create');
     let data = req.body;
     let usuario = data.usuario;
 
@@ -66,15 +66,16 @@ router.put('/update', (req, res) => {
         }
     }); 
 });
-// Delete one document
+// Delete document
 router.delete('/delete', async (req, res) => {
     console.log('/usuarios/delete');
     const data = req.body;
     const usuario = data.usuario;
+    delete data.usuario;    
     data.activo = 'N'
     data.eliminado = moment().format('YYYY-MM-DD hh:mm:ss');
-    let sql = "UPDATE usuarios SET activo = ? WHERE usuario = ?";
-    conn.query(sql, ['N', usuario], function(err, rows){
+    let sql = "UPDATE usuarios SET ? WHERE usuario = ?";
+    conn.query(sql, [data, usuario], function(err){
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             console.log('sql: ', err.sql);
@@ -84,19 +85,41 @@ router.delete('/delete', async (req, res) => {
         }
     });
 });
-router.get('/lastCode',  (req, res) => {
-    console.log('/usuarios/lastCode');
- 
-    let sql = "SELECT CAST(usuario  AS UNSIGNED) AS codigo FROM usuarios ORDER BY codigo DESC LIMIT 1";
-    conn.query(sql, function(err, rows){
+router.get('/usuario/:usuario', function(req, res){
+    // console.log(`/usuarios/usuario/`+req.params.usuario);
+    let usuario = req.params.usuario;
+
+    let sql = 'SELECT count(*) AS cantRegistros FROM usuarios WHERE usuario LIKE BINARY ?;';
+    conn.query(sql, [usuario], function(err, rows){
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             console.log('sql: ', err.sql);
-            res.status(200).json({ status: false, msg: 'Insuccessfull', code:  '-1' });            
+            res.json({status: false, msg: 'Unsucessfull', records: -1, existe: null});
+        }else{
+            let existe = (rows[0].cantRegistros == 0)? false: true;
+            res.json({status: true, msg: 'Sucessfull', usuario: usuario, existe: existe });
         }
-        res.status(200).json({ status: true, msg: 'Successfull', code: rows[0].codigo+'' });
-    });    
-});     // End usuarios
+    }); 
+
+});
+router.get('/one/:usuario', function(req, res){
+    console.log(`/usuarios/one/?${req.params.usuario}`);
+    let usuario = req.params.usuario;
+
+    let sql = "SELECT usuario, nombreUsuario, rolUsuario, codInstitucion, movil, email FROM usuarios WHERE usuario = ? AND activo = 'S'";
+    conn.query(sql, [usuario], function(err, rows){
+        if(err){
+            console.log('sqlMessage: ', err.sqlMessage);
+            console.log('sql: ', err.sql);
+            res.json({status: false, msg: 'Unsucessfull', records: -1, existe: null});
+        }else{
+            res.status(200).json(rows[0]);
+
+        }
+    }); 
+
+});
+
 router.get('/roles', (req, res) => {
     console.log('/usuarios/roles');
 
@@ -105,7 +128,24 @@ router.get('/roles', (req, res) => {
         if(err) console.log('err => ', err);
         res.status(200).json(rows);
     });
+});
+router.post('/login', (req, res) => {
+    console.log('/usuarios/login');
+    let data = req.body;
+    let usuario = data.usuario;
+    let clave = data.clave;
 
+    let sql = 'SELECT count(*) AS cantRegistros FROM usuarios WHERE usuario LIKE BINARY ? AND clave LIKE BINARY ?;';
+    conn.query(sql, [usuario, clave], function(err, rows){
+        if(err){
+            console.log('sqlMessage: ', err.sqlMessage);
+            console.log('sql: ', err.sql);
+            res.json({status: false, msg: 'Unsucessfull', records: -1, existe: null});
+        }else{
+            let acceso = (rows[0].cantRegistros == 0)? false: true;
+            res.json({status: true, msg: 'Sucessfull', usuario: usuario, acceso: acceso });
+        }
+    }); 
 });
 
 module.exports = router;

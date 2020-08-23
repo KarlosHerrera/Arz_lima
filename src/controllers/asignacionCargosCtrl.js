@@ -50,7 +50,7 @@ router.post('/create', (req, res) => {
     console.log('asignacionCargos/create');
     let data = req.body;
     data.fecha = moment(data.fecha).format('YYYY-MM-DD hh:mm:ss');
-    conn.query('INSERT INTO asignacioncargos SET ?', [data], function(err, rows){
+    conn.query('INSERT INTO asignacioncargos SET ?', [data], function(err){
         // console.log(rows[0]);
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
@@ -73,7 +73,7 @@ router.put('/update', (req, res) => {
     // console.log('data: ', data);
     let sql = "UPDATE asignacioncargos SET ? WHERE codAsignacion = ?";
     // console.log('sql = ', sql)
-    conn.query(sql, [data, codAsignacion], function(err, rows){
+    conn.query(sql, [data, codAsignacion], function(err){
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             // console.log('sql: ', err.sql);
@@ -85,9 +85,9 @@ router.put('/update', (req, res) => {
 });
 
 // Delete one document
-router.delete('/delete/', async (req, res) => {
-    console.log('/delete');
-});
+// router.delete('/delete/', async (req, res) => {
+//     console.log('/delete');
+// });
 
 router.get('/sellos/', async (req, res) => {
     console.log('/sellos');
@@ -95,7 +95,7 @@ router.get('/sellos/', async (req, res) => {
     // const doc= req.params.docLegalizacion;
     const data = req.body;
     const codInstitucion = data.codInstitucion;
-    console.log('codInstitucion=', codInstitucion);
+    // console.log('codInstitucion=', codInstitucion);
     let sql = 'SELECT * FROM sellosinstitucion WHERE codInstitucion= ?';
     conn.query(sql, [codInstitucion], function(err, rows){
         if(err){

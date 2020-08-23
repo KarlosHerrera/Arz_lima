@@ -204,6 +204,7 @@ export default {
 }
 </script>
 <style scoped src="@/assets/css/modalComponent.css"></style>
+
 <style scoped>
 .modal-container {
     width: 40rem;
@@ -247,8 +248,18 @@ export default {
 .nombre {
     font-weight: 600;  
 }
-/*  */
-.carousel-control-next-icon, .carousel-control-prev-icon {
-  color: blue !important;
+.v-select {
+  background-color: white;
+/* border: 0.066rem solid darkgray !important; */
+  /* border: none; */
+  /* height: 2rem;  */
+}
+select:focus{ outline: none ;}
+select.decorated option:hover { 
+    box-shadow: 0 0 10px 100px #38809b inset !important; 
+} 
+select > option:hover { 
+  color: #1B517E; 
+  cursor: pointer; 
 }
 </style>

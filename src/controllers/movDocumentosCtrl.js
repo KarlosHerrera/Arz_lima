@@ -137,7 +137,7 @@ router.put('/update', (req, res) => {
     // console.log('data: ', data);
     let sql = "UPDATE movimientodocumento SET ? WHERE docLegalizacion = ?";
     // console.log('sql = ', sql)
-    conn.query(sql, [data, docLegalizacion], function(err, rows){
+    conn.query(sql, [data, docLegalizacion], function(err){
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             console.log('sql: ', err.sql);
@@ -157,10 +157,11 @@ router.delete('/delete/', async (req, res) => {
     // const doc= req.params.docLegalizacion;
     const data = req.body;
     const docLegalizacion = data.docLegalizacion;
+    data.activo = 'N'
     data.eliminado = moment(data.eliminado).format('YYYY-MM-DD hh:mm:ss');
     // let sql = 'DELETE FROM movimientoDocumento WHERE docLegalizacion = ?';
-    let sql = "UPDATE movimientodocumento SET activo = ? WHERE docLegalizacion = ?";
-    conn.query(sql, ['N', docLegalizacion], function(err, rows){
+    let sql = "UPDATE movimientodocumento SET ? WHERE docLegalizacion = ?";
+    conn.query(sql, [data, docLegalizacion], function(err){
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             console.log('sql: ', err.sql);

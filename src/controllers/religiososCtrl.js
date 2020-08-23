@@ -119,7 +119,7 @@ router.put('/update', (req, res) => {
     data.modificado = moment(data.modificado).format('YYYY-MM-DD hh:mm:ss');
     let sql = "UPDATE religiosos SET ? WHERE codReligioso = ?";
     // console.log('Data =>', data);    
-    conn.query(sql, [data, codReligioso], function(err, rows){
+    conn.query(sql, [data, codReligioso], function(err){
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             console.log('sql: ', err.sql);
@@ -136,10 +136,11 @@ router.delete('/delete', async (req, res) => {
     console.log('/religiosos/delete');
     const data = req.body;
     const codReligioso= data.codReligioso;
+    data.activo = 'N'
     data.eliminado = moment(data.eliminado).format('YYYY-MM-DD hh:mm:ss');
     // let sql = 'DELETE FROM movimientoDocumento WHERE codInstitucion = ?';
-    let sql = "UPDATE religiosos SET activo = ? WHERE codReligioso = ?";
-    conn.query(sql, ['N', codReligioso], function(err, rows){
+    let sql = "UPDATE religiosos SET ? WHERE codReligioso = ?";
+    conn.query(sql, [data, codReligioso], function(err){
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             console.log('sql: ', err.sql);

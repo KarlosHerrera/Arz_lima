@@ -43,7 +43,7 @@
       <div class="form-row">
         <div class="col-10 form-group">
             <label for="institucion" class="formControlLabel">Institucion*</label>
-            <v-select v-model="rec.codInstitucion" label="nombreInstitucion" required
+            <v-select v-model="rec.codInstitucion" label="nombreInstitucion" required :disabled="disabledForm"
             :options="Instituciones" :reduce="ele => ele.codInstitucion" placeholder=''
             :clearable="false" @input="selInstitucion" class='miClase'
             >
@@ -57,7 +57,7 @@
       <div class="form-row">
         <div class="col-10 form-group">
           <label for="religioso" class="formControlLabel">Religioso*</label>
-            <v-select v-model="rec.codReligioso" label="apellidosNombres" required
+            <v-select v-model="rec.codReligioso" label="apellidosNombres" required :disabled="disabledForm"
             :options="tmpReligiosos" :reduce="ele => ele.codReligioso" 
             :clearable="false"  @input="numFirmas" class='miClase'
             >
@@ -71,7 +71,7 @@
       <div class="form-row">
         <div class="col-9 form-group">
           <label for="sacramento" class="formControlLabel">Sacramento*</label>
-            <v-select v-model="rec.codSacramento" label="nombreSacramento" 
+            <v-select v-model="rec.codSacramento" label="nombreSacramento" :disabled="disabledForm"
             :options="listSacramentos" :reduce="ele => ele.codSacramento" placeholder=''
             :clearable="false" @input="changeSacramento" class='miClase'
             >
@@ -149,7 +149,7 @@ const idForm = 'formDoc';
 import axios from 'axios';
 import moment from 'moment';
 moment.locale('es');
-// import modal from '@/components/modal.vue';
+
 import SellosCrud from '@/components/SellosCrud.vue';
 import FirmasCrud from '@/components/FirmasCrud.vue';
 
@@ -198,7 +198,8 @@ export default {
       verFirmas: false,
       num_firmas: 0,
       datosReligioso: {},
-      observacionesCrud: ''
+      observacionesCrud: '',
+      disabledForm: true
     }
   },
   computed: { // Expone state al template/script
@@ -208,7 +209,6 @@ export default {
     }
   },
   methods: {
-    // ...mapMutations(['setRecord']),  
     setComponent: function(){
       // console.log('setComponent()');
       this.rec = this.record;
@@ -220,6 +220,7 @@ export default {
 
         // Definiendo valores al formulario
         disabledElementId('IdDocLeg', true);
+        this.disabledForm = false;
         this.generaDoc();
         // Obj. fechas deshabilitadas
         // console.log('ultFecDoc = ', this.ultFecDoc);
@@ -234,6 +235,7 @@ export default {
       if( this.crud == 'D' ) { this.formMethod = 'DELETE'; this.title_detail = 'Anular' }
       if( this.crud == 'D' || this.crud == 'R' ) {
         disabledForm(idForm, true);
+        this.disabledForm = true;
         disabledElementId('docLeg', false);
         this.load_tmpReligiosos();
         this.numSellos();
@@ -248,6 +250,7 @@ export default {
       }      
       if( this.crud == 'U' ) {
         disabledForm(idForm, true, ['docLeg']); // atributo 'name'
+        this.disabledForm = false;
         this.load_tmpReligiosos();
         this.numSellos();
         this.numFirmas();        
@@ -456,7 +459,7 @@ export default {
     loadSacramentos(){
       const self = this;
       let options = { headers: {'Access-Control-Allow-Origin' : '*'}, 'content-type': 'application/json', 'mode': 'cors'};
-      let url = this.host+'/sacramentos/all/';
+      let url = this.host+'/tablas/sacramentos/min/';
       axios.get(url , options)
       .then(function(data){
         self.listSacramentos = data.data;
@@ -573,14 +576,13 @@ export default {
 <style scoped>
 .v-select {
   background-color: white;
-  border: 0.066rem solid darkgray !important;
+  /* border: 0.066rem solid darkgray !important; */
   border: none;
-  height: 1.936rem;
+  /* height: 1.936rem; */
 
 }
 /* input.vs__search {
  border: none;
-
 } */
 
 /* div#vs2__combobox {
@@ -591,20 +593,12 @@ export default {
 /*  input.vs__search {
   border: none !important;
 } */
-#formDoc  {
-  border: 1px solid darkgray !important;  
-  padding-top: 5px;
-  margin-bottom: 5px;
-
-}
-
 select:focus{ outline: none ;}
 select.decorated option:hover { 
     box-shadow: 0 0 10px 100px #38809b inset !important; 
 } 
-
 .optSelect {
-  background: white;
+  /* background: white; */
   /* color: blue; */
   line-height: 2rem !important;
   padding: 3px 3px;
@@ -614,6 +608,13 @@ select.decorated option:hover {
 select > option:hover { 
   color: #1B517E; 
   cursor: pointer; 
+}
+/* ------------------------------------- */
+#formDoc  {
+  border: 1px solid darkgray !important;  
+  padding-top: 5px;
+  margin-bottom: 5px;
+
 }
 .content-header {
   text-align: center;

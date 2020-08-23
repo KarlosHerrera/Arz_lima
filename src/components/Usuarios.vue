@@ -46,22 +46,22 @@
           <div class="form-row justify-content-between">
             <div class="col-2 form-group">
               <label for="usuario" class="formControlLabel">Usuario*</label>
-              <input  type="text" name="codInstitucion" v-model="rec.usuario" class="form-control form-control-sm" 
-                      id='usuario' ref='usuario' placeholder=""  required :disabled="this.crud != 'C'"
-                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 -]{1,9}$" autocomplete='off' data-upper='1c'>
+              <input  type="text" name="codInstitucion" v-model="rec.usuario" class="form-control form-control-sm" @keyup.enter="tecla_tab($event.target)"
+                      id='usuario' ref='usuario' placeholder=""  required :disabled="this.crud != 'C'"  @change="changeUser"
+                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 _-]{4,9}$" autocomplete='off' data-upper='1c'>
               <small id="" class="form-text text-muted"></small>
             </div>
             <div class="col-6 form-group">
               <label for="" class="formControlLabel">Rol*</label>
               <v-select v-model="rec.rolUsuario" label="rolUsuario" :disabled="disabledForm"
-              :options="Roles" :reduce="ele => ele.rolUsuario" placeholder=''
-              :clearable="false" class='miClase'
+              :options="Roles" :reduce="ele => ele.rolUsuario" placeholder='' 
+              :clearable="false" class='miClase' required
               >
               <div slot="no-options">No existen opciones!</div>
               </v-select> 
             </div>
-          </div> 
-
+         </div> 
+          <div class='msgUsuario' v-if=" this.crud == 'C'">Mínimo 5 caracteres, maximo 10, debe empezar con letra mayuscula.</div>
           <div class="form-row">
             <div class="col-12 form-group">
               <label for="nombreInstitucion" class="formControlLabel">Nombre*</label>
@@ -70,7 +70,7 @@
                   @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 -./]{1,39}$" autocomplete='off' data-upper='1c'>
               <small id="" class="form-text text-muted"></small>
             </div>          
-          </div>             
+          </div>     
           <div class="form-row">
             <div class="col-12 form-group">
                 <label for="codInstitucion" class="formControlLabel">Institucion</label>
@@ -84,10 +84,10 @@
           </div>
           <div class="form-row">
             <div class="col-3 form-group">
-              <label for="mvil" class="formControlLabel">Movil</label>
+              <label for="movil" class="formControlLabel">Movil</label>
               <input type="text" name='movil' v-model="rec.movil" class="form-control form-control-sm"
                     id='movil' placeholder="" :disabled="disabledForm"
-                  @input="input($event.target)" pattern="^[1-9]{1}[0-9-]{5,9}$" autocomplete='off'>
+                  @input="input($event.target)" pattern1="^[1-9]{1}[0-9-]{6,9}$" autocomplete='off'>
               <small id="" class="form-text text-muted"></small>
             </div>
           </div>
@@ -97,27 +97,28 @@
               <label for="email" class="formControlLabel">Correo</label>
               <input type="text" name='email' v-model="rec.email" class="form-control form-control-sm"
                   id='email' placeholder="" :disabled="disabledForm"
-                  @input="input($event.target)" pattern1="[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}" autocomplete='off'>
+                  @input="input($event.target)" pattern="^[A-Za-z0-9%+-]+@[A-Za-z0-9-]+.+.[A-Za-z]{2,4}$" autocomplete='off'>
               <small id="" class="form-text text-muted"></small>
             </div>
           </div>
-          <div class="form-row justify-content-between" v-if=" this.crud != 'C' ">
+          <div class="form-row justify-content-between" v-if=" this.crud == 'C' ">
             <div class="col-3 form-group">
               <label for="clave" class="formControlLabel">Clave*</label>
               <input type="text" name='clave' v-model="rec.clave" class="form-control form-control-sm"
-                  id='clave' placeholder="" required
-                  @input="input($event.target)" pattern="^[1-9]{1}[0-9]{5,9}$" autocomplete='off'>
+                  id='clave' placeholder="" required 
+                  @input="input($event.target)" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,10}$" autocomplete='off'>
               <small id="" class="form-text text-muted"></small>
             </div>
             <div class="col-3 form-group">
-              <label for="claveConfirma" class="formControlLabel">Confirm Clave*</label>
+              <label for="claveConfirma" class="formControlLabel">Confirma Clave*</label>
               <input type="text" name='claveConfirma' v-model="rec.claveConfirma" class="form-control form-control-sm" 
                 id='claveConfirma' placeholder="" required
-                  @input="input($event.target)" pattern="^[1-9]{1}[0-9]{5,9}$" autocomplete='off'>
+                  @input="input($event.target)" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,10}$" autocomplete='off'>
               <small id="" class="form-text text-muted"></small>
             </div>
-
+            
           </div>
+          <div class='msgPassword' v-if=" this.crud == 'C'">Mínimo 5 caracteres, maximo 10, al menos una letra y un número.</div>
       </form> 
       <opciones-crud class='row' :crud="crud" @confirm_Create="confirmCreate" @confirm_Update="confirmUpdate" @confirm_Delete="confirmDelete" @exit_Form="exitForm" @reset_Form='resetForm'></opciones-crud>
     </div>
@@ -131,8 +132,6 @@
 <script>
 console.log('<< Usuarios.vue >>');
 
-const idForm = 'formUsuarios';
-
 import { disabledForm, disabledElementId } from '@/assets/js/lib';
 import { evalInput, evalString, evalValue } from '@/assets/js/form';
 
@@ -140,7 +139,7 @@ import moment from 'moment';
 moment.locale('es');
 
 import opcionesCrud from '@/components/opciones-crud.vue'
-
+import axios from 'axios';
 import Swal from 'sweetalert2';
 let optAlert = require('@/assets/json/opt_swal2.json');
 const swal2 = Swal.mixin(optAlert);
@@ -158,8 +157,10 @@ export default {
       tmpUsuarios: [],
       Instituciones: [],
       Roles: [],
+      idForm:'formUsuarios',
       crud: '',
       title_detail: '',
+      existe: false,
       // lenguaje: es,
       fechaHoy: new Date(),   // UTCs 
       searchList: ['usuario','nombreUsuario','rolUsuario','nombreInstitucion'],
@@ -180,7 +181,8 @@ export default {
       if( this.crud == 'C' ) {
         this.title_detail = 'Nuevo'; 
         this.disabledForm = false;
-        this.resetForm();
+        // this.resetForm();
+        this.rec = {};
 
       }
       if( this.crud == 'R' ) this.title_detail = 'Datos';           
@@ -193,32 +195,32 @@ export default {
       if( this.crud == 'U') {
         this.disabledForm = false;
         disabledElementId('codInstitucion', true);
-        disabledForm(idForm, true, ['codInstitucion']); // atributo 'name'
+        disabledForm(this.idForm, true, ['codInstitucion']); // atributo 'name'
       }
       if( this.crud == 'D' ) {
-        disabledForm(idForm, true); // atributo 'name'
+        disabledForm(this.idForm, true); // atributo 'name'
       }
       this.view_content = false;
 
     },
     resetForm: function(){
       // this.$refs.formTipoInstitucion.reset();
-      this.$refs[idForm].reset();
+      this.$refs[this.idForm].reset();
       
     },
     evaluaItem(){
-      // let objForm = document.getElementById(idForm);
-      // console.dir(objForm);
+      console.log(' evaluaItem()');
       let obs='';
       let evaluacion = true;
       if( this.crud == 'C'){
-        if( !evalValue('usuario') ) { obs+='*Usuario '; evaluacion = false}
-        if( !evalValue('clave') ) {obs+=' *Clave'; evaluacion = false;}
-        if( !evalValue('claveConfirma') ) {obs+=' *Confirma Clave'; evaluacion = false;}
+        if( !evalValue('usuario') || this.existe ) { obs+='*Usuario '; evaluacion = false}
+        if( !evalValue('clave') ) {obs+=' *Clave'; evaluacion = false}
+        if( !evalValue('claveConfirma') ) {obs+=' *Confirma Clave'; evaluacion = false}
+        if( !this.checkPasswords() ) {obs+=' *Verifica claves'; evaluacion = false}
       }
       if( !evalValue('nombreUsuario') ) { obs+=' *Nombre '; evaluacion = false}
       if( !evalString(this.rec.rolUsuario) ) { obs+=' *Rol '; evaluacion = false}
-      if( !evalString(this.rec.codInstitucion) ) {obs+=' *Institucion'; evaluacion = false}
+      // if( !evalString(this.rec.codInstitucion) ) {obs+=' *Institucion'; evaluacion = false}
       if( !evalValue('movil') ) {obs+=' Movil'; evaluacion = false;}
       if( !evalValue('email') ) {obs+=' Correo'; evaluacion = false;}
 
@@ -236,21 +238,6 @@ export default {
       this.crud = 'C';
       this.rec = {}
       this.list_view();
-    },
-    evalua(){
-      console.log('evalua()');
-      let evaluacion = true;
-      let id = this.rec.codDepartamento;
-      // if( evalValue( id ) ) evaluacion = false;
-      if( evalString(id) ) evaluacion = false;
-
-      let title = 'Evaluando: ';
-      if ( evaluacion ) { 
-        swal2.fire({title: title, text: 'Verique los datos ingresados.'});
-      }else{
-        swal2.fire({title: title, text: 'Datos OK.'});
-      }      
-
     },
     confirmCreate: async function(){
       // console.log('confirmCreate()');
@@ -271,7 +258,6 @@ export default {
         }; 
 
         let url = this.host+'/usuarios/create';
-        console.log('url = ', url);
         let options = {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -363,8 +349,7 @@ export default {
           this.loadUsuarios();    
         }       
         let text = (res.status)? 'Anulado Satisfactoriamente!': 'Fallo la anulacion!';
-        await swal2.fire({title: title, text: text});
-        disabledForm(idForm, false);
+        await swal2.fire({title: title, text: text}); 
         this.exitForm();
       } catch (error) {
         console.log('Error:', error);
@@ -422,7 +407,46 @@ export default {
     },    
     filterProcess: function(value){
       this.tmpUsuarios = value;
-    }    
+    },
+    async changeUser(){
+      console.log('changeUser()');
+      let user = this.rec.usuario.trim();
+      let self = this;
+      let url = this.host+'/usuarios/usuario/'+user;
+      await axios.get(url)
+      .then(function(res){ 
+        if(res.data.status)
+          self.existe = res.data.existe;
+          console.log(res.data.usuario+', existe? -> ',  res.data.existe);
+          if(res.data.existe){
+            swal2.fire({title: 'Verificacion de Usuario', text: 'Usuario ingresado, existe. Intente nuevamente'});  
+          }else{
+            console.dir(self.$refs.usuario);
+            // .target.nextElementSibling.focus();
+            // this.$refs[this.idForm].reset();
+          }
+      })
+      .catch(function(error) {
+        console.log(error);
+        return '-1';
+      })       
+
+    },
+    checkPasswords(){
+      console.log('checkPasswords()');
+      let clave1 = this.rec.clave.trim();
+      let clave2 = this.rec.claveConfirma.trim();
+
+      console.log(clave1, clave2,'=>' ,clave1 == clave2);
+      // if( clave1 || clave2 ) return false;
+      return ( clave1 != clave2 )? false: true;
+
+    },
+    tecla_tab(e){
+      console.log('tecla_tab()');
+      e.keyCode = 9;
+    }
+
   },
    // Hooks
   created: function(){
@@ -438,6 +462,7 @@ export default {
 </script>
 
 <style scoped src='@/assets/css/table.css'></style>
+<style src="@/assets/css/vue-select.css"></style>
 <style scoped>
 @import url('./../assets/css/scroll_bar.css');
 .content {
@@ -493,7 +518,11 @@ padding: 0.45rem;
   width: 4rem;
 
 }
+.msgPassword, .msgUsuario {
+  font-size: 0.8rem;
+  margin-bottom: 3px;
 
+}
 thead tr {
      /* height: 1.6rem !important;  */
   /* background-color: rgb(66, 31, 31);      */
@@ -505,6 +534,7 @@ tbody tr td {
 
 padding: 2px 3px;
 }
+/* ---------------------- */
 .v-select {
   background-color: white;
 /* border: 0.066rem solid darkgray !important; */
@@ -518,8 +548,5 @@ select.decorated option:hover {
 select > option:hover { 
   color: #1B517E; 
   cursor: pointer; 
-}
-.vs--disabled {
-  background-color: red  !important;
 }
 </style>

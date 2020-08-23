@@ -16,7 +16,7 @@
         <img class='newImg' ref='imagen' src='' v-if='!verImgs'>
         <!-- <b-carousel id="carouselSellos" :interval="0" controls indicators  v-if='verImgs' ref='itmSellos' @sliding-start='slidingStart' :img-width="600" :img-height="500" class="d-block img-fluid">      -->
         <b-carousel id="carouselSellos" :interval="0" controls indicators  v-if='verImgs' ref='itmSellos' @sliding-start='slidingStart' :img-width="600" class="d-block img-fluid" style="max-height: 370px;">     
-          <b-carousel-slide v-for="(itm, index) in imagenes" v-bind:key="index" v-bind:img-src='itm' img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide>
+          <b-carousel-slide v-for="(itm, index) in imagenes" v-bind:key="index" v-bind:img-src='itm.sello' img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide>
           <!-- <b-carousel-slide v-for="(itm, index) in imagenes" :key='index' :img-src='itm.sello' img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide> -->
         </b-carousel>
 <!-- <b-carousel-slide img-src="media/sellos/00131-1.jpg" img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide> -->
@@ -57,10 +57,6 @@ console.log('<< sellos-crud.vue >>');
 
 import axios from 'axios';
 import { mapState } from 'vuex';
-
-// import Swal from 'sweetalert2';
-// let optAlert = require('@/assets/json/opt_swal2.json');
-// const swal2 = Swal.mixin(optAlert);
 
 const s3 = require('@/assets/js/aws_connection.js');
 

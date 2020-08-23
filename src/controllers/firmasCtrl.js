@@ -72,7 +72,7 @@ router.post('/create/', upload.single('imgFirma') , function(req, res){
     let data = req.body;
 
     data.creado = moment().format('YYYY-MM-DD hh:mm:ss');
-    conn.query('INSERT INTO firmareligiosos SET ?', [data], function(err, rows){
+    conn.query('INSERT INTO firmareligiosos SET ?', [data], function(err){
         // console.log(rows[0]);
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
