@@ -556,5 +556,6 @@ export default {
 </script>
 
 <style scoped src='@/assets/css/table.css'></style>
+<style scoped src='@/assets/css/form.css'></style>
 <style scoped src='@/assets/css/scroll_bar.css'></style>
 <style scoped src="@/assets/css/crudInstRelig.css"></style>

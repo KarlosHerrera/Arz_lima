@@ -19,8 +19,8 @@ let fechas_Doc = { desde:  moment(fechaHoy).format('YYYY-MM-DD hh:mm:ss'), hasta
 //const store = new Vuex.Store({
 export default new Vuex.Store({
   state: {
-    User_Name: 'Bulo1',
-    User_Role: 'Supervisor',
+    User_Name: '',
+    User_Role: '',
     users: [],
     Religiosos: [],
     Instituciones: [],
@@ -36,6 +36,9 @@ export default new Vuex.Store({
     setUser: function(state, data){
       state.User_Name = data;
     },
+    setRole: function(state, data){
+      state.User_Role = data;
+    },    
     setReligiosos: function(state, data){
       // console.log('mutations.setReligiosos()');
       state.Religiosos = data;
@@ -176,9 +179,12 @@ export default new Vuex.Store({
       }
 
     },
-    setUser: function(commit, data){
-      commit('setUser', data);
+    setUser: function(context, data){
+      context.commit('setUser', data);
     },
+    setRole: function(context, data){
+      context.commit('setRole', data);
+    },    
     // Configuracion de App
     config_app: function(context){
       // console.log('store.config_app()');

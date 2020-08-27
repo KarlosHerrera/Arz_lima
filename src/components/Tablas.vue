@@ -2,31 +2,31 @@
 <template>
    <div id='subMenu' class='subMenu'>
       <ul class="nav justify-content-center">
-        <li class="nav-item d-flex flex-column">
+        <li class="nav-item d-flex flex-column" v-if="navItem('AS')">
            <router-link class="nav-link subMenu_items" to="/Instituciones">Instituciones</router-link>
            <div></div>
         </li>  
-        <li class="nav-item d-flex flex-column">
+        <li class="nav-item d-flex flex-column" v-if="navItem('AS')">
            <router-link class="nav-link subMenu_items" to="/Religiosos">Religiosos</router-link>
            <div></div>
         </li>              
-        <li class="nav-item d-flex flex-column">
+        <li class="nav-item d-flex flex-column" v-if="navItem('ASU')">
            <router-link class="nav-link subMenu_items" to="/tipoInstitucion">Tipo-Institucion</router-link>
            <div></div>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="navItem('ASU')">
           <router-link  class="nav-link subMenu_items" to="/cargoReligioso">Cargos Religiosos</router-link>
           <div></div>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="navItem('ASU')">
           <router-link class="nav-link subMenu_items" to="/Jerarquias">Jerarquias</router-link>
           <div></div>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="navItem('ASU')">
           <router-link class="nav-link subMenu_items" to="/Sacramentos">Sacramentos</router-link>
           <div></div>
         </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="navItem('ASU')">
           <router-link class="nav-link subMenu_items" to="/TipoIdentificacion">Tipo-Identificacion</router-link>
           <div></div>
         </li>
@@ -35,9 +35,28 @@
 </template>
 
 <script>
-export default {
-  name: 'Tablas'
 
+import { mapState } from 'vuex';
+
+export default {
+  name: 'Tablas',
+  computed: {
+    ...mapState(['User_Name','User_Role']),
+  },
+  methods: {
+    navItem(optionMenu){
+      console.log(`navitem(${optionMenu})`);
+      let role = this.User_Role.trim();
+      if ( role == '' ) return false;
+      role =role. substr(0,1);
+      if( !optionMenu || optionMenu.trim() == '' ) return false;
+      optionMenu = optionMenu.trim().toUpperCase();
+      if( optionMenu == '*') return true;
+      if ( optionMenu.indexOf(role)== -1) return false;
+      return true;
+    },
+
+  }
 }
 </script>
 

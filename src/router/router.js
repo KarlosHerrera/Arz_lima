@@ -3,7 +3,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import Home from '@/components/Home';
+// import Home from '@/components/Home';
 
 import Tablas from '@/components/Tablas';
 import Consultas from '@/components/Consultas';
@@ -25,6 +25,7 @@ import cargoReligioso from '../components/cargoReligioso';
 import Jerarquias from '../components/Jerarquias';
 import Sacramentos from '../components/Sacramentos';
 import Identificacion from '../components/tipoIdentificacion';
+// import { nextTick } from 'process';
 
 
 Vue.use(VueRouter)
@@ -32,8 +33,8 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: '/',
+    // component: Home
     // beforeEnter: function(to, from, next){ // to = donde voy, from = de donde vengo, 
     //   if (to.path != '/login' && existToken()) {
     //     next(); // hacia ruta 'to'
@@ -145,6 +146,18 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach( function(to, from, next){
+  console.log('router.beforeEach()-------------------->');
+  console.log('from: ', from);
+  console.log('to : ', to);
+  if( !from.name ) {
+    console.log('1ra. vez');
+    next(false)
+  }
+  next();
+  // next('/login'); 
 })
 
 export default router

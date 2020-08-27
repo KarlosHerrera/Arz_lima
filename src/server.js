@@ -2,7 +2,7 @@
 const express = require('express');
 // const cookieParser = require('cookie-parser');
 // const uuid = require('uuid').v4;
-const session = require('express-session');
+// const session = require('express-session');
 // const FileStore = require('session-file-store')(session);
 const mysql = require('mysql');
 const serveStatic = require('serve-static')
@@ -17,19 +17,19 @@ const app = express();
 // app.use(cookieParser());
 
 app.set('trust proxy', 1)
-app.use(session({
-  // genid: (req) => {
-  //   console.log('Inside the session middleware')
-  //   console.log(req.sessionID)
-  //   return uuid() // use UUIDs for session IDs
-  // },
-  // store: new FileStore({
-  //   path: './session-store'
-  // }),
-  secret: 'mysessionsecretkey',
-  resave: false,
-  saveUninitialized: true,
-}));
+// app.use(session({
+//   // genid: (req) => {
+//   //   console.log('Inside the session middleware')
+//   //   console.log(req.sessionID)
+//   //   return uuid() // use UUIDs for session IDs
+//   // },
+//   // store: new FileStore({
+//   //   path: './session-store'
+//   // }),
+//   secret: 'mysessionsecretkey',
+//   resave: false,
+//   saveUninitialized: true,
+// }));
 
 // Controllers
 const religiososCtrl = require('./controllers/religiososCtrl');
@@ -69,14 +69,14 @@ app.use(express.static(path.join(__dirname, './public')));
 // });
 app.get('/', (req, res, next) => {
   // req.session.prueba = 'Eureka!';
-  if(req.session.page_views){
-    req.session.page_views++;
-    console.log('-------------PAGE VIEWS  :', req.session.page_views);
-  } else {
-    req.session.page_views = 1;
-    console.log('--------------Welcome to this page for the first time!');
-  }
-  console.log('session: ', req.session);
+  // if(req.session.page_views){
+  //   req.session.page_views++;
+  //   console.log('-------------PAGE VIEWS  :', req.session.page_views);
+  // } else {
+  //   req.session.page_views = 1;
+  //   console.log('--------------Welcome to this page for the first time!');
+  // }
+  // console.log('session: ', req.session);
   let fechaHoy =new Date();
   console.log('->', moment(fechaHoy).format('DD/MM/YYYY hh:mm:ss'));
   // if( !req.session ) res.sendfile(__dirname, './dist/index.html');
@@ -117,7 +117,8 @@ db.connect((err) => {
     db.end();
 });    
 
-let aplication = app.listen(app.get('port'), function(){
+// let aplication = app.listen(app.get('port'), function(){
+app.listen(app.get('port'), function(){
   console.log('->', moment().format('LLL') );
   // let host = aplication.address().address
   // let port = aplication.address().port

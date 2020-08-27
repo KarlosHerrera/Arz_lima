@@ -165,7 +165,8 @@ div, form, input, table, nav {
     border-radius: var(--border-radius) !important;     
 }
 .btn_viewPass {
-    margin: 0.3rem 0.07rem;    
+    margin: 0.3rem 0.07rem;   
+    outline: none; 
 }
 .b-icon {
     margin: 0.1rem;
@@ -194,7 +195,7 @@ div, form, input, table, nav {
     color: lighgray;
     border: 1px solid rgb(151, 150, 150);
   }
-input:focus{ outline: none ;}  
+input:focus{ outline: none; }  
 button, input, select {
     /* border: 0.066rem solid rgb(161, 158, 158) !important; */
 }

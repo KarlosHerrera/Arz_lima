@@ -553,8 +553,7 @@ export default {
    // Hooks
   created: function(){
     // console.log('hook.created()');
-    console.log('create host => ', this.host);
-
+    // console.log('create host => ', this.host);
   },
   mounted: function(){
     // console.log('hook.mounted()')
@@ -570,7 +569,7 @@ export default {
 </script>
 
 <style src="@/assets/css/form.css"></style>
-<style src='@/assets/css/crud.css'></style> // Esilos de estructura
+<style src='@/assets/css/crud.css'></style>
 <style src="@/assets/css/vue-select.css"></style>
 
 <style scoped>

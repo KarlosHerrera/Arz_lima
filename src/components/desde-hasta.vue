@@ -2,7 +2,7 @@
 <template>
   <div class='content-del-al d-flex  flex-grow-0'>
     <div class="content-del input-group input-group-sm d-flex justify-content-center align-items-center">
-      <label class='lblFecha'></label>  
+      <label class='lblFecha'>Del</label>  
       <vuejs-datepicker id='desde' v-model="fecha_del" :language="lenguaje" format="dd/MM/yyyy" 
         :fullMonthName="true" :mondayFirst="true" :bootstrapStyling="false" inputClass="form-control-sm miEstilo"
         calendarClass='calendario'  :highlighted="{days: [ 0 ] }">
@@ -10,7 +10,7 @@
        <!-- @input='changeDel' -->
     </div>
     <div class="content-al input-group input-group-sm d-flex justify-content-center align-items-center">
-      <label class='lblFecha'>Al:</label>
+      <label class='lblFecha'>Al</label>
       <vuejs-datepicker id='hasta' v-model="fecha_al" :language="lenguaje" format="dd/MM/yyyy" 
         :fullMonthName="true" :mondayFirst="true" :bootstrapStyling="false" inputClass="form-control-sm miEstilo"
         calendarClass='calendario'  :highlighted="{days: [ 0 ] }">
@@ -154,7 +154,7 @@ datepicker {
  width: 8.0rem !important;
 }
 .lblFecha {
-  margin: 3px;
+  margin: 1px;
   border: 2px;
 text-align: center;
 }

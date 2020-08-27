@@ -135,15 +135,22 @@ router.post('/login', (req, res) => {
     let usuario = data.usuario;
     let clave = data.clave;
 
-    let sql = 'SELECT count(*) AS cantRegistros FROM usuarios WHERE usuario LIKE BINARY ? AND clave LIKE BINARY ?;';
+    let sql = 'SELECT count(*) AS cantRegistros, rolUsuario FROM usuarios WHERE usuario LIKE BINARY ? AND clave LIKE BINARY ?;';
     conn.query(sql, [usuario, clave], function(err, rows){
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             console.log('sql: ', err.sql);
             res.json({status: false, msg: 'Unsucessfull', records: -1, existe: null});
         }else{
-            let acceso = (rows[0].cantRegistros == 0)? false: true;
-            res.json({status: true, msg: 'Sucessfull', usuario: usuario, acceso: acceso });
+            let rolUsuario = '';
+            let acceso = ''
+            if( rows[0].cantRegistros == 0 ){
+                acceso = false;
+            }else{
+                acceso = true;
+                rolUsuario = rows[0].rolUsuario;
+            }
+            res.json({status: true, msg: 'Sucessfull', usuario: usuario, rolUsuario: rolUsuario, acceso: acceso });
         }
     }); 
 });

@@ -204,7 +204,7 @@ export default {
 }
 </script>
 <style scoped src="@/assets/css/modalComponent.css"></style>
-
+<style scoped src='@/assets/css/form.css'></style>
 <style scoped>
 .modal-container {
     width: 40rem;

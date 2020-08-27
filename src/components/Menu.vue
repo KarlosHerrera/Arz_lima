@@ -2,44 +2,43 @@
 <template>
   <div>
    <nav id='Menu' class="navbar navbar-expand-sm navbar-light bg-light menu justify-content-center">  
-
       <!-- <b-icon-bounding-box></b-icon-bounding-box> -->
       <router-link class="navbar-brand" to="/">Arzobispado de Lima</router-link>
       <button class="navbar-toggler" typeexclamation-triangle-fill="button" data-toggle="collapse" data-target="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon icon_menu"></span>
       </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <router-link class="nav-link" to="/LegDocumentos" v-if='true' >Legalizacion</router-link>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav" v-if="verMenu">
+          <ul class="navbar-nav">             <!-- :disabled="disabledMenu" -->
+            <li class="nav-item" v-if="navItem('AU')" disabled>
+              <router-link class="nav-link" to="/LegDocumentos" >Legalizacion</router-link>
               <div></div>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="navItem('AS')">
               <router-link class="nav-link" to="/AsigReligiosos">Asignacion</router-link>
               <div></div>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" v-if="navItem('ASU')">
               <router-link class="nav-link" to="/Consultas">Consultas</router-link>
               <div></div>
             </li>            
-            <li class="nav-item">
+            <li class="nav-item" v-if="navItem('ASU')">
               <router-link class="nav-link" to="/Tablas">Mantenimiento</router-link>
               <div></div>
             </li>
+            <!-- Acceso y control de opciones -->
             <li class="nav-item ">
-              <div class='icon_ctn' @click='userRole()' v-if="User_Name == '' "><i class="far fa-user icon_user"></i>?</div>
-              <div class='icon_ctn' @click="userRole()" v-if="User_Name != '' " data-toggle="tooltip" data-placement="right" :title="userCurrent">
+              <div class='icon_ctn' @click='userRole()' v-if="User_Name == '' " data-toggle="tooltip" data-placement="bottom" title="Iniciar Sesion">
+                <!-- <b-icon class="icon_user" icon="person-dash" font-scale='0.5' ></b-icon> -->
+                <i class="icon_user">?</i>
+              </div>
+              <div class='icon_ctn' @click="userRole()" v-if="User_Name != '' " data-toggle="tooltip" data-placement="bottom" :title="userCurrent">
                 <i class="icon_user">{{ iconUser }}</i>
               </div>
-              <!-- <router-link class="nav-link icon_ctn" to='' @click='ok' v-if="User_Name == '' "><i class="far fa-user icon_user"></i></router-link> -->
-              <!-- <router-link class="nav-link icon_ctn" to='' @click='ok' v-if="User_Name != '' "><i class="icon_user">R</i></router-link> -->
-              <!-- <router-link class="nav-link icon_ctn" to="/login" v-if="User_Name != '' "><i class="icon_user">R</i></router-link> -->
               <!-- Componente   --> 
-                <div id='userRole' class="drowndown" :class="{show: roleView}">                        
+                <div id='userRole' class="drowndown" >                        
                   <ul class="dropdown-menu dropdown-menu-right" :class="{show: roleView}" role="menu" aria-labelledby="userRole">
                     <li class='dropdown-item' v-for="(item, index) in listOptionsPerfil" :key='index' @click='actionRole(index)'>{{ item.dsc }}</li>
                   </ul>
-
                 </div>
             </li>
           </ul>
@@ -67,92 +66,119 @@ export default {
         iconUser: '?',
         listOptionsPerfil: [{dsc: 'Cerrar-Sesion', action: '/logout'}, {dsc: 'Perfil-Usuario', action: '/perfilusuario'}, {dsc: 'Usuarios', action: '/usuarios'}, {dsc: 'Salir', action: '/exit'}, {dsc: 'Iniciar-Sesion', action: '/login'}, {dsc: 'Cambio-Clave', action: '/cambioClave'}],
         roleView: false,
-        userCurrent: 'Sin Usuario'
+        userCurrent: 'Sin Usuario',
+        verMenu: true,
+        disabledMenu: false
       }
   },
   computed: {
-    // ...mapState(['User_Name', 'User_Role'])
-    ...mapState(['User_Name'])
+    ...mapState(['User_Name','User_Role']),
+      User: function(){
+        return this.User_Name;
+    }  
   },
   methods: {
-    userRole: function(){
-      console.log('mixin.userRole()');
-      // // console.dir(self);
-      // if( !id ) {console.log('Drowndown Id'); return false;} 
-      // let ele = document.getElementById(id);
-      // if( !ele ) {console.log('Not found drowndown'); return false;}
-      // console.dir(ele); 
-      // ele.classList.toggle('show');
-      //ele.firstChild.toggle('show');
-      this.roleView = !this.roleView;
-      if( this.roleView ) {
-          // this.disableElement('main', true);
-          console.log('$store.state.UserName:', this.$store.state.User_Name);
-          // let listOptionsPerfil = [{dsc: 'SignOut', action: '/login'}, {dsc: 'Perfil', action: '/customers'}, {dsc: 'Users', action: '/users'}, {dsc: 'Exit', action: '/exit'}];
-          // this.listOptionsPerfil = listOptionsPerfil;
+    setComponent(){
+      console.log(`Menu.vue setComponent(${this.User_Name}).........`);
+      if( this.User_Name=='' ){
+        console.log('User_Name = empty');
+        this.listOptionsPerfil = [{dsc: 'Iniciar-Sesion', action: '/login'}, {dsc: 'Salir', action: '/exit'}];
+      }else{
 
+        this.currentUser();
       }
-
-      // return listOptionsPerfil;
-
     },
-    userOption: function(){
-      console.log('mixin.userOption()');
-      this.optionsView = !this.optionsView;
-      if ( this.optionsView) {
-
-          // let listOptionsUser = [{dsc: 'Print', action: '/home'}, {dsc: 'To Pdf', action: '/customers'}, {dsc: 'Migrar', action: '/users'}, {dsc: 'Salir', action: '/exit'}];
-          // this.listOptionsUser = listOptionsUser;
-
-      }
-      // return listOptionsUser;
+    userRole: function(){
+      // console.log(`userRole(${this.roleView})`);
+      this.roleView = !this.roleView; 
     },
     actionRole: function(index){
-        console.log(`mixin.actionRole( ${index} )`);
+        console.log(`actionRole( ${index} )`);
+        console.log('----------------------');
         let action = this.listOptionsPerfil[index].action;
-        // console.log(this.listOptionsPerfil);
-        console.log('ruta = ', action);
-        this.$router.push(action)
-        .catch(function(){
-            console.log('Duplicando ruta...!')
-        });
+        if( action == '/exit'){
+          console.log('/exit');
+          // Salir
+          // window.top.close();
 
-        this.roleView = false;
-    },
-    actionOption: function(index){
-        console.log(`mixin.actionOption( ${index} )`);
-        let action = this.listOptionsUser[index].action;
-        console.log(this.listOptionsUser);
-        console.log('ruta = ', action);
-        this.$router.push(action)
-        .catch(function(){
-            console.log('Duplicando ruta...!')
-        });
+          // setTimeout(function(){var ww = window.open(window.location, '_self'); ww.close(); }, 1000);
 
-        this.optionsView = false;
+          // let customWindow = window.open('', '_parent', '');
+          // customWindow.close();
+
+        //  window.close();
+          this.listOptionsPerfil = [{dsc: 'Iniciar-Sesion', action: '/login'}, {dsc: 'Salir', action: '/exit'}];
+          // this.setComponent();
+          // window.location."http://google.com";
+          window.location = "http://google.com";
+          // this.$router.push('/');
+        }else{
+          if( action == '/logout' ){
+            console.log('action/logout -> Cerrar Sesion')
+            // Cerrar-Session
+            this.listOptionsPerfil = [];
+            this.listOptionsPerfil = [{dsc: 'Iniciar-Sesion', action: '/login'}, {dsc: 'Salir', action: '/exit'}];
+            this.$store.dispatch('setUser', '');
+            this.$store.dispatch('setRole', '');
+            // console.log(this.listOptionsPerfil);
+            this.setComponent();
+            this.roleView = false;
+            // this.$router.push('/menu');
+            console.log('Saliendo de /logout');
+          }else{
+            // console.log(this.listOptionsPerfil);
+            console.log('ruta = ', action);
+            this.$router.push(action)
+    
+            this.roleView = false;
+          }
+
+        }
+
     },
     currentUser(){
-      this.iconUser = this.$store.state.User_Name.substr(0,1);
+      console.log('currentUser()');
+      // this.iconUser = this.$store.state.User_Name.substr(0,1);
+      this.iconUser = this.User_Name.substr(0,1);
+      this.userCurrent = this.User_Name;
+      // Genera opciones de Usuario
+      this.listOptionsPerfil = [{dsc: 'Cerrar-Sesion', action: '/logout'}, 
+                                {dsc: 'Perfil-Usuario', action: '/perfilUsuario'},
+                                {dsc: 'Cambio-Clave', action: '/cambioClave'},
+                                {dsc: 'Salir', action: '/exit'}, 
+                                ]
+      if( this.User_Role == 'Administrador') this.listOptionsPerfil.unshift({dsc: 'Usuarios', action: '/usuarios'})   ;              
+
+      // Genera opciones de SubMenu
+      //this.listOptionsUser = [{dsc: 'Print', action: '/home'}, {dsc: 'To Pdf', action: '/customers'}, {dsc: 'Migrar', action: '/users'}, {dsc: 'Salir', action: '/exit'}];
     },
-    viewCurrentUser(obj){
-      console.log('viewCurrentUser()');
-      console.dir(obj);
-    }
+    navItem(optionMenu){
+      // console.log(`navitem(${optionMenu})`);
+      let role = this.User_Role.trim();
+      if ( role == '' ) return false;
+      role =role. substr(0,1);
+      if( !optionMenu || optionMenu.trim() == '' ) return false;
+      optionMenu = optionMenu.trim().toUpperCase();
+      if( optionMenu == '*') return true;
+      if ( optionMenu.indexOf(role)== -1) return false;
+      return true;
+    },
+
   },
+  watch: {
+    User: function(newVal, oldVal){
+      console.log('watch.this.User_Name');
+      console.log('New: ', newVal);
+      console.log('Old: ', oldVal);
+      this.currentUser();
+    },
+  },    
   created(){
     // console.log('Menu.vue.created()');
-    // User_Name = this.$store.state.User_Name;
   },
   mounted: function(){
     console.log('App.vue.mounted()');
-    // console.log('User_Name ===> ', this.$store.state.User_Name);
-    // if( this.$store.state.User_Name == ''){
-    //   this.$router.push('/login');
-    // }
-    // console.log(this.$store.state.User_Name);
-    // console.log('===>', this.userRole() );
-    this.userCurrent = this.$store.state.User_Name;
-    this.currentUser();
+    this.setComponent();
   }
 }
 </script>
@@ -174,7 +200,8 @@ export default {
   justify-content: center;
 }
 .icon_ctn:hover {
-    /* border-color: blue; */
+    /* border: 1px solid blue; */
+  color: blue;  
 }
 .icon_user {
   width: 1.4rem;

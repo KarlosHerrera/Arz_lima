@@ -39,12 +39,16 @@
             <div class="col-3 form-group">
               <label for="clave" class="formControlLabel">Contraseña Actual*</label>
               <input type="password" name='clave' v-model="rec.clave" class="form-control form-control-sm"
-                  id='clave' ref='clave' placeholder="" required  @change="checkedPassword"
-                  @input="input($event.target)" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,10}$" autocomplete='off'>
+                  id='clave' ref='clave' placeholder="" required  @change="checkPassword"
+                  @input="input($event.target)" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,10}$" autocomplete='new-password'>
               <small id="" class="form-text text-muted"></small>
             </div> 
            <div class="col-3 form-group align-self-end">
-              <button class='btn btn-sm btn_viewPass' @click="changeType('clave')"><b-icon icon="eye-fill" font-scale='1' ></b-icon> Ver Contraseña</button>
+              <button class='btn btn-sm btn_viewPass' @click="changeType('clave')">
+                <b-icon v-if="verClave" icon="eye-fill" font-scale='1' ></b-icon>
+                <b-icon v-if="!verClave" icon="eye-slash-fill" font-scale='1' ></b-icon>
+                Ver Contraseña
+              </button>
             </div>                      
           </div>          
           <div class="form-row " v-if="claveOk">
@@ -100,6 +104,7 @@ export default {
       fechaHoy: new Date(),   // UTCs 
       observacionesCrud: '',
       disabledForm: false,
+      verClave: false
     }
   },  
   computed: { // Expone state al template
@@ -195,6 +200,7 @@ export default {
     changeType(id){
       // console.log(` changeType(${id})`);
       let obj = this.$refs[id];
+      this.verClave = !this.verClave;
       if(obj.type=='text'){
         obj.setAttribute('type',  'password')
       }else{
@@ -202,7 +208,7 @@ export default {
       }
 
     },
-    async checkedPassword(){
+    async checkPassword(){
       // console.log('checkPassword()');
       let self = this;
 
@@ -261,20 +267,20 @@ export default {
 .content-body {
   height: 84%;
   border: 1px solid gray;
-    margin: 0.25rem 0.1rem;
+  margin: 0.25rem 0.1rem;
 }
 .content-footer {
-    height: 5%;
-padding: 1px;
+  height: 5%;
+  padding: 1px;
 }
 .titulo_2 {
-    font-size: 1.2rem;
-      font-weight: 600;
-    color: black;
-    margin-top: 1rem;
+  font-size: 1.2rem;
+    font-weight: 600;
+  color: black;
+  margin-top: 1rem;
 }
 .content-search {
- height: 1.5rem !important;
+  height: 1.5rem !important;
 
 }
 .detailRecord {
@@ -284,7 +290,7 @@ padding: 1px;
 
 }
 .formBase {
-padding: 0.45rem;
+  padding: 0.45rem;
 
 }
 .fila {

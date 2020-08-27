@@ -6,28 +6,35 @@
     <div class="modal-container">
       <div class="modal-header d-flex justify-content-between align-items-center">
           <div class='titulo-1 align-items-center'>Acceso al Sistema</div>
-          <div class='escape align-items-end' @click="$emit('close')">X</div>  
+          <div class='escape align-items-end' @click="salir">X</div>  
       </div>    
       <div class="modal-body" ref='modal_body'> 
         <form id='formLogin' ref='formLogin' class='formBase' onsubmit="return false;" novalidate autocomplete="nope" :disabled='true' data-btnEnable='btnAceptar'>
             <div class="form-row ">
-                <div class="col-10 form-group d-flex align-items-center">
-                <div class="col-3 label align_right">Usuario</div>
-                <input  type="text" name="codInstitucion" v-model="usuario" class="col-8 form-control form-control-sm" @keyup.enter="tecla_tab($event.target)"
-                        id='usuario' ref='usuario' placeholder=""  required
-                        @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 _-]{4,9}$" autocomplete='off' data-upper='1c'>
+                <div class="col-8 form-group d-flex align-items-center">
+                  <div class="col-3 label align_right">Usuario</div>
+                  <input  type="text" name="codInstitucion" v-model="usuario" class="col-7 form-control form-control-sm" @keyup.enter="tecla_tab($event.target)"
+                          id='usuario' ref='usuario' placeholder=""  required
+                          @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 _-]{4,9}$" autocomplete='off' data-upper='1c'>
                 </div>
             </div>
             <div class="form-row">
-                <div class="col-10 form-group d-flex align-items-center">
-                <div class="col-3 label align_right">Contraseña</div>
-                <input type="text" name='clave' v-model="clave" class="col-8 form-control form-control-sm"
-                    id='clave' ref='clave' placeholder="" required 
-                    @input="input($event.target)" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,10}$" autocomplete='off'>
+                <div class="col-8 form-group d-flex align-items-center">
+                  <div class="col-3 label align_right">Contraseña</div>
+                  <input type="password" name='clave' v-model="clave" class="col-7 form-control form-control-sm"
+                      id='clave' ref='clave' placeholder="" required 
+                      @input="input($event.target)" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,10}$" autocomplete='new-password'>
                 </div>
-            </div>
-            <div class='col-7 claveOlvidada align_right'>Contraseña olvidada?</div>
-        <div class='mensaje d-flex justify-content-center align-items-end' v-if='verMsg'>{{ messages }}</div>
+                <div class="col-4 form-group align-self-end">
+                  <button class='btn btn-sm btn_viewPass' @click="changeType('clave')">
+                    <b-icon v-if="verClave" icon="eye-fill" font-scale='1' ></b-icon>
+                    <b-icon v-if="!verClave" icon="eye-slash-fill" font-scale='1' ></b-icon>
+                    Ver contraseña
+                  </button>
+                </div>                      
+            </div>  
+            <div class='col-7 claveOlvidada align_right'><a href="#"> Contraseña olvidada?</a></div>
+            <div class='mensaje d-flex justify-content-center align-items-end' v-if='verMsg'>{{ messages }}</div>
         </form> 
       </div>
       <div class="modal-footer d-flex justify-content-center align-items-center">
@@ -58,11 +65,12 @@ export default {
         usuario: '',
         clave: '',
         verMsg: true,
-        messages: ''
+        messages: '',
+        verClave: false
     }
   },
   computed: {
-     ...mapState(['host']),
+     ...mapState(['host','User_Name'])
   },  
   methods: {
     setComponent: function(){
@@ -80,14 +88,14 @@ export default {
       return evaluacion;
     },    
     async aceptar(){
-      console.log('aceptar()')
+      // console.log('aceptar()')
       let self = this;
       if ( !this.evaluaItem() ) { 
         this.verMsg = true;
       }else{
         let data = {
-        usuario: this.usuario,
-        clave: this.clave,
+          usuario: this.usuario,
+          clave: this.clave,
         }; 
         let url = this.host+'/usuarios/login/';
         let options = {
@@ -98,14 +106,15 @@ export default {
         try {
             let data = await fetch(url, options);
             let res = await data.json();
-            console.log('acceso =>', res.acceso);
             if( res.acceso ){
-                self.messages = '';
-                // console.log('usuario => ', res.usuario)
+                self.messages = 'Acceso concedido!';
+                // console.log('usuario => ', res.rolusuario)
                 this.$store.dispatch('setUser', res.usuario);
+                this.$store.dispatch('setRole', res.rolUsuario);
+                this.salir();
             }else{
-                self.messages ='Usuario o contraseña no valida!'; 
-                this.$store.dispatch('setUser', '');
+                self.messages ='Usuario o Contraseña invalido!'; 
+                // this.$store.dispatch('setUser', '');
             }
         } catch (error) {
             console.log('Error:', error);
@@ -113,28 +122,42 @@ export default {
       }
     }, 
     salir(){
-      console.log('salir()');
-      location.href="/home.html";
-
-        // if (confirm("Esta seguro?")) {
-          // window.close();
-        // }
-
+      console.log('Login.salir()');
+      // location.href="/menu.html";
+      this.$router.push('/')
+      // if (confirm("Esta seguro?")) {
+        // window.close();
+      // }
     },
     input: function(self){
       evalInput(self);
       this.messages = '';
-    },    
+    },
+    changeType(id){
+      // console.log(` changeType(${id})`);
+      let obj = this.$refs[id];
+      this.verClave = !this.verClave;
+      if(obj.type=='text'){
+        obj.setAttribute('type',  'password')
+      }else{
+        obj.setAttribute('type',  'text')
+      }
+    },
+    tecla_tab(e){
+      console.log('tecla_tab()');
+      e.keyCode = 9;
+    }     
   },
   created: function(){
     this.setComponent();
   },
   mounted: function(){
-
+     console.log('Login.entrando...');
   }  
 }
 </script>
 <style scoped src="@/assets/css/modalComponent.css"></style>
+<style scoped src='@/assets/css/form.css'></style>
 <style scoped src="@/assets/css/crud.css"></style>
 <style scoped>
 .modal-container {
@@ -170,7 +193,7 @@ export default {
 }
 .label {
     padding: 0 4px;
-    margin-right: 3px;
+    margin-right: 15px;
 }
 .claveOlvidada {
     font-size: .9rem;
@@ -178,7 +201,7 @@ export default {
   /* font-weight: 400;    */
 }
 .mensaje {
-    color: red;
+    color: blue;
     height: 3rem;
     text-align: center;
 }

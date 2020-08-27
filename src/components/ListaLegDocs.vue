@@ -20,7 +20,7 @@
     </div>
   </div>
   <div class='content-body table_Docs table_overflow_y scroll_1 d-flex'>
-    <table class='table table-sm table-bordered table-hover table_1'>
+    <table id='lst_Docs' ref='lst_Docs' class='table table-sm table-bordered table-hover table_1'>
       <thead class='rounded-top'>
         <tr>
           <th>#</th>
@@ -66,7 +66,10 @@ console.log('<< LegDocumentos.vue >>');
 
 import axios from 'axios';
 import moment from 'moment';
-import jsPDF from 'jspdf';
+// import jsPDF from 'jspdf';
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
+
 // Download jspdf and jspdf-autotable from github
 import DesdeHasta from '@/components/desde-hasta.vue';
 
@@ -256,12 +259,21 @@ export default {
     },
     print_1(){
       console.log('print_1()');
-      var doc = new jsPDF({unit: 'mm'});
-      doc.text('Prueba de Impresion', 10, 10);
-
-      doc.text('Seguna Linea.....',2, 2);
-      doc.autoPrint({variant: 'non-confirm'});
-      doc.save('print.pdf')    
+      let tabla = 'lst_Docs';
+      let doc = new jsPDF();
+      // doc.text('Prueba de Impresion', 10, 10);
+      // doc.text('Seguna Linea.....',2, 2);
+      // doc.autoPrint({variant: 'non-confirm'});
+      // doc.save('print.pdf')
+      // let opt_Table = {
+      // }
+      doc.text("titulo....",10,10)
+      let elem = this.$refs[tabla];
+      let res = doc.autoTableHtmlToJson(elem);
+      // doc.autoTable({ html: '#lst_Docs' });s
+      doc.autoTable(res.columns, res.data);
+      // doc.autoTable(opt_table);
+      doc.save('lstDocs');  
 
     }
   },
@@ -322,9 +334,7 @@ thead tr th{
   margin: 0.0rem;
   height: 1.9rem;
 }
-/* Test */
-/* div {
-  border-radius: var(--border-radius) !important;   
- border: 1px solid white; 
-} */
+.vdp-datepicker {
+  border-color: blue !important;
+}
 </style1>

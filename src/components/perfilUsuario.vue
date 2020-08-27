@@ -230,6 +230,7 @@ export default {
 </script>
 
 <style scoped src='@/assets/css/table.css'></style>
+<style scoped src='@/assets/css/form.css'></style>
 <style src="@/assets/css/vue-select.css"></style>
 <style scoped>
 .content {

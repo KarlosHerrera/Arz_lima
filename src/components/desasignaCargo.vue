@@ -173,6 +173,7 @@ export default {
 }
 </script>
 <style scoped src="@/assets/css/modalComponent.css"></style>
+<style scoped src='@/assets/css/form.css'></style>
 <style scoped src="@/assets/css/vueSelect.css"></style>
 <style scoped>
 /* @import url('@/assets/css/modalComponent.css'); */
