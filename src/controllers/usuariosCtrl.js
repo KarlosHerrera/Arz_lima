@@ -11,7 +11,7 @@ router.get('/all', (req, res) => {
     console.log('/usuarios/all');
     let sql = `SELECT usuario, nombreUsuario, usuarios.codInstitucion, instituciones.nombreInstitucion, rolUsuario
                 FROM usuarios 
-                LEFT JOIN Instituciones ON instituciones.codInstitucion = usuarios.codInstitucion
+                LEFT JOIN instituciones ON instituciones.codInstitucion = usuarios.codInstitucion
                 WHERE usuarios.activo='S' 
                 ORDER BY usuario`;                
     conn.query(sql, function(err, rows){
