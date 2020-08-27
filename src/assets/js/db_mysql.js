@@ -15,7 +15,7 @@ let mysql = require('mysql');
 let db = require('./../json/config_db.json');
 
 var pool = mysql.createPool({
-    connectionLimit: 200,
+    connectionLimit: 100,
     host: db.host,
     user: db.user,
     password: db.password,

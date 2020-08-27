@@ -123,7 +123,7 @@ router.get('/one/:usuario', function(req, res){
 router.get('/roles', (req, res) => {
     console.log('/usuarios/roles');
 
-    let sql = `SELECT rolUsuario FROM rolesUsuarios ORDER BY nivel`;    
+    let sql = `SELECT rolUsuario FROM rolesusuarios ORDER BY nivel`;    
     conn.query(sql, function(err, rows){ 
         if(err) console.log('err => ', err);
         res.status(200).json(rows);
