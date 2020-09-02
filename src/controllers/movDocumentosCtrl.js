@@ -132,7 +132,7 @@ router.delete('/delete/', async (req, res) => {
     // const doc= req.params.docLegalizacion;
     const data = req.body;
     const docLegalizacion = data.docLegalizacion;
-    
+    delete data.docLegalizacion;    
     data.activo = 'N';
     data.precio = 0;
     data.eliminado = moment(data.eliminado).format('YYYY-MM-DD hh:mm:ss');

@@ -89,7 +89,7 @@ export function evalValue(id){
 // 	return true;
 // }
 export function evalString(value){
-	console.log(`evalString(${value})`);
+	// console.log(`evalString(${value})`);
 	if( !value || value == null || !typeof(value) == 'string') return false;
 	if( value.trim() == '') return false;
 	return true;
@@ -97,6 +97,12 @@ export function evalString(value){
 // function evalStrings(){
 // 	return true;
 // }
+export function evalNumber(value){
+	// console.log(`evalNumber(${value})`);
+	if( !value || value == null || !typeof(value) == 'number') return false;
+	if( value== 0 ) return false;	
+	return true;
+}
 function evalExpReg(sPatron, sValor){
 	// Evalua Expresion Regular del Input
 	// if( arguments.length != 2) console.log('evalExpReg() -> Arguments no valid.');

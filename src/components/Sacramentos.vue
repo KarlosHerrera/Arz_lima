@@ -67,7 +67,7 @@
                         <label for="nombreSacramento" class="formControlLabel">Nombre*</label>
                         <input type="text" name='nombreSacramento' v-model="rec.nombreSacramento" class="form-control form-control-sm" 
                             id='nombreSacramento' ref='nombreSacramento' placeholder="" required :disabled='!disabledTable'  autofocus
-                            @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 -./]{1,19}$" autocomplete='off' data-upper='1C'>
+                            @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 áéíóúñÑ -./]{1,19}$" autocomplete='off' data-upper='1C'>
                         <small id="" class="form-text text-muted"></small>
                     </div>          
                 </div>

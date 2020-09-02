@@ -66,7 +66,7 @@
             <div class="col-12 form-group">
               <label for="observaciones" class="formControlLabel">Observaciones</label>
               <input type="text" name='observaciones' v-model="rec.observaciones" class="form-control form-control-sm" placeholder=""
-                @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z 0-9 (),-./@#]{0,99}$" autocomplete='off' id="observaciones">
+                @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z 0-9 () áéíóúñÑ ,-./@#]{0,99}$" autocomplete='off' id="observaciones">
               <small id="" class="form-text text-muted"></small>
             </div>
           </div>

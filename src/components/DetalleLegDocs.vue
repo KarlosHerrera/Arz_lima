@@ -164,7 +164,7 @@ import opcionesCrud from '@/components/opciones-crud.vue'
 
 import { disabledElementId, disabledForm } from '@/assets/js/lib';
 
-import { evalInput, evalString, evalValue } from '@/assets/js/form';
+import { evalInput, evalString, evalNumber, evalValue } from '@/assets/js/form';
 
 import Swal from 'sweetalert2';
 let optAlert = require('@/assets/json/opt_swal2.json');
@@ -280,7 +280,7 @@ export default {
       if( !evalString( this.rec.fechaDoc ) ) {obs+=' *Institucion'; evaluacion = false}  
       if( !evalString( this.rec.codReligioso ) ) {obs+=' *Religioso'; evaluacion = false}  
       if( !evalString( this.rec.codSacramento ) ) {obs+=' *Sacramento'; evaluacion = false} 
-      if( !evalString( this.rec.precio ) ) {obs+=' *Precio'; evaluacion = false}
+      if( !evalNumber( this.rec.precio ) ) {obs+=' *Precio'; evaluacion = false}
       if( !evalString( this.rec.ticket) ) { obs+=' *Ticket '; evaluacion = false}
 
       if( !evalValue('beneficiario') ) {obs+=' -Beneficiario'; evaluacion = false}
@@ -295,29 +295,15 @@ export default {
       // Consistencia
       let doc = this.existRecord(this.rec.docLegalizacion);
       console.log('doc = ', doc);
-      // let evaluacion = true;
-      // let obs = '';
-      // if( !evalValue('IdDocLeg') ) { obs+='*Documento '; evaluacion = false}
-      // if( !evalString( this.rec.codInstitucion ) ) {obs+=' *Institucion'; evaluacion = false}  
-      // if( !evalString( this.rec.fechaDoc ) ) {obs+=' *Institucion'; evaluacion = false}  
-      // if( !evalString( this.rec.codReligioso ) ) {obs+=' *Religioso'; evaluacion = false}  
-      // if( !evalString( this.rec.codSacramento ) ) {obs+=' *Sacramento'; evaluacion = false} 
-      // if( !evalString( this.rec.precio ) ) {obs+=' *Precio'; evaluacion = false}
-      // if( !evalString( this.rec.ticket) ) { obs+=' *Ticket '; evaluacion = false}
 
-      // if( !evalValue('beneficiario') ) {obs+=' -Beneficiario'; evaluacion = false}
-      // if( !evalValue('refLibro') ) {obs+=' -Libro'; evaluacion = false}
-      // if( !evalValue('refFolio') ) {obs+=' -Folio'; evaluacion = false}
-      // if( !evalValue('refNumero') ) {obs+=' -Numero'; evaluacion = false}
-      // this.observacionesCrud = obs;
       if ( !this.evaluaItem() ) {
         swal2.fire({title: 'Nuevo Documento', text: 'Verique los datos ingresados: '+this.observacionesCrud });
       }else{
         let rec = this.$store.state.record;
         this.rec.creado_usuario = this.$store.state.User_Name;
       
-        console.log(`Documento existe?: ${ this.rec.docLegalizacion }`);
-        console.log('boolean => ', this.existeDoc);
+        // console.log(`Documento existe?: ${ this.rec.docLegalizacion }`);
+        // console.log('boolean => ', this.existeDoc);
         if( this.existeDoc ){
           swal2.fire({title: `Nuevo Documento: ${ this.rec.docLegalizacion}`, text: `Numero de documento existe! `});
         }else{
@@ -392,11 +378,16 @@ export default {
       // let rec =  this.$store.state.record; 
       this.rec.eliminado = new Date();
       this.rec.eliminado_usuario =  this.$store.state.User_Name;
+      let data = {
+        docLegalizacion: this.rec.docLegalizacion, 
+        eliminado: new Date(),
+        eliminado_usuario: this.$store.state.User_Name        
+      }
       let url = this.host+'/movDocumentos/delete';
       let options = {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(this.rec)
+          body: JSON.stringify(data)
       };
       try {
           let data = await fetch(url, options);
@@ -472,7 +463,7 @@ export default {
           let data = await fetch(url, options);
           let res = await data.json();
           self.existeDoc = res.status;
-          console.log('self.existeDoc', self.existeDoc);         
+          // console.log('self.existeDoc', self.existeDoc);         
           return self.existeDoc;
       } catch (error) { 
           console.log(error);

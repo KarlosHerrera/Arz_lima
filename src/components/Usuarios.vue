@@ -69,7 +69,7 @@
               <label for="nombreInstitucion" class="formControlLabel">Nombre*</label>
                 <input type="text" name='nombreUsuario' v-model="rec.nombreUsuario" class="form-control form-control-sm" 
                   id='nombreUsuario' placeholder="" required :disabled="disabledForm"
-                  @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 -./]{1,39}$" autocomplete='off' data-upper='1c'>
+                  @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 áéíóúñÑ -./]{1,39}$" autocomplete='off' data-upper='1c'>
               <small id="" class="form-text text-muted"></small>
             </div>          
           </div>     

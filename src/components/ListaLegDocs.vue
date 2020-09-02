@@ -216,19 +216,22 @@ export default {
       newHeader.shift();  // delete first element
       newHeader.pop();    // delete last element
       let newBody = res.data.map(function(ele){
-        // return ele.slice(0,1);   // delete first element
+        // return ele.slice(0,1);   // delete first element/columna
         return ele.shift();
       })      
       newBody = res.data.map(function(ele){
-        return ele.slice(0,-1);   // delete last element
+        return ele.slice(0,-1);   // delete last element/columna
       })
 
       // Totales (precio)
       let nTotPrecio = 0;
       this.listDocs.forEach( (ele) => { if( ele.activo == 'S') nTotPrecio += ele.precio; } );  
+      let items = this.listDocs.length;
       nTotPrecio = numeral(nTotPrecio).format('0.00');
-      newBody.push([{content: `T o t a l`, colSpan: 6, styles: { fontStyle: 'bold', halign: 'right', lineWidth:0, fillColor: [220, 220, 220] } }, 
-        {content: `${nTotPrecio}`, colSpan: 1, styles: { fontStyle: 'bold', halign: 'right', lineWidth:0, fillColor: [220, 220, 220] } },
+      newBody.push([
+        {content: `Reg.  ${items}`, colSpan: 1, lineWidth: 0, styles: { fontStyle: 'bold', halign: 'left', lineWidth: 0, fillColor: [220, 220, 220] } },
+        {content: `T o t a l`, colSpan: 5, styles: { fontStyle: 'bold', halign: 'right', lineWidth: 0, fillColor: [220, 220, 220] } }, 
+        {content: `${nTotPrecio}`, colSpan: 1, styles: { fontStyle: 'bold', halign: 'right', lineWidth: 0, fillColor: [220, 220, 220] } },
         {content: ' ', colSpan: 1, styles: { fontStyle: 'bold', halign: 'right', lineWidth:0,  fillColor: [220, 220, 220] } }
 
         ]);  
