@@ -7,13 +7,11 @@
   <div class="content-header row d-flex">
     <div class='col-3 d-flex justify-content-start align-items-center'>
       <button class='btn btn-sm btn_1 btn_new' @click='createItem'>Nuevo</button>
-      <!-- <button class='btn btn-sm btn_1' @click='test1'>Test 1</button>  -->
       <!-- <button class='btn btn-sm btn_1' @click='test2'>Test 2</button>  -->
-      <!-- <button class='btn btn-sm btn_1' @click='print_1'>Print</button> -->
+      <button class='btn btn-sm btn_1 btn_prt' @click='print_1' :disabled='listDocs.length == 0'>Reporte</button>
     </div>
     <div class='col-5 d-flex justify-content-center'>
       <desde-hasta  :desde='desde' :hasta='hasta' @valor_fechas='aceptaFechas'></desde-hasta>
-      <!-- -->
     </div>
     <div class='col-4 d-flex  justify-content-end'>
       <filtra-tabla class='justify-item-right' :recordList="listDocuments" :colsSearch='elemSearch' @filter_Process="filterProcess" ></filtra-tabla>
@@ -64,16 +62,14 @@
 <script>
 console.log('<< LegDocumentos.vue >>');
 
-import axios from 'axios';
+// import axios from 'axios';
 import moment from 'moment';
-// import jsPDF from 'jspdf';
+import numeral from 'numeral';
+
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
 
-// Download jspdf and jspdf-autotable from github
 import DesdeHasta from '@/components/desde-hasta.vue';
-
-// import InputFecha from '@/components/input-fecha.vue';
 
 import { mapState, mapMutations } from 'vuex';
 
@@ -90,8 +86,7 @@ export default {
     elemSearch: ['docLegalizacion','nombreInstitucion','apellidosNombres','nombreSacramento','ticket','refNombre'],
     ascending: false,
     sortField: '',
-    // fechaHoy: new Date(),
-    fechaHoy: moment(),
+    fechaHoy: moment(), //new Date(),
     desde: '',
     hasta: '',
     fechas_deshabilitadas: {}
@@ -99,22 +94,17 @@ export default {
   },
   computed: {
       ...mapState(['host','record', 'fechas_ingresadas']),
-        desde_: function(){
-          return this.desde;
-        }
   },
   methods: {
-    // ...mapMutations(['Religiosos','Instituciones','setCrud','setRecord','setFechas_Doc']),
     ...mapMutations(['setCrud','setRecord','setFechas_Doc']),
     setComponent(){
-      console.log('setComponent()');
+      console.log('ListaLegDocs.setComponent()');
       let del = this.$store.state.fechas_ingresadas.desde;
       let al = this.$store.state.fechas_ingresadas.hasta;
-      console.log('fechas del store....')
-      console.log(del,' - '+al);
-
-      this.desde = moment(del).format('YYYY-MM-DD');
-      // this.desde = moment(al);   // TEMPORAL
+      // console.log('fechas del store:')
+      // console.log(del,' - '+al);
+      // Fechas para el componente
+      this.desde = moment(del).format('YYYY-MM-DD'); 
       this.hasta = moment(al).format('YYYY-MM-DD');
       this.load_DocLeg(this.desde, this.hasta); // API
     },
@@ -124,7 +114,7 @@ export default {
       this.$router.push({ path: this.routeDet, params: { crud : 'C' } });
     },
     readItem: function(index){
-        console.log('readItem('+index+')');
+        // console.log('readItem('+index+')');
         this.$store.commit('setCrud', 'R');
         // // console.log(this.$store.state.users[index]); // Tener en cuenta!
         let record = this.listDocs[index];
@@ -149,32 +139,8 @@ export default {
     filterProcess: function(value){
       this.listDocs = value;
     },
-    loadDocs_axios: function(){
-      console.log('loadDocs_axios');
-      let self = this;
-      let options = {
-        method: 'GET',
-        mode: 'no-cors',
-        headers: {
-          'Access-Control-Allow-Origin' : '*', 
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        // withCredentials: true,
-        // credentials: 'same-origin',
-      };
-
-      axios.get(this.host+'/movDocumentos/all', options)
-      .then(function(res){
-        console.log(res.data);
-        self.listDocuments = res.data;
-      })
-      .catch(function(err){
-        console.log('Error==>', err);
-      });
-
-    },
     async load_DocLeg(desde, hasta){
-      console.log(`load_DocLeg(${desde}, ${hasta})`);
+      // console.log(`load_DocLeg(${desde}, ${hasta})`);
       // self = this;
       let fechas = {}
       fechas.desde = moment(desde).format('YYYY-MM-DD');
@@ -196,34 +162,8 @@ export default {
       this.listDocuments = data[0];
     },
     async aceptaFechas(values){
-      console.log(`aceptaFechas(${values.del}, ${values.al})`);
-      //
+      // console.log(`aceptaFechas(${values.del}, ${values.al})`);
       this.load_DocLeg(values.del, values.al); 
-
-    },
-    test1(){
-      let new_1 =  {activo: "S",
-        docLegalizacion: "1003",
-        fechaDoc: "2020-06-07T04:00:00.000Z",
-        codInstitucion: "107", 
-        nombreInstitucion: "Nombre Institucion 107",
-        codReligioso: "110",   
-        nombreReligioso: "JUANCITO TRUCUPE",
-        codSacramento: "1",     
-        nombreSacramento: "Nombre Sacramento3",
-        ticket: "1236",
-        refLibro: null,
-        refFolio: null,
-        refNumero: null,
-        refNombre: "Beneficiario 3",
-        precio: 0,
-        creado: "2020-06-05T00:40:03.000Z",
-        creado_usuario: null,
-        modificado: null,
-        modificado_usuario: null,
-        eliminado: null,
-        eliminado_usuario: null};
-      this.listDocuments.push(new_1);
     },
     test2(){      
       let new_1 =  {
@@ -240,7 +180,7 @@ export default {
         refLibro: null,
         refFolio: null,
         refNumero: null,
-        refNombre: "Beneficiario 3",
+        refNombre: "Beneficiario",
         precio: 0,
         creado: "2020-06-05T00:40:03.000Z",
         creado_usuario: null,
@@ -250,7 +190,7 @@ export default {
         eliminado_usuario: null
       };
       let numdoc=3000;
-      for(let r=0; r<300; r++){
+      for(let r=0; r<100; r++){
         let sec = numdoc+r+'' ;
         new_1.docLegalizacion = sec;
         console.log(new_1.docLegalizacion );
@@ -258,23 +198,106 @@ export default {
       }
     },
     print_1(){
-      console.log('print_1()');
+      // console.log('print_1()');
+      if ( this.listDocs.length == 0 ) return false;
       let tabla = 'lst_Docs';
+      let fecha = moment().format('DD/MM/YYYY hh:mma');
+      let periodo = moment(this.desde).format('DD/MM/YYYY')+'  -  '+ moment(this.hasta).format('DD/MM/YYYY');
+      let usuario = 'Usuario: '+this.$store.state.User_Name;
       let doc = new jsPDF();
-      // doc.text('Prueba de Impresion', 10, 10);
-      // doc.text('Seguna Linea.....',2, 2);
-      // doc.autoPrint({variant: 'non-confirm'});
-      // doc.save('print.pdf')
-      // let opt_Table = {
-      // }
-      doc.text("titulo....",10,10)
+      doc.setLanguage("en-US")
+      doc.page = 1;
+
+
+      // Generando Tabla
       let elem = this.$refs[tabla];
       let res = doc.autoTableHtmlToJson(elem);
-      // doc.autoTable({ html: '#lst_Docs' });s
-      doc.autoTable(res.columns, res.data);
-      // doc.autoTable(opt_table);
-      doc.save('lstDocs');  
+      let newHeader = res.columns;
+      newHeader.shift();  // delete first element
+      newHeader.pop();    // delete last element
+      let newBody = res.data.map(function(ele){
+        // return ele.slice(0,1);   // delete first element
+        return ele.shift();
+      })      
+      newBody = res.data.map(function(ele){
+        return ele.slice(0,-1);   // delete last element
+      })
 
+      // Totales (precio)
+      let nTotPrecio = 0;
+      this.listDocs.forEach( (ele) => { if( ele.activo == 'S') nTotPrecio += ele.precio; } );  
+      nTotPrecio = numeral(nTotPrecio).format('0.00');
+      newBody.push([{content: `T o t a l`, colSpan: 6, styles: { fontStyle: 'bold', halign: 'right', lineWidth:0, fillColor: [220, 220, 220] } }, 
+        {content: `${nTotPrecio}`, colSpan: 1, styles: { fontStyle: 'bold', halign: 'right', lineWidth:0, fillColor: [220, 220, 220] } },
+        {content: ' ', colSpan: 1, styles: { fontStyle: 'bold', halign: 'right', lineWidth:0,  fillColor: [220, 220, 220] } }
+
+        ]);  
+      //  ---------------
+      // console.log('newHeader', newHeader)
+      // console.log('newBody', newBody)
+      doc.autoTable({
+        theme: 'grid',
+        margin: {top: 18, left: 8, right: 8, bottom: 10},
+        styles: {fontSize: 8}, // margin: 3
+        tableWidth: 'auto',
+        headStyles: {
+          fontStyle: 'bold',  // normal
+          textColor: [0, 0, 0],
+          fillColor: [220, 220, 220], // lightgray 211
+          minCellHeight: 5,
+          columnStyles: {
+            2: {halign: 'center'},
+            6: {halign: 'right'}
+          },
+        },
+        bodyStyles: {
+          textColor: [0, 0, 0], // black
+
+        },
+        columnStyles: {
+          1: {halign: 'center'},
+          2: {cellWidth: 46 },
+          3: {cellWidth: 50 },
+          6: {halign: 'right'}
+        },
+        head: [newHeader],    // Cabecera de la Tabla
+        body: newBody,        // Institucion','Religioso','Ticket','Beneficiario','Precio','Sacramento']
+        // didDrawCell: (data) => {
+        //   console.log(data.column)
+        // },
+        });
+      // Agregando Cabecera/Pie de Pagina
+      let pageCount = doc.internal.getNumberOfPages();
+      doc.setFontSize(8)
+      for(var i = 1; i <= pageCount; i++) {
+        doc.setPage(i);   // Go to page i
+        // Cabecera
+        doc.setFontSize(11)
+        doc.text("Arzobispado de Lima", 8, 10)
+        doc.setFontSize(10)
+        doc.text("Legalización de Documentos", 85, 10)
+        doc.setFontSize(8)
+        doc.text(fecha, 175, 10)
+        doc.setFontSize(9)
+        doc.text(periodo, 90, 15)
+        doc.setFontSize(8)
+        doc.text(usuario, 200, 15,'right')
+        // Pie
+        doc.setFontSize(8)
+        doc.text('Pag. ' + String(i) + ' / ' + String(pageCount), 10, 290, null, null, "left");
+      }
+      // doc.addPage();
+      // doc.setFillColor ( 100 , 100 , 240 ); 
+      // doc.setDrawColor ( 100 , 100 , 0 );      
+      // doc.setLineWidth ( 1 );
+      // doc.roundedRect ( 20 , 30 , 20 , 10 , 3 , 3 , 'FD' );    
+
+      doc.autoPrint({variant: 'non-conform'});
+      doc.output('dataurlnewwindow', {filename: 'Informe_Docs.pdf'}); // Funciona, solucionar el nombre
+      // doc.output('save', 'Informe_Docs.pdf');  
+
+      // doc.save('Informe_Docs');  
+      // window.open(doc.output('Informe_Docs'), '_blank');     
     }
   },
   watch: {
@@ -282,12 +305,6 @@ export default {
   },
   mounted(){
     // console.log('ListaLegDocs.created()');
-    // let datos =  this.$store.dispatch('allLegDocs');
-    // console.log('datos=>', datos.data);
-    // this.listDocuments = datos.data;
-    // this.listDocs = datos.data;
-    // this.listDocs = this.listDocuments;
-    // this.loadDocs_axios();
     this.setComponent()
    }
 
@@ -326,12 +343,12 @@ thead tr th{
     background-color: var(--btnBackground) !important;
     color: var(--btnColor)  !important;
 }
-.btn_new {
-  width: 4rem;
+.btn_new, .btn_prt {
+  width: 3.1rem;
   padding: 0.05rem 0.2rem; 
   border: 0;
   padding: 0;
-  margin: 0.0rem;
+  margin: 0 2px;
   height: 1.9rem;
 }
 .vdp-datepicker {

@@ -335,7 +335,7 @@ export default {
     this.setComponent();
   },
   mounted: function(){
-
+    document.getElementById('nombreSacramento').focus();
   }  
 }
 </script>

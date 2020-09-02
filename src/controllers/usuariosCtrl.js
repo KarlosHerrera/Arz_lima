@@ -9,7 +9,7 @@ moment.locale('es');
 
 router.get('/all', (req, res) => {
     console.log('/usuarios/all');
-    let sql = `SELECT usuario, nombreUsuario, usuarios.codInstitucion, instituciones.nombreInstitucion, rolUsuario
+    let sql = `SELECT usuario, nombreUsuario, usuarios.codInstitucion, instituciones.nombreInstitucion, rolUsuario, usuarios.email
                 FROM usuarios 
                 LEFT JOIN instituciones ON instituciones.codInstitucion = usuarios.codInstitucion
                 WHERE usuarios.activo='S' 

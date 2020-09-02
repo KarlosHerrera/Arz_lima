@@ -22,6 +22,7 @@
           <th>Nombre<span></span></th>
           <th>Rol<span></span></th>
           <th>Institucion<span></span></th>
+          <th>Correo<span></span></th>
           <th class='text-center'>Opciones</th>
         </tr>
       </thead>
@@ -31,6 +32,7 @@
           <td> {{ doc.nombreUsuario }} </td>
           <td> {{ doc.rolUsuario | frmLongMaxima(15) }} </td>
           <td> {{ doc.nombreInstitucion | frmLongMaxima(40) }} </td>
+          <td> {{ doc.email }} </td>
           <td class=' d-flex justify-content-center align-items-center'>
             <button class='btn btn-sm btn_actions btn_1' @click='updateItem(index)' :class="{void_Btn: doc.activo=='N'}">Editar</button>
             <button class='btn btn-sm btn_actions btn_1' @click='deleteItem(index)' :class="{void_Btn: doc.activo=='N'}">Anular</button>

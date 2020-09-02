@@ -79,7 +79,7 @@
             </v-select>
         </div>
         <div class="col-2 form-group">
-            <label for="precio" class="formControlLabel align_right">Precio</label>
+            <label for="precio" class="formControlLabel align_right">Precio*</label>
             <input type="number" name='precio' v-model="rec.precio" class="form-control form-control-sm align_right" 
                 id='precio'  placeholder=""
                 @input="input($event.target)" pattern="" value='0.00' required>
@@ -90,9 +90,9 @@
       </div>                
       <div class="form-row">
         <div class="col-2 form-group">
-          <label for="ticket" class="formControlLabel">Ticket</label>
+          <label for="ticket" class="formControlLabel">Ticket*</label>
           <input type="text" name='ticket' v-model="record.ticket" class="form-control form-control-sm"
-            id='ticket'  placeholder=""
+            id='ticket'  placeholder="" required
             @input="input($event.target)" pattern="^[1-9]{1}[0-9]{4}$" autocomplete='off'>
           <small id="" class="form-text text-muted"></small>
         </div>
@@ -100,7 +100,7 @@
           <label for="beneficiario" class="formControlLabel">Beneficiario(s)</label>
           <input type="text" name='beneficiario' v-model="record.refNombre" class="form-control form-control-sm"
             id='beneficiario' placeholder=""
-            @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 ,-/()#]{1,49}$" autocomplete='off' data-upper='1c'>
+            @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 áéíóúñÑ ,-/()#]{1,49}$" autocomplete='off' data-upper='1c'>
           <small id="" class="form-text text-muted"></small>
         </div>
       </div>
@@ -165,6 +165,7 @@ import opcionesCrud from '@/components/opciones-crud.vue'
 import { disabledElementId, disabledForm } from '@/assets/js/lib';
 
 import { evalInput, evalString, evalValue } from '@/assets/js/form';
+
 import Swal from 'sweetalert2';
 let optAlert = require('@/assets/json/opt_swal2.json');
 const swal2 = Swal.mixin(optAlert);
@@ -200,6 +201,7 @@ export default {
       datosReligioso: {},
       observacionesCrud: '',
       disabledForm: true
+
     }
   },
   computed: { // Expone state al template/script
@@ -210,13 +212,14 @@ export default {
   },
   methods: {
     setComponent: function(){
-      // console.log('setComponent()');
+      console.log('DeatlleLegDocs.setComponent()');
       this.rec = this.record;
       this.formMethod ='';
       if( this.crud == 'C' ) { // Create
         this.formMethod = 'POST'; 
         this.title_detail = 'Nuevo'; 
-        this.resetForm();
+        // this.resetForm();
+        this.rec = {};
 
         // Definiendo valores al formulario
         disabledElementId('IdDocLeg', true);
@@ -266,55 +269,50 @@ export default {
     },
     resetForm: function(){
       // console.log('resetForm()');
-      this.rec.codInstitucion = '';
-      this.rec.codReligioso = '';
-      this.codSacramento = '';
-      document.getElementById(idForm).reset();
-
+      this.setComponent();
     },
     evaluaItem(){
-      // let objForm = document.getElementById(idForm);
-      // console.dir(objForm);
-      // let obs='';
-      // let evaluacion = true;
-      // if( !evalValue('codReligioso') ) { obs+='*Codigo '; evaluacion = false}
-      // if( !evalValue('apellidosNombres') ) { obs+=' *Nombre '; evaluacion = false}
-      // if( !evalString(this.rec.codJerarquia) ) {obs+=' *Jerarquia'; evaluacion = false}
-      // if( !evalString(this.rec.codDepartamento) ) {obs+=' *Departamento'; evaluacion = false}
-      // if( !evalString(this.rec.codProvincia) ) {obs+=' *Provincia'; evaluacion = false}
-      // if( !evalString(this.rec.codDistrito) ) {obs+=' *Distrito'; evaluacion = false}
-      // if( !evalValue('telefono1') ) {obs+=' *Telefono 1'; evaluacion = false}
-      // if( !evalValue('telefono2') ) {obs+=' *Telefono 2'; evaluacion = false}
-      // if( !evalValue('movil') ) {obs+=' *Movil'; evaluacion = false;}
-      // if( !evalValue('email') ) {obs+=' *Correo'; evaluacion = false;}
-      // this.observacionesCrud = obs;
-      // return evaluacion;
-    },    
-    confirmCreate: async function(){
-      console.log('confirmCreate()');
-      // let objForm = document.getElementById(idForm);
-      // console.dir(objForm);
-      // this.rec.docLegalizacion ='3019'; 
-      // Consistencia
-      let doc = this.existRecord(this.rec.docLegalizacion);
-      console.log('doc = ', doc);
+      console.log('evaluaItem()');
       let evaluacion = true;
       let obs = '';
       if( !evalValue('IdDocLeg') ) { obs+='*Documento '; evaluacion = false}
       if( !evalString( this.rec.codInstitucion ) ) {obs+=' *Institucion'; evaluacion = false}  
       if( !evalString( this.rec.fechaDoc ) ) {obs+=' *Institucion'; evaluacion = false}  
       if( !evalString( this.rec.codReligioso ) ) {obs+=' *Religioso'; evaluacion = false}  
-      if( !evalString( this.rec.codSacramento ) ) {obs+=' *Sacramento'; evaluacion = false}  
-      if( !evalValue('ticket') ) { obs+=' -Ticket '; evaluacion = false}
+      if( !evalString( this.rec.codSacramento ) ) {obs+=' *Sacramento'; evaluacion = false} 
+      if( !evalString( this.rec.precio ) ) {obs+=' *Precio'; evaluacion = false}
+      if( !evalString( this.rec.ticket) ) { obs+=' *Ticket '; evaluacion = false}
+
       if( !evalValue('beneficiario') ) {obs+=' -Beneficiario'; evaluacion = false}
       if( !evalValue('refLibro') ) {obs+=' -Libro'; evaluacion = false}
       if( !evalValue('refFolio') ) {obs+=' -Folio'; evaluacion = false}
       if( !evalValue('refNumero') ) {obs+=' -Numero'; evaluacion = false}
       this.observacionesCrud = obs;
-      if ( !evaluacion ) {
+      return evaluacion;
+    },    
+    confirmCreate: async function(){
+      console.log('confirmCreate()');
+      // Consistencia
+      let doc = this.existRecord(this.rec.docLegalizacion);
+      console.log('doc = ', doc);
+      // let evaluacion = true;
+      // let obs = '';
+      // if( !evalValue('IdDocLeg') ) { obs+='*Documento '; evaluacion = false}
+      // if( !evalString( this.rec.codInstitucion ) ) {obs+=' *Institucion'; evaluacion = false}  
+      // if( !evalString( this.rec.fechaDoc ) ) {obs+=' *Institucion'; evaluacion = false}  
+      // if( !evalString( this.rec.codReligioso ) ) {obs+=' *Religioso'; evaluacion = false}  
+      // if( !evalString( this.rec.codSacramento ) ) {obs+=' *Sacramento'; evaluacion = false} 
+      // if( !evalString( this.rec.precio ) ) {obs+=' *Precio'; evaluacion = false}
+      // if( !evalString( this.rec.ticket) ) { obs+=' *Ticket '; evaluacion = false}
+
+      // if( !evalValue('beneficiario') ) {obs+=' -Beneficiario'; evaluacion = false}
+      // if( !evalValue('refLibro') ) {obs+=' -Libro'; evaluacion = false}
+      // if( !evalValue('refFolio') ) {obs+=' -Folio'; evaluacion = false}
+      // if( !evalValue('refNumero') ) {obs+=' -Numero'; evaluacion = false}
+      // this.observacionesCrud = obs;
+      if ( !this.evaluaItem() ) {
         swal2.fire({title: 'Nuevo Documento', text: 'Verique los datos ingresados: '+this.observacionesCrud });
       }else{
-        swal2.fire({title: 'Nuevo Documento', text: 'Datos OK.'});
         let rec = this.$store.state.record;
         this.rec.creado_usuario = this.$store.state.User_Name;
       
@@ -329,12 +327,8 @@ export default {
           let url = this.host+'/movDocumentos/create';
           let options = {
               method: 'POST',
-              //headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-              // headers: { 'Content-Type': 'multipart/form-data' },
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(this.rec)
-              //mode: 'no-cors',
-              //body: formData
           };
           try {
               let data = await fetch(url, options);
@@ -352,44 +346,44 @@ export default {
     },
     confirmUpdate: async function(){
       console.log('confirmUpdate()');
-      // let objForm = document.getElementById(idForm);
-      // let rec = this.$store.state.record;
-      // console.log('record:', rec);
 
       // Consistencia
+      if ( !this.evaluaItem() ){
+        swal2.fire({title: 'Edicion Documento', text: 'Verique los datos ingresados: '+this.observacionesCrud });
+      }else{
+        let data = {  
+            docLegalizacion: this.rec.docLegalizacion, 
+            // fechaDoc: moment(rec.fechaDoc).format('YYYY-MM-DD'),
+            fechaDoc: this.rec.fechaDoc,
+            codInstitucion: this.rec.codInstitucion,
+            codReligioso: this.rec.codReligioso,
+            codSacramento: this.rec.codSacramento,
+            precio: this.rec.precio,          
+            ticket: this.rec.ticket,
+            refNombre: this.rec.refNombre,
+            refLibro: this.rec.refLibro,
+            refFolio: this.rec.refFolio,
+            refNumero: this.rec.refNumero,
+            modificado: new Date(),
+            modificado_usuario: this.$store.state.User_Name
+        };  
+        // console.log('data: ', data)
+        let url = this.host+'/movDocumentos/update';
+        let options = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        };
+        try {
+            let data = await fetch(url, options);
+            let res = await data.json();
+            let text = (res.status)? 'Modificado Satisfactoriamente.': 'Fallo modificacion!';
+            await swal2.fire({title: 'Documento: '+res.nroDoc , text: text});
+            this.exitForm();
+        } catch (error) {
+            console.log('Error:', error);
+        }
 
-      let data = {  
-          docLegalizacion: this.rec.docLegalizacion, 
-          // fechaDoc: moment(rec.fechaDoc).format('YYYY-MM-DD'),
-          fechaDoc: this.rec.fechaDoc,
-          codInstitucion: this.rec.codInstitucion,
-          codReligioso: this.rec.codReligioso,
-          codSacramento: this.rec.codSacramento,
-          precio: this.rec.precio,          
-          ticket: this.rec.ticket,
-          refNombre: this.rec.refNombre,
-          refLibro: this.rec.refLibro,
-          refFolio: this.rec.refFolio,
-          refNumero: this.rec.refNumero,
-          modificado: new Date(),
-          modificado_usuario: this.$store.state.User_Name
-      };  
-      // console.log('data: ', data)
-      let url = this.host+'/movDocumentos/update';
-      let options = {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-      };
-      try {
-          let text = '';
-          let data = await fetch(url, options);
-          let res = await data.json();
-          text = (res.status)? 'Modificado Satisfactoriamente.': 'Fallo modificacion!';
-          await swal2.fire({title: 'Documento: '+res.nroDoc , text: text});
-          this.exitForm();
-      } catch (error) {
-          console.log('Error:', error);
       }
 
     },
@@ -398,20 +392,16 @@ export default {
       // let rec =  this.$store.state.record; 
       this.rec.eliminado = new Date();
       this.rec.eliminado_usuario =  this.$store.state.User_Name;
-      // console.log('data: ', rec)
       let url = this.host+'/movDocumentos/delete';
       let options = {
           method: 'DELETE',
-          // headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          // body: formData
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(this.rec)
       };
       try {
-          let text = '';
           let data = await fetch(url, options);
           let res = await data.json();
-          text = (res.status)? 'Anulado Satisfactoriamente!': 'Fallo la anulacion!';
+          let text = (res.status)? 'Anulado Satisfactoriamente!': 'Fallo la anulacion!';
           await swal2.fire({title: 'Documento: '+ res.nroDoc , text: text});
           disabledForm(idForm, false);
           this.exitForm();
@@ -515,14 +505,12 @@ export default {
     },    
     selInstitucion(value){
       // console.log(`selInstitucion(${value})`);
-      // let codInstitucion = value.srcElement.value;
       let codInstitucion = value;
       this.tmpReligiosos = this.Religiosos.filter( ele => ele.codInstitucion == codInstitucion);
       this.numSellos();
     },
     changeSacramento(value){
-      // console.log('changeSacramento()');
-      // let codigo = evt.target.value;
+      // console.log(`changeSacramento(${value})`);
       let codigo = value;
       let precio = 0;
       this.listSacramentos.forEach(function(ele){
@@ -545,10 +533,6 @@ export default {
     }
   },
   watch: {
-    algo: function(newVal, oldVal){
-      console.log('New: ', newVal);
-      console.log('Old: ', oldVal);
-    },
   },
    // Hooks
   created: function(){
@@ -556,15 +540,14 @@ export default {
     // console.log('create host => ', this.host);
   },
   mounted: function(){
-    // console.log('hook.mounted()')
-    console.log('mounted host => ', this.host);
+    console.log('hook.mounted()')
+    // console.log('mounted host => ', this.host);
     this.loadReligiosos();
-    
     this.loadInstituciones();
     this.loadSacramentos();
     this.setComponent();
   }
-  // }
+
 }
 </script>
 
@@ -580,18 +563,6 @@ export default {
   /* height: 1.936rem; */
 
 }
-/* input.vs__search {
- border: none;
-} */
-
-/* div#vs2__combobox {
-  border: none !important;  
- border: 1px solid darkgray !important; 
-}  */
-
-/*  input.vs__search {
-  border: none !important;
-} */
 select:focus{ outline: none ;}
 select.decorated option:hover { 
     box-shadow: 0 0 10px 100px #38809b inset !important; 
@@ -644,5 +615,8 @@ select > option:hover {
 }
 .badge {
   margin: 0 0.27rem;
+}
+.vdp-datepicker, .miEstilo {
+  background-color: rgb(185, 127, 127) !important;
 }
 </style>

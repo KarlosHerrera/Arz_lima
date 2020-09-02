@@ -78,8 +78,8 @@ Vue.filter('llenaLongMaxima', function(value, length, fill){
 // Vue.config.productionTip = false;
 
 new Vue({
-  router,
   store,
+  router,
   created() {
     // console.log('Vue created()');
     // this.$store.dispatch('getCustomers');

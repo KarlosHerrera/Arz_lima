@@ -69,7 +69,7 @@
                   <label for="nombreReligioso" class="formControlLabel">Nombre*</label>
                     <input type="text" name='nombreInstitucion' v-model="rec.apellidosNombres" class="form-control form-control-sm" 
                       id='apellidosNombres' placeholder="" required :disabled="disabledForm"
-                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 -./]{1,59}$" autocomplete='off' data-upper='1c'>
+                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 áéíóúñÑ -./]{1,59}$" autocomplete='off' data-upper='1c'>
                   <small id="" class="form-text text-muted"></small>
               </div>          
           </div>             
@@ -78,7 +78,7 @@
                   <label for="direccion" class="formControlLabel">Direccion*</label>
                     <input type="text" name='direccion' v-model="rec.direccion" class="form-control form-control-sm" 
                       id='direccion' placeholder="" required :disabled="disabledForm"
-                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 #-.()/]{1,99}$" autocomplete='off' data-upper='1c'>
+                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 áéíóúñÑ #-.()/]{1,99}$" autocomplete='off' data-upper='1c'>
                   <small id="" class="form-text text-muted"></small>
               </div>          
           </div>  

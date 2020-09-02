@@ -66,7 +66,12 @@ const routes = [
   {
     path: '/detalleLegDocs',
     name: 'detalleLegDocs',
-    component: DetalleLegDocs
+    component: DetalleLegDocs,
+    // beforeEnter: (to, from, next) => {
+    //   console.log('router.detalleLegDocs: Intentando salir del componente, verificar pendientes!');
+    //   console.log(to, from);
+    //   next()
+    // }
 
   },
   {
@@ -148,13 +153,22 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach( function(to, from, next){
+router.beforeEach( async function(to, from, next){
   console.log('router.beforeEach()-------------------->');
-  console.log('from: ', from);
-  console.log('to : ', to);
+
+// console.log('store: ', store)
+  // let user = store.state.User_Name;
+  // const store = await import('@/store/store.js');
+  // console.log('store.state.User_Name:', user);
+  // User_Role: '',
+// console.log('from: ', from);
+console.log('to : ', to);
   if( !from.name ) {
     console.log('1ra. vez');
-    next(false)
+    if( from.path != '/') { console.log('Entranda incorrecta...')}
+    // next('/login');  // redirecciona
+
+    // next(false)
   }
   next();
   // next('/login'); 

@@ -58,7 +58,7 @@ export default new Vuex.Store({
       state.record = record;
     },
     setFechas_Doc: function(state, fechas){
-      console.log(`>>setFechas_Doc( ${fechas.desde} , ${fechas.hasta} )`);
+      // console.log(`>>setFechas_Doc( ${fechas.desde} , ${fechas.hasta} )`);
       // state.fechas_ingresadas = {desde: fechas.desde, hasta: fechas.hasta};
       state.fechas_ingresadas.desde = fechas.desde;
       state.fechas_ingresadas.hasta = fechas.hasta;

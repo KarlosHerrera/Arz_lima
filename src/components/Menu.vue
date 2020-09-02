@@ -79,9 +79,9 @@ export default {
   },
   methods: {
     setComponent(){
-      console.log(`Menu.vue setComponent(${this.User_Name}).........`);
+      // console.log(`Menu.vue setComponent(${this.User_Name}).........`);
       if( this.User_Name=='' ){
-        console.log('User_Name = empty');
+        // console.log('User_Name = empty');
         this.listOptionsPerfil = [{dsc: 'Iniciar-Sesion', action: '/login'}, {dsc: 'Salir', action: '/exit'}];
       }else{
 
@@ -109,7 +109,6 @@ export default {
         //  window.close();
           this.listOptionsPerfil = [{dsc: 'Iniciar-Sesion', action: '/login'}, {dsc: 'Salir', action: '/exit'}];
           // this.setComponent();
-          // window.location."http://google.com";
           window.location = "http://google.com";
           // this.$router.push('/');
         }else{
@@ -123,14 +122,14 @@ export default {
             // console.log(this.listOptionsPerfil);
             this.setComponent();
             this.roleView = false;
-            // this.$router.push('/menu');
             console.log('Saliendo de /logout');
+            this.$router.push('/');
           }else{
             // console.log(this.listOptionsPerfil);
             console.log('ruta = ', action);
+            this.roleView = false;
             this.$router.push(action)
     
-            this.roleView = false;
           }
 
         }

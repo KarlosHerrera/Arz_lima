@@ -49,16 +49,6 @@ router.post('/checkDoc',  (req, res) => {
 });
 
 // Get all documents
-router.get('/all_', (req, res) => {
-    console.log('/all_');
-
-    let sql ='CALL ListMovDocumentos_test()';
-    conn.query(sql, function(err, rows){
-        if(err) throw err;
-        res.status(200).json(rows);
-        // res.send(rows);
-    });
-});
 router.post('/all', (req, res) => {
     console.log('movDocumentos/all');
     let data = req.body;
@@ -89,19 +79,6 @@ router.post('/id', async (req, res) => {
     });
 });
 
-
-// Get one document
-router.get('/one/:docLegalizacion', (req, res) => {
-    // console.log('get:id');
-    const { docLegalizacion } = req.params;
-    console.log('Doc =  ', docLegalizacion);
-    res.json({
-        status: 'ok',
-        crud: 'read one',
-        doc: docLegalizacion
-    });
-
-});
 // Create document
 router.post('/create', (req, res) => {
     console.log('/create');
@@ -148,16 +125,16 @@ router.put('/update', (req, res) => {
     }); 
 
 });
-
 // Delete one document
-// router.delete('/:id', (req, res) => {
 router.delete('/delete/', async (req, res) => {
     console.log('/delete');
     // console.log(req.params);
     // const doc= req.params.docLegalizacion;
     const data = req.body;
     const docLegalizacion = data.docLegalizacion;
-    data.activo = 'N'
+    
+    data.activo = 'N';
+    data.precio = 0;
     data.eliminado = moment(data.eliminado).format('YYYY-MM-DD hh:mm:ss');
     // let sql = 'DELETE FROM movimientoDocumento WHERE docLegalizacion = ?';
     let sql = "UPDATE movimientodocumento SET ? WHERE docLegalizacion = ?";
@@ -187,32 +164,6 @@ router.get('/sellos/', async (req, res) => {
             res.json({status: false, msg: 'Unsucessfull', crud: 'delete'});
         }else{
             console.log(rows);
-
-
-            // Proceso de lectura de imagenes
-
-            // Envio de imagenes
-            res.json({status: true, msg: 'Sucessfull', Institucion: codInstitucion, crud: 'get', imgs: []});
-        }
-    }); 
-});
-
-router.get('/sellos/subir', async (req, res) => {
-    console.log('/sellos/subir');
-    // console.log(req.params);
-    // const doc= req.params.docLegalizacion;
-    const data = req.body;
-    const codInstitucion = data.codInstitucion;
-    console.log('codInstitucion=', codInstitucion);
-    let sql = 'SELECT * FROM sellosinstitucion WHERE codInstitucion= ?';
-    conn.query(sql, [codInstitucion], function(err, rows){
-        if(err){
-            console.log('sqlMessage: ', err.sqlMessage);
-            console.log('sql: ', err.sql);
-            res.json({status: false, msg: 'Unsucessfull', crud: 'delete'});
-        }else{
-            console.log(rows);
-
 
             // Proceso de lectura de imagenes
 
