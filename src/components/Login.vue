@@ -152,7 +152,7 @@ export default {
     this.setComponent();
   },
   mounted: function(){
-     console.log('Login.entrando...');
+    // console.log('Login.mounted()');
   }  
 }
 </script>

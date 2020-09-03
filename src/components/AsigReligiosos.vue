@@ -195,7 +195,7 @@ export default {
 
     },
     desasignarCargo(index){
-      console.log('desasignarCargo()');
+      // console.log('desasignarCargo()');
       let record = this.tmpAsignaciones[index];
       this.rec.codAsignacion = record.codAsignacion;
       this.rec.fechaInicio = record.fechaInicio;
@@ -224,7 +224,7 @@ export default {
       }
     },
     retornoAsignacion(resultado){
-      console.log('retornoAsignacion()');
+      // console.log('retornoAsignacion()');
       if(resultado.status){
         this.verAsignacionCargo = false;
         this.loadAsignacionCargos();
@@ -234,7 +234,7 @@ export default {
       }
     },
     retornoDesasignacion(resultado){
-      console.log('retornoAsignacion()');
+      // console.log('retornoAsignacion()');
       if(resultado.status){
         // console.log('codIsntitucion: ', this.codInstitucion);
         this.verDesasignacionCargo = false;
@@ -245,25 +245,25 @@ export default {
       }
     },    
     cargosInstitucion(index){
-      console.log(`cargosInstitucion(${index})`);
+      // console.log(`cargosInstitucion(${index})`);
       this.isDisabledAsignacion = false;
       this.codInstitucion = this.tmpInstituciones[index].codInstitucion;
       this.nombreInstitucion = this.tmpInstituciones[index].nombreInstitucion;
       this.filtoCargos(this.codInstitucion);
     },
     async filtoCargos(codInst){
-      console.log(`filtroargos(${codInst})`);
+      // console.log(`filtroargos(${codInst})`);
       this.tmpAsignaciones = await this.cargosReligiosos.filter( ele => ele.codInstitucion == codInst);
     },
     imgSellos(index){
-      console.log('imgSellos()');
+      // console.log('imgSellos()');
       this.verSellos = !this.verSellos;
       this.datosInstitucion.codInstitucion = this.tmpInstituciones[index].codInstitucion;
       this.datosInstitucion.nombreInstitucion = this.tmpInstituciones[index].nombreInstitucion;
 
     },    
     imgFirmas(index){
-      console.log('imgFirmas()');
+      // console.log('imgFirmas()');
       this.verFirmas = !this.verFirmas;
       this.datosReligioso.codReligioso = this.tmpReligiosos[index].codReligioso;
       this.datosReligioso.apellidosNombres = this.tmpReligiosos[index].apellidosNombres;
@@ -303,7 +303,7 @@ export default {
 
     },
     async loadAsignacionCargos(){
-      console.log('loadAsignacionCargos()');
+      // console.log('loadAsignacionCargos()');
       // this.$store.dispatch('allAsignacionCargos');
       const self = this;
       let options = { headers: {'Access-Control-Allow-Origin' : '*'}, 'content-type': 'application/json', 'mode': 'cors'};

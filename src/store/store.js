@@ -199,19 +199,15 @@ export default new Vuex.Store({
   modules: {
   },
   getters: {
-
     getUsers: function(state){
       // console.log('getUsers');
       return state.users;
     },
-    getId: function(state){
-      // console.log('getId');
-      return state.record._id;
-    },
     getAuthorized: function(state){
       // console.log('getAuthorized');     
-      if( !state.User_Name ) return false;
+      return ( !state.User_Name )? false : true;
 
     }
+
   }
 })

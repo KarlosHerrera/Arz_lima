@@ -154,24 +154,30 @@ const router = new VueRouter({
 })
 
 router.beforeEach( async function(to, from, next){
-  console.log('router.beforeEach()-------------------->');
+  console.log('router.beforeEach()');
+  let store = await import('@/store/store.js');
+  let isAuthorized = store.default.getters.getAuthorized;
+  // console.log('getAuthorized: ', isAuthorized);
 
-// console.log('store: ', store)
-  // let user = store.state.User_Name;
-  // const store = await import('@/store/store.js');
-  // console.log('store.state.User_Name:', user);
-  // User_Role: '',
-// console.log('from: ', from);
-console.log('to : ', to);
-  if( !from.name ) {
-    console.log('1ra. vez');
-    if( from.path != '/') { console.log('Entranda incorrecta...')}
+console.log('from: ', from.path+' - to: '+to.path);
+if (to.name !== 'Login' && !isAuthorized) next({ name: 'Login' })
+else next()
+  // if( !from.name ) {
+  //   console.log('entro....')
+  //   if( !isAuthorized ){  
+  //     console.log(to.path)
+  //     next({ path: '/login' })
+  //   }else{
+  //     console.log('next()')
+  //     next();
+  //   }
+    // console.log('1ra. vez');
+    // if( from.path != '/') { console.log('Entranda incorrecta...')}
     // next('/login');  // redirecciona
-
     // next(false)
-  }
-  next();
-  // next('/login'); 
+  // }
+
+  
 })
 
 export default router

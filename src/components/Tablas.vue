@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     navItem(optionMenu){
-      console.log(`navitem(${optionMenu})`);
+      // console.log(`navitem(${optionMenu})`);
       let role = this.User_Role.trim();
       if ( role == '' ) return false;
       role =role. substr(0,1);

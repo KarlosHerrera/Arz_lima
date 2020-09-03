@@ -94,10 +94,10 @@ export default {
     },
     actionRole: function(index){
         console.log(`actionRole( ${index} )`);
-        console.log('----------------------');
+        // console.log('----------------------');
         let action = this.listOptionsPerfil[index].action;
         if( action == '/exit'){
-          console.log('/exit');
+          // console.log('/exit');
           // Salir
           // window.top.close();
 
@@ -110,7 +110,6 @@ export default {
           this.listOptionsPerfil = [{dsc: 'Iniciar-Sesion', action: '/login'}, {dsc: 'Salir', action: '/exit'}];
           // this.setComponent();
           window.location = "http://google.com";
-          // this.$router.push('/');
         }else{
           if( action == '/logout' ){
             console.log('action/logout -> Cerrar Sesion')
@@ -122,11 +121,11 @@ export default {
             // console.log(this.listOptionsPerfil);
             this.setComponent();
             this.roleView = false;
-            console.log('Saliendo de /logout');
+            // console.log('Saliendo de /logout');
             this.$router.push('/');
           }else{
             // console.log(this.listOptionsPerfil);
-            console.log('ruta = ', action);
+            // console.log('ruta = ', action);
             this.roleView = false;
             this.$router.push(action)
     
@@ -136,7 +135,7 @@ export default {
 
     },
     currentUser(){
-      console.log('currentUser()');
+      // console.log('currentUser()');
       // this.iconUser = this.$store.state.User_Name.substr(0,1);
       this.iconUser = this.User_Name.substr(0,1);
       this.userCurrent = this.User_Name;
@@ -166,9 +165,8 @@ export default {
   },
   watch: {
     User: function(newVal, oldVal){
-      console.log('watch.this.User_Name');
-      console.log('New: ', newVal);
-      console.log('Old: ', oldVal);
+      // console.log('watch.this.User_Name');
+      console.log('New: ', newVal, ', Old: ', oldVal );
       this.currentUser();
     },
   },    
