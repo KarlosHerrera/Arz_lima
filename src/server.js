@@ -43,7 +43,7 @@ const firmasCtrl = require('./controllers/firmasCtrl');
 const usuariosCtrl = require('./controllers/usuariosCtrl');
 
 // settings
-app.set('port', process.env.PORT || 3000);  // Configuracion de puerto (variables globales)
+app.set('port', process.env.PORT || 3003);  // Configuracion de puerto (variables globales)
 
 app.use('/', serveStatic(path.join(__dirname,'./../dist')));  // Carga 
 
@@ -107,14 +107,15 @@ app.use('/usuarios', usuariosCtrl);
 const dbase = require('./assets/json/config_db.json');
 const db = mysql.createConnection(dbase);
 db.connect((err) => {
-    if(err){
-      console.log(err);
-      console.log('Error connecting to DataBase');
-      return;
-    }
+  if(err){
+    console.log(err);
+    console.log('Error connecting to DataBase');
+    // return;
+  }else{
     console.log('host:', dbase.host);
     console.log('Connection mySQL successfull!');
     db.end();
+  }
 });    
 
 // let aplication = app.listen(app.get('port'), function(){

@@ -1,5 +1,4 @@
 //  form.js
-// console.log('form.js');
 
 'use strict';
 
@@ -18,14 +17,13 @@ export function evalInput(obj){
 	let txtError = '';
 	if(lblError) txtError = lblError.textContent;			// Texto del label de error
 
-	//let oExpReg = new RegExp(sPatron);					!');
-	// Crea el objeto patron para el elemento
-	//let maxLength = obj.getAttribute("maxlength");			// Longitud maxima definida por atributo
-
+	//let oExpReg = new RegExp(sPatron);
+	// Crea el objeto patron para el 			// Longitud maxima definida por atributo elemento
+	//let maxLength = obj.getAttribute("maxlength");
 	let sValor = obj.value;									// Valor actual del elemento 'string'
 	let nLonText = sValor.length;							// Longitud del valor
-// let lValido = obj.checkValidity();						// test del input
-// let lEstado = obj.validity.valid;						// estado resultante del conjunto de atributos del input
+	// let lValido = obj.checkValidity();						// test del input
+	// let lEstado = obj.validity.valid;						// estado resultante del conjunto de atributos del input
 	let upper = obj.getAttribute('data-upper');
 	if(upper){
 		// let vue_valor = obj.getAttribute('v-model');
@@ -156,7 +154,6 @@ export function disabledForm(idForm, YesNo, ElementsForm){
     // console.dir(objForm);
     if( !ElementsForm ){        // Todos los elementos del form
         for(let e=0; e < objForm.length ; e++){
-			// console.log(objForm[e]);
 			// console.log('===>',objForm[e]);
             objForm[e].disabled = YesNo;
         }
@@ -178,6 +175,5 @@ export function test(){
 // 	evalInput,
 // 	evalForm,
 // 	seePassword,
-// 	test
 
 // }

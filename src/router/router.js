@@ -19,6 +19,7 @@ import LogIn from '@/components/Login';
 import LogOut from '@/components/Logout';
 import perfilUsuario from '@/components/perfilUsuario';
 import cambioClave from '@/components/cambioClave';
+import parametros from '@/components/parametros';
 
 import tipoInstitucion from '../components/tipoInstitucion';
 import cargoReligioso from '../components/cargoReligioso';
@@ -144,7 +145,13 @@ const routes = [
     path: '/cambioclave',
     name: 'cambioclave',
     component: cambioClave
-  },        
+  },  
+  {
+    path: '/parametros',
+    name: 'parametros',
+    component: parametros
+  },
+
 ]
 
 const router = new VueRouter({
@@ -154,7 +161,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach( async function(to, from, next){
-  console.log('router.beforeEach()');
+  // console.log('router.beforeEach()');
   let store = await import('@/store/store.js');
   let isAuthorized = store.default.getters.getAuthorized;
   // console.log('getAuthorized: ', isAuthorized);

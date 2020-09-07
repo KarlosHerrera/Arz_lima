@@ -11,10 +11,10 @@ moment.locale('es');
 // console.log('sellosCtrl.js global.__basedir ===>', global.__basedir );
 
 router.get('/:codInstitucion', async (req, res) => {
-    console.log('sellos/');
+    // console.log(`sellos/${ req.params.codInstitucion }`);
     let codInstitucion = req.params.codInstitucion;
     // let { codInstitucion } = req.params.codInstitucion;
-    console.log('codInstitucion = ', codInstitucion);
+    // console.log('codInstitucion = ', codInstitucion);
     let sql = `SELECT codSello, codInstitucion, sello
                 FROM sellosinstitucion 
                 WHERE activo='S' AND codInstitucion = ?  

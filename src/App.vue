@@ -34,7 +34,7 @@ export default {
   },
   mounted: function(){
   this.config_app();
-}  
+  }  
 }
 </script>
 

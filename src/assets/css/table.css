@@ -8,6 +8,8 @@
 table {
     /* width: 400px; */
     /* height: 600px; */
+
+    /* width: 100%; */
     border-collapse: collapse;
     background-color: transparent;
     border-spacing: 0.214rem;   /*  espaciado entre  celdas */

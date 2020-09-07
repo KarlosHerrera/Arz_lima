@@ -35,7 +35,7 @@
                 <i class="icon_user">{{ iconUser }}</i>
               </div>
               <!-- Componente   --> 
-                <div id='userRole' class="drowndown" >                        
+                <div id='userRole' class="drowndown" @blur="menuUserClose">                        
                   <ul class="dropdown-menu dropdown-menu-right" :class="{show: roleView}" role="menu" aria-labelledby="userRole">
                     <li class='dropdown-item' v-for="(item, index) in listOptionsPerfil" :key='index' @click='actionRole(index)'>{{ item.dsc }}</li>
                   </ul>
@@ -93,7 +93,7 @@ export default {
       this.roleView = !this.roleView; 
     },
     actionRole: function(index){
-        console.log(`actionRole( ${index} )`);
+        // console.log(`actionRole( ${index} )`);
         // console.log('----------------------');
         let action = this.listOptionsPerfil[index].action;
         if( action == '/exit'){
@@ -145,7 +145,7 @@ export default {
                                 {dsc: 'Cambio-Clave', action: '/cambioClave'},
                                 {dsc: 'Salir', action: '/exit'}, 
                                 ]
-      if( this.User_Role == 'Administrador') this.listOptionsPerfil.unshift({dsc: 'Usuarios', action: '/usuarios'})   ;              
+      if( this.User_Role == 'Administrador') this.listOptionsPerfil.unshift({dsc: 'Usuarios', action: '/usuarios'}, {dsc: 'Parametros', action: '/parametros'})   ;              
 
       // Genera opciones de SubMenu
       //this.listOptionsUser = [{dsc: 'Print', action: '/home'}, {dsc: 'To Pdf', action: '/customers'}, {dsc: 'Migrar', action: '/users'}, {dsc: 'Salir', action: '/exit'}];
@@ -161,6 +161,9 @@ export default {
       if ( optionMenu.indexOf(role)== -1) return false;
       return true;
     },
+    menuUserClose(){
+      console.log('menuUsersClose()');
+    }
 
   },
   watch: {

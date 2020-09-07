@@ -11,10 +11,9 @@ moment.locale('es');
 // console.log('sellosCtrl.js global.__basedir ===>', global.__basedir );
 
 router.get('/:codReligioso', async (req, res) => {
-    console.log('firmas/');
+    // console.log(`firmas/${req.params.codReligioso}`);
     let codReligioso = req.params.codReligioso;
     // let { codReligioso } = req.params.codReligioso;
-    console.log('codReligioso = ', codReligioso);
     let sql = `SELECT codFirmas, codReligioso, firma
                 FROM firmareligiosos
                 WHERE activo='S' AND codReligioso = ?  

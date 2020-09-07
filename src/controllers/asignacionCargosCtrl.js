@@ -29,6 +29,25 @@ router.get('/cargos', (req, res) => {
     });
 });
 
+router.get('/tmpReligiosos/:codInstitucion', (req, res) => {
+    // console.log(`asignacionCargos/tmpReligiosos/${req.params.codInstitucion}`);
+    let codInstitucion = req.params.codInstitucion;
+    // console.log('codInstitucion = ', codInstitucion)
+    const sql = `SELECT asignacioncargos.codInstitucion, asignacioncargos.codReligioso, religiosos.apellidosNombres FROM asignacioncargos 
+                LEFT JOIN religiosos ON religiosos.codReligioso = asignacioncargos.codReligioso 
+                WHERE asignacioncargos.activo = 'S' AND asignacioncargos.codInstitucion = '${codInstitucion}' ORDER BY apellidosNombres`;
+                // console.log('SQL =', sql);
+    conn.query(sql, function(err, rows){
+        if(err){
+            console.log('sqlMessage: ', err.sqlMessage);
+            console.log('sql: ', err.sql);
+            res.json({status: false, msg: 'Unsucessfull', records: -1, existe: null});
+        }else{
+            let religiosos = rows;
+            res.json({status: true, msg: 'Sucessfull', religiosos: religiosos });
+        }
+    });
+});
 // Record verify 
 router.post('/id', async (req, res) => {
     // let existUser = true;
@@ -89,53 +108,53 @@ router.put('/update', (req, res) => {
 //     console.log('/delete');
 // });
 
-router.get('/sellos/', async (req, res) => {
-    console.log('/sellos');
-    // console.log(req.params);
-    // const doc= req.params.docLegalizacion;
-    const data = req.body;
-    const codInstitucion = data.codInstitucion;
-    // console.log('codInstitucion=', codInstitucion);
-    let sql = 'SELECT * FROM sellosinstitucion WHERE codInstitucion= ?';
-    conn.query(sql, [codInstitucion], function(err, rows){
-        if(err){
-            console.log('sqlMessage: ', err.sqlMessage);
-            console.log('sql: ', err.sql);
-            res.json({status: false, msg: 'Unsucessfull', crud: 'delete'});
-        }else{
-            console.log('CTrlrows = ', rows);
+// router.get('/sellos/', async (req, res) => {
+//     console.log('/sellos!!!!!!!');
+//     // console.log(req.params);
+//     // const doc= req.params.docLegalizacion;
+//     const data = req.body;
+//     const codInstitucion = data.codInstitucion;
+//     // console.log('codInstitucion=', codInstitucion);
+//     let sql = 'SELECT * FROM sellosinstitucion WHERE codInstitucion= ?';
+//     conn.query(sql, [codInstitucion], function(err, rows){
+//         if(err){
+//             console.log('sqlMessage: ', err.sqlMessage);
+//             console.log('sql: ', err.sql);
+//             res.json({status: false, msg: 'Unsucessfull', crud: 'delete'});
+//         }else{
+//             console.log('CTrlrows = ', rows);
 
-            // Proceso de lectura de imagenes
+//             // Proceso de lectura de imagenes
 
-            // Envio de imagenes
-            res.json({status: true, msg: 'Sucessfull', Institucion: codInstitucion, crud: 'get', imgs: []});
-        }
-    }); 
-});
+//             // Envio de imagenes
+//             res.json({status: true, msg: 'Sucessfull', Institucion: codInstitucion, crud: 'get', imgs: []});
+//         }
+//     }); 
+// });
 
-router.get('/sellos/subir', async (req, res) => {
-    console.log('/sellos/subir');
-    // console.log(req.params);
-    // const doc= req.params.docLegalizacion;
-    const data = req.body;
-    const codInstitucion = data.codInstitucion;
-    console.log('codInstitucion=', codInstitucion);
-    let sql = 'SELECT * FROM sellosinstitucion WHERE codInstitucion= ?';
-    conn.query(sql, [codInstitucion], function(err, rows){
-        if(err){
-            console.log('sqlMessage: ', err.sqlMessage);
-            console.log('sql: ', err.sql);
-            res.json({status: false, msg: 'Unsucessfull', crud: 'delete'});
-        }else{
-            console.log(rows);
+// router.get('/sellos/subir', async (req, res) => {
+//     console.log('/sellos/subir');
+//     // console.log(req.params);
+//     // const doc= req.params.docLegalizacion;
+//     const data = req.body;
+//     const codInstitucion = data.codInstitucion;
+//     console.log('codInstitucion=', codInstitucion);
+//     let sql = 'SELECT * FROM sellosinstitucion WHERE codInstitucion= ?';
+//     conn.query(sql, [codInstitucion], function(err, rows){
+//         if(err){
+//             console.log('sqlMessage: ', err.sqlMessage);
+//             console.log('sql: ', err.sql);
+//             res.json({status: false, msg: 'Unsucessfull', crud: 'delete'});
+//         }else{
+//             console.log(rows);
 
 
-            // Proceso de lectura de imagenes
+//             // Proceso de lectura de imagenes
 
-            // Envio de imagenes
-            res.json({status: true, msg: 'Sucessfull', Institucion: codInstitucion, crud: 'get', imgs: []});
-        }
-    }); 
-});
+//             // Envio de imagenes
+//             res.json({status: true, msg: 'Sucessfull', Institucion: codInstitucion, crud: 'get', imgs: []});
+//         }
+//     }); 
+// });
 
 module.exports = router;

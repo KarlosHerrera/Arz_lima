@@ -1,7 +1,7 @@
 // lib.js
 
 export function disabledElementId(eleId, value){
-	console.log(`disabledElementId(${ eleId }, ${value})`); 
+	// console.log(`disabledElementId(${ eleId }, ${value})`); 
 	let sintaxis ='disableElementId(eleId string , value boolean)';
 
 	// console.log('Id = ', Id, 'string:', is_string(Id) );

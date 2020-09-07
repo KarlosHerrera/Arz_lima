@@ -6,11 +6,9 @@ const conn = require('../assets/js/db_mysql.js');
 const  moment =require('moment');
 moment.locale('es');
 
-// const currentUser = state.User_Name;
-// console.log('global.db', global.db);
 // Devuelve ultimo numero de documento
 router.get('/lastDoc',  (req, res) => {
-    console.log('/lastDoc');
+    // console.log('/lastDoc');
  
     let sql = 'SELECT docLegalizacion, fechaDoc FROM movimientodocumento ORDER BY docLegalizacion DESC LIMIT 1';
     conn.query(sql, function(err, rows){
@@ -91,14 +89,14 @@ router.post('/create', (req, res) => {
     // console.log(docLegalizacion, fechaDoc, codInstitucion, codReligioso, codSacramento);
 
     data.fechaDoc = moment(data.fechaDoc).format('YYYY-MM-DD hh:mm:ss');
-    conn.query('INSERT INTO movimientodocumento SET ?', [data], function(err, rows){
+    conn.query('INSERT INTO movimientodocumento SET ?', [data], function(err){
         // console.log(rows[0]);
         if(err){
             console.log('sqlMessage: ', err.sqlMessage);
             console.log('sql: ', err.sql);
             res.json({status: false, msg: 'Unsucessfull', nroDoc: nroDoc, crud: 'create'});
         }else{
-            console.log(rows);
+            // console.log(rows);
             res.json({status: true, msg: 'Sucessfull', nroDoc: nroDoc, crud: 'create'});
         }
     })
@@ -145,30 +143,6 @@ router.delete('/delete/', async (req, res) => {
             res.json({status: false, msg: 'Unsucessfull', nroDoc: docLegalizacion, crud: 'delete'});
         }else{
             res.json({status: true, msg: 'Sucessfull', nroDoc: docLegalizacion, crud: 'delete'});
-        }
-    }); 
-});
-
-router.get('/sellos/', async (req, res) => {
-    console.log('/sellos');
-    // console.log(req.params);
-    // const doc= req.params.docLegalizacion;
-    const data = req.body;
-    const codInstitucion = data.codInstitucion;
-    console.log('codInstitucion=', codInstitucion);
-    let sql = 'SELECT * FROM sellosinstitucion WHERE codInstitucion= ?';
-    conn.query(sql, [codInstitucion], function(err, rows){
-        if(err){
-            console.log('sqlMessage: ', err.sqlMessage);
-            console.log('sql: ', err.sql);
-            res.json({status: false, msg: 'Unsucessfull', crud: 'delete'});
-        }else{
-            console.log(rows);
-
-            // Proceso de lectura de imagenes
-
-            // Envio de imagenes
-            res.json({status: true, msg: 'Sucessfull', Institucion: codInstitucion, crud: 'get', imgs: []});
         }
     }); 
 });

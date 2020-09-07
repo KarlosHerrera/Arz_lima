@@ -217,8 +217,7 @@ input:focus{ outline: none; }
     body {
 
     }
-}   End sm
-*/
+} /*  End sm */
    
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) { /* md */
@@ -232,7 +231,7 @@ input:focus{ outline: none; }
     /* #app {
         height: auto;
     } */
-}  /*  End md */
+}  
     
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {  /* lg */
@@ -247,12 +246,12 @@ input:focus{ outline: none; }
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {  /* xl */
-html {
-    font-size: 16px; 
-}
-body {
-    /* background-color: silver;   */
+    html {
+        font-size: 16px; 
+    }
+    body {
+        /* background-color: silver;   */
 
-}
+    }
       
 }   /*  End xl */

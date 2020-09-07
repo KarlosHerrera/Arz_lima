@@ -75,7 +75,7 @@
     </div>
   </div>
   <div id="areaCar">
-    <div  class="cargos "> 
+    <div  class="cargos"> 
       <div class='titulo_2'>
         <div class='align_center'>Cargos</div> 
         <div> Institucion: <span> {{ nombreInstitucion }} </span></div> 
@@ -149,10 +149,8 @@ export default {
     // vuejsDatepicker,
     asignaCargo,
     desasignaCargo,
-    // modalFirmas,
     FirmasCrud,
     SellosCrud
-    // modalSellos
 
   },  
   data(){
@@ -229,7 +227,7 @@ export default {
         this.verAsignacionCargo = false;
         this.loadAsignacionCargos();
         // this.cargosInstitucion();
-        // this.filtoCargos(this.codInstitucion);
+        // this.filtroCargos(this.codInstitucion);
         swal2.fire({ title: resultado.title , text: resultado.text });
       }
     },
@@ -240,7 +238,7 @@ export default {
         this.verDesasignacionCargo = false;
         this.loadAsignacionCargos();
         // this.cargosInstitucion();       
-        // this.filtoCargos(this.codInstitucion);        
+        // this.filtroCargos(this.codInstitucion);        
         swal2.fire({ title: resultado.title , text: resultado.text });
       }
     },    
@@ -249,9 +247,9 @@ export default {
       this.isDisabledAsignacion = false;
       this.codInstitucion = this.tmpInstituciones[index].codInstitucion;
       this.nombreInstitucion = this.tmpInstituciones[index].nombreInstitucion;
-      this.filtoCargos(this.codInstitucion);
+      this.filtroCargos(this.codInstitucion);
     },
-    async filtoCargos(codInst){
+    async filtroCargos(codInst){
       // console.log(`filtroargos(${codInst})`);
       this.tmpAsignaciones = await this.cargosReligiosos.filter( ele => ele.codInstitucion == codInst);
     },
@@ -270,7 +268,7 @@ export default {
 
     },
     async loadReligiosos(){
-      let url = this.host+'/Religiosos/Religiosos_min';
+      let url = this.host+'/religiosos/Religiosos_min';
       let options = {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
@@ -391,11 +389,8 @@ margin-left: 1.5px;
    padding: 4px;
    margin: 0 2px;
 }
-.instituciones {
-  /* background-color: rgb(199, 147, 147); */
-}
-.religiosos {
-  /* background-color: rgb(136, 136, 167); */
+.cargos {
+  height: 90%;
 }
 .cargos1{
    height: 26.5%;
@@ -403,7 +398,6 @@ margin-left: 1.5px;
    padding: 3px;
    margin: 0 2px;
 }
-
 .table_Inst {
   width: 100%;
   height: 90%;   /* test */
@@ -437,8 +431,6 @@ padding: 2px 3px;
   font-weight: 600;
   padding-bottom: 2px;
 }
-
-
 .instituciones, .religiosos {
   width: 100%;
 }

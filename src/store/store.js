@@ -24,6 +24,7 @@ export default new Vuex.Store({
     users: [],
     Religiosos: [],
     Instituciones: [],
+    cargosReligiosos: [],
     crud: '*',
     record: {},
     fechas_ingresadas: fechas_Doc,
@@ -47,6 +48,10 @@ export default new Vuex.Store({
       // console.log('mutations.setInstituciones()');
       state.Instituciones = data;
     },
+    setCargosReligiosos: function(state, data){
+      // console.log('mutations.setInstituciones()');
+      state.cargosReligiosos = data;
+    },    
     setUsers: function(state, users){
       console.log('mutations.setUsers()');
       state.users = users;
@@ -70,7 +75,7 @@ export default new Vuex.Store({
     /// --- Religiosos
     allReligiosos: async function({ state, commit }){
       // console.log('actions.allReligiosos()');
-// console.log('religiosos host: ', this.host);
+      // console.log('religiosos host: ', this.host);
       // let app = await require('./../assets/json/config_app.json');
       let url = state.host+'/religiosos/all/';
       // console.log('religiosos/all url: ', url);    
@@ -136,23 +141,17 @@ export default new Vuex.Store({
       });
 
     },
-    /// --- Asignacion de Cargos
-    allAsignacionCargos: async function(){
+    /// --- Asignacion de Cargos (Religiosos por Institucion)
+    allAsignacionCargos: async function({ commit }){
       console.log('actions.allAsignacionCargos()')
       try {
-// let data = await fetch(this.host+'/asignacionCargos/all/');
-// let cargos = await data.json();
-        // commit('setReligiosos', cargos);   
+        let data = await fetch(this.host+'/asignacionCargos/all/');
+        let cargos = await data.json();
+        commit('setCargosReligiosos', cargos);   
       } catch (error) {
         console.log(error);          
       }
     },    
-    /// --- Sacramentos
-    // allSacramentos: 
-
-    /// Usuarios
-    /// Tablas
-
     userAll: async function({ commit }){
       console.log('actions.userAll()')
       try {

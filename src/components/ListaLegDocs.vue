@@ -98,7 +98,7 @@ export default {
   methods: {
     ...mapMutations(['setCrud','setRecord','setFechas_Doc']),
     setComponent(){
-      console.log('ListaLegDocs.setComponent()');
+      // console.log('ListaLegDocs.setComponent()');
       let del = this.$store.state.fechas_ingresadas.desde;
       let al = this.$store.state.fechas_ingresadas.hasta;
       // console.log('fechas del store:')
