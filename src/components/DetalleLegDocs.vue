@@ -86,17 +86,17 @@
       </div>                
       <div class="form-row">
         <div class="col-2 form-group">
-          <label for="ticket" class="formControlLabel">Ticket*</label>
+          <label for="ticket" class="formControlLabel">Ticket/Oper./Vou.*</label>
           <input type="text" name='ticket' v-model="rec.ticket" class="form-control form-control-sm"
-            id='ticket'  placeholder="" required
-            @input="input($event.target)" pattern="^[1-9]{1}[0-9]{4}$" autocomplete='off'>
+            id='ticket' ref='ticket' placeholder="" required
+            @input="input($event.target)" pattern="^[TOV]{1}[\-]{1}[0-9]{1,12}$" autocomplete='off' data-upper='1c'>
           <small id="" class="form-text text-muted"></small>
         </div>
         <div class="col-9 form-group">
           <label for="beneficiario" class="formControlLabel">Beneficiario(s)</label>
           <input type="text" name='beneficiario' v-model="rec.refNombre" class="form-control form-control-sm"
             id='beneficiario' placeholder=""
-            @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 áéíóúñÑ ,-/()#]{1,49}$" autocomplete='off' data-upper='1c'>
+            @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 áéíóúñÑ , - \/()#]{1,49}$" autocomplete='off' data-upper='1c'>
           <small id="" class="form-text text-muted"></small>
         </div>
       </div>
@@ -260,9 +260,9 @@ export default {
       .then(function(res){ 
         if(res.data.status)
           self.tmpReligiosos = res.data.religiosos;
-          self.tmpReligiosos.forEach((ele)=>{
-            console.log('-', ele.codReligioso,'.',ele.apellidosNombres);
-          })
+          // self.tmpReligiosos.forEach((ele)=>{
+          //   console.log('-', ele.codReligioso,'.',ele.apellidosNombres);
+          // })
 
       })
       .catch(function(error) {

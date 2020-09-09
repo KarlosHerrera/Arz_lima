@@ -69,8 +69,8 @@
                   <label for="nombreInstitucion" class="formControlLabel">Nombre*</label>
                     <input type="text" name='nombreInstitucion' v-model="rec.nombreInstitucion" class="form-control form-control-sm" 
                       id='nombreInstitucion' placeholder="" required :disabled="disabledForm"
-                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 áéíóúñÑ-./]{1,59}$" autocomplete='off' data-upper='1c'>
-                  <small id="" class="form-text text-muted"></small>
+                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 áéíóúñÑ - .\/]{1,59}$" autocomplete='off' data-upper='1c'>
+                  <small id="" class="form-text text-muted"></small> 
               </div>          
           </div>             
           <div class="form-row">
@@ -78,7 +78,7 @@
                   <label for="direccion" class="formControlLabel">Direccion*</label>
                     <input type="text" name='direccion' v-model="rec.direccion" class="form-control form-control-sm" 
                       id='direccion' placeholder="" required :disabled="disabledForm"
-                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 áéíóúñÑ #-.()/]{1,99}$" autocomplete='off' data-upper='1c'>
+                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 áéíóúñÑ #-.()\/]{1,99}$" autocomplete='off' data-upper='1c'>
                   <small id="" class="form-text text-muted"></small>
               </div>          
           </div>  
@@ -165,7 +165,7 @@
   <div class="content-footer align-items-end"  v-if='view_content'>
     <div class='itemCurrent '>Items: {{ itemCurrent}}/{{tmpInstituciones.length}} </div>
   </div>
-  <sellos-crud :datosInstitucion="datosInstitucion" v-if="verSellosCrud" @close='verSellosCrud=false'></sellos-crud>
+  <sellos-crud :datosInstitucion="datosInstitucion" v-if="verSellosCrud" @close='cierraSellosCrud'></sellos-crud>
 </div>
 </template>
 
@@ -448,6 +448,12 @@ export default {
       this.datosInstitucion.codInstitucion = this.rec.codInstitucion;
       this.datosInstitucion.nombreInstitucion = this.rec.nombreInstitucion;
       
+    },
+    cierraSellosCrud(value){
+      console.log(`cierraSellosCrud(${value})`);
+      this.verSellosCrud=false;
+      if( value ) this.loadInstituciones();
+
     },
     async loadInstituciones(){
       // console.log('loadInstituciones()');

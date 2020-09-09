@@ -1,7 +1,9 @@
 /* imgCrud.css */
 .modal-container {
     width: 45rem;
+    width: 58rem;
     height:60%;
+    height:75%;
 } 
 .modal-header {
     height: 10%;

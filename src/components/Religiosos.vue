@@ -69,7 +69,7 @@
                   <label for="nombreReligioso" class="formControlLabel">Nombre*</label>
                     <input type="text" name='nombreInstitucion' v-model="rec.apellidosNombres" class="form-control form-control-sm" 
                       id='apellidosNombres' placeholder="" required :disabled="disabledForm"
-                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 áéíóúñÑ -./]{1,59}$" autocomplete='off' data-upper='1c'>
+                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 áéíóúñÑ -.\/]{1,59}$" autocomplete='off' data-upper='1c'>
                   <small id="" class="form-text text-muted"></small>
               </div>          
           </div>             
@@ -78,7 +78,7 @@
                   <label for="direccion" class="formControlLabel">Direccion*</label>
                     <input type="text" name='direccion' v-model="rec.direccion" class="form-control form-control-sm" 
                       id='direccion' placeholder="" required :disabled="disabledForm"
-                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 áéíóúñÑ #-.()/]{1,99}$" autocomplete='off' data-upper='1c'>
+                      @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 áéíóúñÑ #-.()\/]{1,99}$" autocomplete='off' data-upper='1c'>
                   <small id="" class="form-text text-muted"></small>
               </div>          
           </div>  
@@ -156,7 +156,7 @@
   <div class="content-footer align-items-end"  v-if='view_content'>
     <div class='itemCurrent '>Items: {{ itemCurrent}}/{{tmpReligiosos.length}} </div>
   </div>
-  <firmas-crud :datosReligioso="datosReligioso" v-if="verFirmasCrud" @close='verFirmasCrud=false'></firmas-crud>
+  <firmas-crud :datosReligioso="datosReligioso" v-if="verFirmasCrud" @close='cierraFirmasCrud'></firmas-crud>
   <!-- <modal-firmas :datosReligioso="datosReligioso" v-if="verFirmas" @close='verFirmas=false'></modal-firmas>   -->
 </div>
 </template>
@@ -438,6 +438,12 @@ export default {
       this.datosReligioso.apellidosNombres = this.rec.apellidosNombres;
       this.datosReligioso.crud = true;
     },
+    cierraFirmasCrud(value){
+      console.log(`cierraFirmasCrud(${value})`);
+      this.verFirmasCrud=false;
+      if( value ) this.loadReligiosos();
+
+    },    
     async loadReligiosos(){
       // console.log('loadInstituciones()');
       let url = this.host+'/religiosos/all_rel';

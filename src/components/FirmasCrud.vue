@@ -7,7 +7,7 @@
       <div class="modal-header d-flex justify-content-between align-items-center">
           <div class='titulo-1 align-items-left'>Religioso</div>
           <div class='titulo-2 align-items-center'> {{ datosReligioso.codReligioso }} - {{ datosReligioso.apellidosNombres }}</div>
-          <div class='escape lign-items-end' @click="$emit('close')">X</div>
+          <div class='escape lign-items-end' @click="$emit('close', cambios)">X</div>
       </div>
           
       <div class="modal-body" ref='firmas_body'> 
@@ -33,10 +33,9 @@
         </div> 
         <div class='i-del d-flex justify-content-center' v-if="imagenes.length>0 && verAddImg" style1='background: red'>
           <button class="btn-crud btn btn-sm btn_1" v-if="verDelImg" @click="deleteImg">Borrar</button>
-          <button class="btn-crud btn btn-sm btn_1" v-if="!verDelImg" @click="confirmDelete">Confirma</button>                
         </div>
         <div class='i-exit d-flex justify-content-end'  style1='background: orange'>
-            <button class="btnExit btn btn-sm btn_1" v-if='verSalir' @click="$emit('close')">Salir</button>
+            <button class="btnExit btn btn-sm btn_1" v-if='verSalir' @click="$emit('close', cambios)">Salir</button>
             <button class="btnCancel btn btn-sm btn_1" v-if='!verSalir' @click="cancel">Cancela</button>
         </div>
 
@@ -81,7 +80,8 @@ export default {
       nameImgOld: '',
       nameImgNew: '',
       messages: '',
-      verMsg: false
+      verMsg: false,
+      cambios: false
     }
   },
   computed: { // Expone state al template
@@ -130,6 +130,7 @@ export default {
             // this.firmas_aws();
           }
           let text = (res.status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!';
+          this.cambios = true;
           this.verMensaje(text);
           // await swal2.fire({ title: 'Nuevo Sello ', text: text });      
       } catch (error) {
@@ -165,6 +166,7 @@ export default {
           // this.firmas_aws();
         }
         let text = (res.status)? 'Anulado Satisfactoriamente!': 'Fallo la anulacion!';
+        this.cambios = true;
         this.verMensaje(text);
         // await swal2.fire({title: 'Elimina Sello', text: text});
       } catch (error) {

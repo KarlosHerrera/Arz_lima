@@ -22,7 +22,7 @@ export function disabledForm(idForm, YesNo, ElementsForm){
     //  Habilita/Deshabilita (YesNo = boolean), todos los elementos del form () o una lista especifica (ElementsForm)
     // console.log('disabledForm('+idForm+')');
 	// console.log('boolean: ', YesNo);
-	console.log('id = ', idForm);
+	// console.log('id = ', idForm);
     if( !idForm || !YesNo ){
 		console.log('disabledForm(idForm - String, YesNo - Boolean, [ElementsForm - Array])');
 		return null;
