@@ -10,7 +10,10 @@
           <router-link  class="nav-link sub_menu" to="/religiososLista">Religiosos</router-link>
           <div></div>
         </li>
-
+        <li class="nav-item">
+          <router-link  class="nav-link sub_menu" to="/sellosfirmas">Sellos-Firmas</router-link>
+          <div></div>
+        </li>
       </ul>    
    </div>  
 </template>

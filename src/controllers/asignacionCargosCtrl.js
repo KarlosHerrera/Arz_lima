@@ -29,12 +29,34 @@ router.get('/cargos', (req, res) => {
     });
 });
 
+router.get('/sellosfirmas', (req, res) => {
+    console.log('asignacionCargos/sellosfirmas');
+
+    const sql = `SELECT asignacioncargos.codInstitucion, asignacioncargos.codReligioso, religiosos.apellidosNombres,
+    asignacioncargos.codCargo,cargoReligioso.nombreCargo, (SELECT count(*) FROM firmareligiosos WHERE firmareligiosos.codReligioso = asignacioncargos.codReligioso) AS num_firmas
+    FROM asignacioncargos
+    LEFT JOIN Religiosos ON asignacioncargos.codReligioso = Religiosos.codReligioso
+    LEFT JOIN cargoReligioso ON asignacioncargos.codCargo = cargoReligioso.codCargo
+    WHERE asignacioncargos.activo='S' AND asignacioncargos.ejerciendoCargo='S'
+    ORDER BY asignacioncargos.codInstitucion AND asignacioncargos.codCargo`;
+
+    conn.query(sql, function(err, rows){
+        if(err) throw err;
+        // console.log(rows);
+        res.status(200).json(rows);
+        // res.send(rows);
+    });
+});
+
 router.get('/tmpReligiosos/:codInstitucion', (req, res) => {
     // console.log(`asignacionCargos/tmpReligiosos/${req.params.codInstitucion}`);
     let codInstitucion = req.params.codInstitucion;
     // console.log('codInstitucion = ', codInstitucion)
-    const sql = `SELECT asignacioncargos.codInstitucion, asignacioncargos.codReligioso, religiosos.apellidosNombres FROM asignacioncargos 
+    const sql = `SELECT asignacioncargos.codInstitucion, asignacioncargos.codReligioso, asignacioncargos.codCargo, 
+                LEFT( CONCAT(religiosos.apellidosNombres,' (',cargoreligioso.nombreCargo,')' ), 77 ) AS apellidosNombres 
+                FROM asignacioncargos 
                 LEFT JOIN religiosos ON religiosos.codReligioso = asignacioncargos.codReligioso 
+                LEFT JOIN cargoreligioso ON asignacioncargos.codCargo = cargoreligioso.codCargo
                 WHERE asignacioncargos.activo = 'S' AND asignacioncargos.codInstitucion = '${codInstitucion}' ORDER BY apellidosNombres`;
                 // console.log('SQL =', sql);
     conn.query(sql, function(err, rows){

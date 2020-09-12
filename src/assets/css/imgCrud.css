@@ -7,7 +7,7 @@
 } 
 .modal-header {
     height: 10%;
-    height: 8%;
+    height: 7%;
     padding: 0.40rem 0.35rem;
 }
 .modal-body {
@@ -26,6 +26,10 @@
 }
 .i-exit {
   width: 12%;
+}
+.archivo {
+  /* color: blue; */
+  padding: 1px 1px;
 }
 .mensaje {
   font-size: 1rem;

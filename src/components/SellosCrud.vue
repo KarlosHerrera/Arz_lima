@@ -23,7 +23,7 @@
 
 <!-- <img :src='imagenes[1].sello' > -->
       </div>
-
+      <div class='archivo' v-if='!verMsg'>Archivo: {{ nombreArchivo }}</div>
       <div class='mensaje' v-if='verMsg'>{{ messages }}</div>
       <div class="modal-footer d-flex justify-content-between align-items-center">
         <div class='i-itm col1-1 d-flex justify-content-start' style1='background: plum'>
@@ -52,6 +52,7 @@
 </transition>    
 
 </template>
+
 <script>
 console.log('<< sellos-crud.vue >>');    
 
@@ -87,6 +88,13 @@ export default {
   },
   computed: { // Expone state al template
      ...mapState(['host', 'record']),
+     nombreArchivo: function(){
+       let fileName= this.imagenes[this.indexImg-1].sello.split('/').pop();
+      //  this.imagenes.forEach(function(ele){
+      //    console.log(ele.sello);
+      //  })
+       return fileName;
+     }     
   },  
   methods: {
     setComponent: function(){
@@ -95,14 +103,14 @@ export default {
       if( !this.datosInstitucion.crud ) { this.verAddImg= false, this.verDelImg = false }
     },
     addImg(){
-      console.log('addImg()');
+      // console.log('addImg()');
       this.verAddImg = !this.verAddImg;
       this.verSalir = false;
       this.$refs.idFile.click();
 
     },
     async confirmAdd(){
-      console.log('confirmAdd()');
+      // console.log('confirmAdd()');
       this.verNewImg = false; 
       this.verAddImg = !this.verAddImg;
       this.verMsg = false;
@@ -127,7 +135,7 @@ export default {
           let res = await data.json();
           if( res.status ) {
             self.nameImgOld = '';
-            // this.cargaSellos()
+            this.cargaSellos();
             // this.sellos_aws();
           }
           let text = (res.status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!';
@@ -140,14 +148,14 @@ export default {
 
     },
     deleteImg(){
-      console.log('deleteImg()');
+      // console.log('deleteImg()');
       this.verDelImg = false;
       this.verSalir = false;
       this.$refs.sellos_body.style.borderColor='red';
 
     },
     async confirmDelete(){
-      console.log('confirmDelete()');
+      // console.log('confirmDelete()');
       this.verDelImg = !this.verDelImg;
       let data = {};
 
@@ -196,7 +204,7 @@ export default {
       }
     },    
     cancel(){
-      console.log('cancel()');
+      // console.log('cancel()');
       this.verAddImg = true;
       this.verDelImg = true;
       this.verSalir = true;  
@@ -206,7 +214,7 @@ export default {
       this.$refs.sellos_body.style.borderColor='';
     },
     cargaSellos: function(){
-      console.log('cargaSellos()');
+      // console.log('cargaSellos()');
       let codInstitucion = this.datosInstitucion.codInstitucion.trim();
       // console.log('path: ', this.pathImg);
       let self = this;
@@ -305,7 +313,7 @@ export default {
       this.indexImg = slide + 1;
     },
     async consecutivoSello(){
-      console.log('consecutivoSello()');
+      // console.log('consecutivoSello()');
       let codInstitucion = this.datosInstitucion.codInstitucion.trim();
       let self = this;
       let url = this.host+'/sellos/consecutivo/'+codInstitucion;
@@ -342,7 +350,7 @@ export default {
       // console.log(`verMensaje(${texto})`);
       let self = this;
       this.verMsg = true;
-      let segundos = 4000;
+      let segundos = 5000;
       this.messages = texto;
       setTimeout(function(){
         self.verMsg = false;

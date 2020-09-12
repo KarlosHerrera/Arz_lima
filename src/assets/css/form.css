@@ -43,7 +43,6 @@ input {
 
 /* form.js */
 .formControlLabel {
-	color: inherit;
 	margin: 1.3px !important;
 	margin-bottom: 1px !important;
 	padding: 2.7px 3.0px !important;

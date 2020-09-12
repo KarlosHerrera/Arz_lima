@@ -1,0 +1,38 @@
+/*  btns.css */
+/*  Buttons */
+
+@charset "UTF-8";
+
+.btn_1, .btn_viewPass, .btn_2 {
+    background-color: var(--btnBackground) !important;
+    background-color: red;
+    color: var(--btnColor)  !important;
+    color: black;
+    border: 0.1rem 0.2rem;
+    padding: 0.07rem 0.2rem;
+    margin: 0 0.07rem;
+    border-radius: var(--border-radius) !important;     
+font-size: 1.01rem;
+}
+.btn_viewPass {
+    margin: 0.3rem 0.07rem;   
+    outline: none; 
+}
+.b-icon {
+    margin: 0.1rem;
+}
+.btn_1:hover {
+    background-color: var(--btnBackgroundHover) !important;
+    color: var(--btnColorHover) !important; 
+}
+.btn_2:hover {
+    background-color: var(--btnBackgroundHover) !important;
+    color: var(--btnColorHover) !important; 
+}
+.btn_1:focus, .btn_2:focus {
+    box-shadow:  none;
+}
+.btn_1:active {
+    transform: scale(.95);
+    box-shadow:  none;
+}

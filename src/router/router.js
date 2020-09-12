@@ -19,13 +19,15 @@ import LogIn from '@/components/Login';
 import LogOut from '@/components/Logout';
 import perfilUsuario from '@/components/perfilUsuario';
 import cambioClave from '@/components/cambioClave';
-import parametros from '@/components/parametros';
+import SellosFirmas from '@/components/SellosFirmas';
+
 
 import tipoInstitucion from '../components/tipoInstitucion';
 import cargoReligioso from '../components/cargoReligioso';
 import Jerarquias from '../components/Jerarquias';
 import Sacramentos from '../components/Sacramentos';
 import Identificacion from '../components/tipoIdentificacion';
+import parametros from '../components/parametros';
 // import { nextTick } from 'process';
 
 
@@ -95,7 +97,11 @@ const routes = [
   name: 'religiosos',
   component: Religiosos,
   },
-   
+  {
+    path: '/sellosfirmas',
+    name: 'sellosfirmas',
+    component: SellosFirmas,
+  },   
   {
     path: '/tipoInstitucion',
     name: 'tipoInstitucion',

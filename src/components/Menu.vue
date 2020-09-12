@@ -9,7 +9,7 @@
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav" v-if="verMenu">
           <ul class="navbar-nav">             <!-- :disabled="disabledMenu" -->
-            <li class="nav-item" v-if="navItem('AU')" disabled>
+            <li class="nav-item" v-if="navItem('AS')" disabled>
               <router-link class="nav-link" to="/LegDocumentos" >Legalizacion</router-link>
               <div></div>
             </li>
@@ -21,7 +21,7 @@
               <router-link class="nav-link" to="/Consultas">Consultas</router-link>
               <div></div>
             </li>            
-            <li class="nav-item" v-if="navItem('ASU')">
+            <li class="nav-item" v-if="navItem('AS')">
               <router-link class="nav-link" to="/Tablas">Mantenimiento</router-link>
               <div></div>
             </li>

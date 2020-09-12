@@ -1,4 +1,4 @@
-// SellosCrud.vue
+// FirmasCrud.vue
 <template>
 <transition name="modal">
   <div class="modal-mask">
@@ -10,7 +10,7 @@
           <div class='escape lign-items-end' @click="$emit('close', cambios)">X</div>
       </div>
           
-      <div class="modal-body" ref='firmas_body'> 
+      <div class="modal-body d-flex" ref='firmas_body'> 
         <div class='noImgs' v-if='imagenes.length == 0'>Sin imagenes.</div>
         <img class='newImg' ref='imagen' src='' v-if='!verImgs'>
         <b-carousel id="carouselFirmas" :interval="0" controls indicators  v-if='verImgs' ref='itmFirmas' @sliding-start='slidingStart' :img-width="500" :img-height="300" class="d-block img-fluid">     
@@ -18,8 +18,9 @@
         </b-carousel>
 <!-- <b-carousel-slide img-src="media/sellos/00131-1.jpg" img-alt=' Imagen no se encuentra en la carpeta adecuada.'></b-carousel-slide> -->
 <!-- <img src="../media/sellos/00131-1.jpg"> -->
-      </div>
 
+      </div>
+      <div class='archivo' v-if='!verMsg'>Archivo: {{ nombreArchivo }}</div>
       <div class='mensaje' v-if='verMsg'>{{ messages }}</div>
       <div class="modal-footer d-flex justify-content-between align-items-center">
         <div class='i-itm col1-1 d-flex justify-content-start' style1='background: plum'>
@@ -53,10 +54,6 @@ console.log('<< firmas-crud.vue >>');
 import axios from 'axios';
 import { mapState } from 'vuex';
 
-// import Swal from 'sweetalert2';
-// let optAlert = require('@/assets/json/opt_swal2.json');
-// const swal2 = Swal.mixin(optAlert);
-
 const s3 = require('@/assets/js/aws_connection.js');
 
 export default {
@@ -85,7 +82,14 @@ export default {
     }
   },
   computed: { // Expone state al template
-     ...mapState(['host', 'record']),
+    ...mapState(['host', 'record']),
+    nombreArchivo: function(){
+      console.log(' this.imagenes[this.indexImg-1] = ', this.imagenes[this.indexImg-1]);
+      let fileName= this.imagenes[this.indexImg-1].firma;
+      fileName = fileName.split('/').pop()
+      return fileName;
+    }
+
   },  
   methods: {
     setComponent: function(){
@@ -94,14 +98,14 @@ export default {
       if( !this.datosReligioso.crud ) { this.verAddImg= false, this.verDelImg = false }
     },
     addImg(){
-      console.log('addImg()');
+      // console.log('addImg()');
       this.verAddImg = !this.verAddImg;
       this.verSalir = false;
       this.$refs.idFile.click();
 
     },
     async confirmAdd(){
-      console.log('confirmAdd()');
+      // console.log('confirmAdd()');
       this.verNewImg = false; 
       this.verAddImg = !this.verAddImg;
       this.verMsg = false;
@@ -126,7 +130,7 @@ export default {
           let res = await data.json();
           if( res.status ) {
             self.nameImgOld = '';
-            // this.cargaFirmas()
+            this.cargaFirmas()
             // this.firmas_aws();
           }
           let text = (res.status)? 'Creado Satisfactoriamente!': 'Fallo Creacion!';
@@ -139,14 +143,14 @@ export default {
 
     },
     deleteImg(){
-      console.log('deleteImg()');
+      // console.log('deleteImg()');
       this.verDelImg = false;
       this.verSalir = false;
       this.$refs.firmas_body.style.borderColor='red';
 
     },
     async confirmDelete(){
-      console.log('confirmDelete()');
+      // console.log('confirmDelete()');
       this.verDelImg = !this.verDelImg;
       let data = {};
 
@@ -175,7 +179,7 @@ export default {
 
     },
     async verImg(){
-      console.log('verImg()');
+      // console.log('verImg()');
       // let self = this;
       this.verAddImg = false;
       this.verNewImg = true;
@@ -196,7 +200,7 @@ export default {
       }
     },    
     cancel(){
-      console.log('cancel()');
+      // console.log('cancel()');
       this.verAddImg = true;
       this.verDelImg = true;
       this.verSalir = true;  
@@ -206,7 +210,7 @@ export default {
       this.$refs.firmas_body.style.borderColor='';
     },
     cargaFirmas: function(){
-      console.log('cargaFirmas()');
+      // console.log('cargaFirmas()');
       let codReligioso = this.datosReligioso.codReligioso.trim();
       // console.log('path: ', this.pathImg);
       let self = this;
@@ -235,7 +239,7 @@ export default {
 
     },
     firmas_aws: function(){
-      console.log('firmas_aws()');
+      // console.log('firmas_aws()');
       let codReligioso = this.datosReligioso.codReligioso.trim();
       let self = this;
       let url = this.host+'/firmas/'+codReligioso;
@@ -305,7 +309,7 @@ export default {
       this.indexImg = slide + 1;
     },
     async consecutivoFirma(){
-      console.log('consecutivoFirma()');
+      // console.log('consecutivoFirma()');
       let codReligioso = this.datosReligioso.codReligioso.trim();
       let self = this;
       let url = this.host+'/firmas/consecutivo/'+codReligioso;

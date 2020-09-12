@@ -16,9 +16,9 @@
     <form id='formDoc' class='col-9 formBase' onsubmit="return false;" novalidate autocomplete="nope" data-btnEnable='btnSave'>
       <div class="form-row justify-content-between">
           <div class="col-2 form-group">
-              <label for="docLeg" class="formControlLabel">Documento*</label>
+              <label for="docLeg" class="formControlLabel">Nro.Movimiento*</label>
               <input  type="text" name="docLeg" v-model="rec.docLegalizacion" class="form-control form-control-sm" 
-                      id="IdDocLeg" placeholder="" 
+                      id="IdDocLeg" placeholder="" disabled
                       @input="input($event.target)" pattern="^[0-9]{1,5}$" autocomplete='off' required>
               <small id="" class="form-text text-muted"></small>
           </div>
@@ -66,7 +66,7 @@
       </div> 
       <div class="form-row">
         <div class="col-9 form-group">
-          <label for="sacramento" class="formControlLabel">Sacramento*</label>
+          <label for="sacramento" class="formControlLabel">Constancias/Otros*</label>
             <v-select v-model="rec.codSacramento" label="nombreSacramento" :disabled="disabledForm"
             :options="listSacramentos" :reduce="ele => ele.codSacramento" placeholder=''
             :clearable="false" @input="changeSacramento" class='miClase'
@@ -83,7 +83,17 @@
           <small id="" class="form-text text-muted"></small>
         </div>
 
-      </div>                
+      </div>   
+      <div class="form-row">
+          <div class="col-2 form-group">
+            <label for="numero" class="formControlLabel">Doc. Eclesiastico</label>        
+            <input type="text" name='numero' v-model="rec.refNumero" class="form-control form-control-sm"
+              id='refNumero' placeholder=""
+              @input="input($event.target)" pattern="^[A-Z0-9]{1,2}[\-]{0,1}[A-Z0-9]{1,6}$" autocomplete='off'>
+
+          </div>  
+            
+      </div>
       <div class="form-row">
         <div class="col-2 form-group">
           <label for="ticket" class="formControlLabel">Ticket/Oper./Vou.*</label>
@@ -98,33 +108,9 @@
             id='beneficiario' placeholder=""
             @input="input($event.target)" pattern="^[A-Z]{1}[a-zA-Z0-9 áéíóúñÑ , - \/()#]{1,49}$" autocomplete='off' data-upper='1c'>
           <small id="" class="form-text text-muted"></small>
+                      <label for=''><i class="far fa-eye"></i></label>
         </div>
       </div>
-      <div class="form-row">
-          <div class="col-2 form-group">
-            <label for="libro" class="formControlLabel">Libro</label>
-            <input type="text" name='libro' v-model="rec.refLibro" class="form-control form-control-sm"
-              id='refLibro' placeholder=""
-              @input="input($event.target)" pattern="^[0-9]{3}$" autocomplete='off'>
-            <span class='icon_ctn'><i class="far fa-eye"></i></span>
-            <small id="" class="form-text text-muted"></small>
-          </div>
-          <div class="col-2 form-group">
-            <label for="folio" class="formControlLabel">Folio</label>
-            <input type="text" name='folio' v-model="rec.refFolio" class="form-control form-control-sm"
-              id='refFolio' placeholder=""
-              @input="input($event.target)" pattern="^[0-9]{3}$" autocomplete='off'>         
-            <small id="" class="form-text text-muted"></small>
-          </div>
-          <div class="col-2 form-group">
-            <label for="numero" class="formControlLabel">Numero</label>        
-            <input type="text" name='numero' v-model="rec.refNumero" class="form-control form-control-sm"
-              id='refNumero' placeholder=""
-              @input="input($event.target)" pattern="^[0-9]{3}$" autocomplete='off'>      
-            <label for=''><i class="far fa-eye"></i></label>
-          </div>  
-            
-        </div>
     </form>
     <opciones-crud class='' :crud="crud" @confirm_Create="confirmCreate" @confirm_Update="confirmUpdate" @confirm_Delete="confirmDelete" @exit_Form="exitForm" @reset_Form='resetForm'></opciones-crud>
 
@@ -278,18 +264,16 @@ export default {
       console.log('evaluaItem()');
       let evaluacion = true;
       let obs = '';
-      if( !evalValue('IdDocLeg') ) { obs+='*Documento '; evaluacion = false}
+      if( !evalValue('IdDocLeg') ) { obs+='*Nro.Movimiento '; evaluacion = false}
       if( !evalString( this.rec.codInstitucion ) ) {obs+=' *Institucion'; evaluacion = false}  
-      if( !evalString( this.rec.fechaDoc ) ) {obs+=' *Institucion'; evaluacion = false}  
+      if( !evalString( this.rec.fechaDoc ) ) {obs+=' *Fecha'; evaluacion = false}  
       if( !evalString( this.rec.codReligioso ) ) {obs+=' *Religioso'; evaluacion = false}  
-      if( !evalString( this.rec.codSacramento ) ) {obs+=' *Sacramento'; evaluacion = false} 
+      if( !evalString( this.rec.codSacramento ) ) {obs+=' *Constancia/Otros'; evaluacion = false} 
       if( !evalNumber( this.rec.precio ) ) {obs+=' *Precio'; evaluacion = false}
-      if( !evalString( this.rec.ticket) ) { obs+=' *Ticket '; evaluacion = false}
+      if( !evalString( this.rec.ticket) ) { obs+=' *Comprobante '; evaluacion = false}
 
       if( !evalValue('beneficiario') ) {obs+=' -Beneficiario'; evaluacion = false}
-      if( !evalValue('refLibro') ) {obs+=' -Libro'; evaluacion = false}
-      if( !evalValue('refFolio') ) {obs+=' -Folio'; evaluacion = false}
-      if( !evalValue('refNumero') ) {obs+=' -Numero'; evaluacion = false}
+      if( !evalValue('refNumero') ) {obs+=' -Doc.Eclesiastico'; evaluacion = false}
       this.observacionesCrud = obs;
       return evaluacion;
     },    
@@ -617,7 +601,7 @@ select > option:hover {
   height: 1.1rem !important;
 }
 .btnSellos, .btnFirmas {
-  width: 5rem;
+  width: 5.1rem;
 }
 .badge {
   margin: 0 0.27rem;

@@ -22,14 +22,14 @@
       <thead class='rounded-top'>
         <tr>
           <th>#</th>
-          <th @click="sortTable('docLegalizacion', $event)">Documento<span></span></th>
+          <th @click="sortTable('docLegalizacion', $event)">Nro.Mov.<span></span></th>
           <th class="align_center" @click="sortTable('fdchaDoc', $event)">Fecha<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'username')? 'arrow': 'noarrow']"></span></th>
           <th @click="sortTable('nombreInstitucion', $event)">Institucion<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'fullname')? 'arrow': 'noarrow']"></span></th>
-          <th @click="sortTable('nombreReligioso', $event)">Religioso<span :class="sortArrow"></span></th>
-          <th @click="sortTable('ticket', $event)">Ticket<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'role')? 'arrow': 'noarrow']"></span></th>
           <th @click="sortTable('refNombre', $event)">Beneficario<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'role')? 'arrow': 'noarrow']"></span></th>
-          <th class='align_right' @click="sortTable('precio', $event)">Precio<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'role')? 'arrow': 'noarrow']"></span></th>
-          <th @click="sortTable('nombreSacramento', $event)">Sacramento<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'role')? 'arrow': 'noarrow']"></span></th>
+          <th @click="sortTable('ticket', $event)">Comprobante<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'role')? 'arrow': 'noarrow']"></span></th>
+          <th @click="sortTable('nombreReligioso', $event)">Religioso<span :class="sortArrow"></span></th>
+          <th @click="sortTable('ticket', $event)">Nro.Eclesias.<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'role')? 'arrow': 'noarrow']"></span></th>       
+          <th @click="sortTable('nombreSacramento', $event)">Const./Otros<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'role')? 'arrow': 'noarrow']"></span></th>
           <th class='text-center' v-if='true'>Opciones</th>
         </tr>
       </thead>
@@ -40,10 +40,10 @@
           <td> {{ doc.docLegalizacion}} </td>
           <td class='align_center'> {{ doc.fechaDoc | frmFecha }} </td>
           <td class='text_overflow'> {{ doc.nombreInstitucion }} </td>
-          <td class='text_overflow'> {{ doc.apellidosNombres }} </td>
-          <td> {{ doc.ticket }} </td>
           <td> {{ doc.refNombre }} </td>
-          <td class='align_right'> {{ doc.precio | frmDecimal }} </td>
+          <td> {{ doc.ticket }} </td>
+          <td class='text_overflow'> {{ doc.apellidosNombres }} </td>
+          <td> {{ doc.refNumero }} </td>
           <td> {{ doc.nombreSacramento }} </td>
           <td class=' d-flex justify-content-center align-items-center' v-if='true' >
             <button class='btn btn_actions btn_1' @click='updateItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Editar</button>
@@ -347,7 +347,7 @@ thead tr th{
     color: var(--btnColor)  !important;
 }
 .btn_new, .btn_prt {
-  width: 3.1rem;
+  width: 3.5rem;
   padding: 0.05rem 0.2rem; 
   border: 0;
   padding: 0;

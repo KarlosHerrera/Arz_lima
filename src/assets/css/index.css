@@ -6,6 +6,7 @@
 @import url('https://fonts.googleapis.com/css?family=Dosis&display=swap');
 @import url(sweetalert2.css);
 /* @import '~bootsrap/dist/css/bootstrap.css'; */
+@import 'btns.css';
 
 :root {
     /* Back */
@@ -153,34 +154,6 @@ div, form, input, table, nav {
 }
 .align_right {
     text-align: right;
-}
-
-/*  Button */
-.btn_1, .btn_viewPass  {
-    background-color: var(--btnBackground) !important;
-    color: var(--btnColor)  !important;
-    border: 0.1rem 0.2rem;
-    padding: 0.07rem 0.2rem;
-  margin: 0 0.07rem;
-    border-radius: var(--border-radius) !important;     
-}
-.btn_viewPass {
-    margin: 0.3rem 0.07rem;   
-    outline: none; 
-}
-.b-icon {
-    margin: 0.1rem;
-}
-.btn_1:hover {
-    background-color: var(--btnBackgroundHover) !important;
-    color: var(--btnColorHover) !important; 
-}
-.btn_1:focus {
-    box-shadow:  none;
-}
-.btn_1:active {
-    transform: scale(.95);
-    box-shadow:  none;
 }
 
 .void {
