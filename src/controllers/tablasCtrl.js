@@ -9,12 +9,11 @@ moment.locale('es');
 
 // router.get('/', (req, res) => {
 //     console.log('tablas/???');
-
 // });
 
 // --- Departamentos --- //
 router.get('/departamentos/all', (req, res) => {
-    console.log('tablas/departamentos/all');
+    // console.log('tablas/departamentos/all');
     let sql = `SELECT * FROM departamento WHERE activo='S' ORDER BY nombreDepartamento`;                
     conn.query(sql, function(err, rows){
         if(err) console.log('err => ', err);
@@ -23,7 +22,7 @@ router.get('/departamentos/all', (req, res) => {
 });
 // --- Provincias --- //
 router.get('/provincias/all', (req, res) => {
-    console.log('tablas/provincias/all');
+    // console.log('tablas/provincias/all');
     let sql = `SELECT * FROM provincias WHERE activo='S' ORDER BY nombreProvincia`;                
     conn.query(sql, function(err, rows){
         if(err) console.log('err => ', err);
@@ -32,7 +31,7 @@ router.get('/provincias/all', (req, res) => {
 });
 // --- Distritos --- //
 router.get('/distritos/all', (req, res) => {
-    console.log('tablas/distritos/all');
+    // console.log('tablas/distritos/all');
     let sql = `SELECT * FROM distritos WHERE activo='S' ORDER BY nombreDistrito`;                
     conn.query(sql, function(err, rows){
         if(err) console.log('err => ', err);
@@ -44,7 +43,7 @@ router.get('/distritos/all', (req, res) => {
 
 // --- Jerarquias --- //
 router.get('/jerarquias/all', (req, res) => {
-    console.log('tablas/jerarquias/all');
+    // console.log('tablas/jerarquias/all');
     let sql = `SELECT * FROM jerarquias ORDER BY nombreJerarquia`;                
     conn.query(sql, function(err, rows){
         // conn.release();
@@ -53,7 +52,7 @@ router.get('/jerarquias/all', (req, res) => {
     });
 });
 router.get('/jerarquias/min', (req, res) => {
-    console.log('tablas/jerarquias/min');
+    // console.log('tablas/jerarquias/min');
     let sql = `SELECT codJerarquia, nombreJerarquia FROM jerarquias WHERE activo='S' ORDER BY nombreJerarquia`;                
     conn.query(sql, function(err, rows){
         if(err) console.log('err => ', err);
@@ -63,7 +62,7 @@ router.get('/jerarquias/min', (req, res) => {
 });
 // Create document
 router.post('/jerarquias/create', (req, res) => {
-    console.log('/tablas/jerarquias/create');
+    // console.log('/tablas/jerarquias/create');
     let data = req.body;
     let codJerarquia = data.codJerarquia;
 
@@ -80,7 +79,7 @@ router.post('/jerarquias/create', (req, res) => {
 });
 // Update document
 router.put('/jerarquias/update', (req, res) => {
-    console.log('/tablas/jerarquias/update');
+    // console.log('/tablas/jerarquias/update');
     const data = req.body;
     const codJerarquia = data.codJerarquia;
     delete data.codJerarquia;
@@ -99,7 +98,7 @@ router.put('/jerarquias/update', (req, res) => {
 });
 // Delete one document
 router.delete('/jerarquias/delete', async (req, res) => {
-    console.log('/tablas/jerarquias/delete');
+    // console.log('/tablas/jerarquias/delete');
     const data = req.body;
     const codJerarquia = data.codJerarquia;
     data.activo = 'N'
@@ -116,7 +115,7 @@ router.delete('/jerarquias/delete', async (req, res) => {
     });
 });
 router.get('/jerarquias/lastCode',  (req, res) => {
-    console.log('/tablas/jerarquias/lastCode');
+    // console.log('/tablas/jerarquias/lastCode');
  
     let sql = "SELECT CAST(codJerarquia AS UNSIGNED) AS codigo FROM jerarquias ORDER BY codigo DESC LIMIT 1";
     conn.query(sql, function(err, rows){
@@ -130,7 +129,7 @@ router.get('/jerarquias/lastCode',  (req, res) => {
 });     // End Jerarquias
 // --- Sacramentos --- //
 router.get('/sacramentos/all', (req, res) => {
-    console.log('tablas/sacramentos/all');
+    // console.log('tablas/sacramentos/all');
     let sql = `SELECT * FROM sacramentos WHERE activo='S' ORDER BY nombreSacramento `;                
     conn.query(sql, function(err, rows){
         // conn.release();
@@ -139,7 +138,7 @@ router.get('/sacramentos/all', (req, res) => {
     });
 });
 router.get('/sacramentos/min', (req, res) => {
-    console.log('tablas/sacramentos/min');
+    // console.log('tablas/sacramentos/min');
     let sql = `SELECT codSacramento, nombreSacramento, precio FROM sacramentos WHERE activo='S' ORDER BY nombreSacramento`;                
     conn.query(sql, function(err, rows){
         if(err) console.log('err => ', err);
@@ -149,7 +148,7 @@ router.get('/sacramentos/min', (req, res) => {
 });
 // Create document
 router.post('/sacramentos/create', (req, res) => {
-    console.log('/tablas/sacramentos/create');
+    // console.log('/tablas/sacramentos/create');
     let data = req.body;
     let codSacramento = data.codSacramento;
 
@@ -166,7 +165,7 @@ router.post('/sacramentos/create', (req, res) => {
 });
 // Update document
 router.put('/sacramentos/update', (req, res) => {
-    console.log('/tablas/sacramentos/update');
+    // console.log('/tablas/sacramentos/update');
     const data = req.body;
     const codSacramento = data.codSacramento;
     delete data.codSacramento;
@@ -184,7 +183,7 @@ router.put('/sacramentos/update', (req, res) => {
 });
 // Delete one document
 router.delete('/sacramentos/delete', async (req, res) => {
-    console.log('/tablas/sacramentos/delete');
+    // console.log('/tablas/sacramentos/delete');
     const data = req.body;
     const codSacramento = data.codSacramento;
     data.activo = 'N'
@@ -201,7 +200,7 @@ router.delete('/sacramentos/delete', async (req, res) => {
     });
 });
 router.get('/sacramentos/lastCode',  (req, res) => {
-    console.log('/tablas/sacramentos/lastCode');
+    // console.log('/tablas/sacramentos/lastCode');
  
     let sql = "SELECT CAST(codSacramento AS UNSIGNED) AS codigo FROM sacramentos ORDER BY codigo DESC LIMIT 1";
     conn.query(sql, function(err, rows){
@@ -216,7 +215,7 @@ router.get('/sacramentos/lastCode',  (req, res) => {
 
 // --- Tipos de Identificacion --- //
 router.get('/tipoidentificacion/all', (req, res) => {
-    console.log('tablas/tipoidentificacion/all');
+    // console.log('tablas/tipoidentificacion/all');
     let sql = `SELECT * FROM tipoidentificacion ORDER BY nombreIdentificacion`;                
     conn.query(sql, function(err, rows){
         // conn.release();
@@ -225,7 +224,7 @@ router.get('/tipoidentificacion/all', (req, res) => {
     });
 });
 router.get('/tipoidentificacion/min', (req, res) => {
-    console.log('tablas/tipoidentificacion/min');
+    // console.log('tablas/tipoidentificacion/min');
     let sql = `SELECT codIdentificacion, nombreIdentificacion FROM tipoidentificacion WHERE activo='S' ORDER BY nombreIdentificacion`;                
     conn.query(sql, function(err, rows){ 
         if(err) console.log('err => ', err);
@@ -235,7 +234,7 @@ router.get('/tipoidentificacion/min', (req, res) => {
 });
 // Create document
 router.post('/tipoidentificacion/create', (req, res) => {
-    console.log('/tablas/tipoidentificacion/create');
+    // console.log('/tablas/tipoidentificacion/create');
     let data = req.body;
     let codIdentificacion = data.codIdentificacion;
 
@@ -252,7 +251,7 @@ router.post('/tipoidentificacion/create', (req, res) => {
 });
 // Update document
 router.put('/tipoidentificacion/update', (req, res) => {
-    console.log('/tablas/tipoidentificacion/update');
+    // console.log('/tablas/tipoidentificacion/update');
     const data = req.body;
     const codIdentificacion = data.codIdentificacion;
     delete data.codIdentificacion;
@@ -270,7 +269,7 @@ router.put('/tipoidentificacion/update', (req, res) => {
 });
 // Delete one document
 router.delete('/tipoidentificacion/delete', async (req, res) => {
-    console.log('/tablas/tipoidentificacion/delete');
+    // console.log('/tablas/tipoidentificacion/delete');
     const data = req.body;
     const codIdentificacion = data.codIdentificacion;
     data.activo = 'N'
@@ -287,7 +286,7 @@ router.delete('/tipoidentificacion/delete', async (req, res) => {
     });
 });
 router.get('/tipoidentificacion/lastCode',  (req, res) => {
-    console.log('/tablas/tipoidentificacion/lastCode');
+    // console.log('/tablas/tipoidentificacion/lastCode');
  
     let sql = "SELECT CAST(codIdentificacion  AS UNSIGNED) AS codigo FROM tipoidentificacion ORDER BY codigo DESC LIMIT 1";
     conn.query(sql, function(err, rows){
@@ -301,7 +300,7 @@ router.get('/tipoidentificacion/lastCode',  (req, res) => {
 });     // End TipoIdentificacion
 // ---- Tipo Institucion ------- //
 router.get('/tipoInstitucion/all', (req, res) => {
-    console.log('tablas/tipoInstitucion/all');
+    // console.log('tablas/tipoInstitucion/all');
     let sql = `SELECT * FROM tipoinstitucion ORDER BY nombreTipo`;                
     conn.query(sql, function(err, rows){
         // conn.release();
@@ -311,7 +310,7 @@ router.get('/tipoInstitucion/all', (req, res) => {
 
 });
 router.get('/tipoInstitucion/min', (req, res) => {
-    console.log('tablas/tipoInstitucion/min');
+    // console.log('tablas/tipoInstitucion/min');
     let sql = `SELECT tipoInstitucion, nombreTipo FROM tipoinstitucion WHERE activo='S' ORDER BY nombreTipo`;                
     conn.query(sql, function(err, rows){
         if(err) console.log('err => ', err);
@@ -321,7 +320,7 @@ router.get('/tipoInstitucion/min', (req, res) => {
 });
 // Read oned
 router.get('/tipoinstitucion/one', (req, res) => {
-    console.log('tablas/tipoInstitucion/one');
+    // console.log('tablas/tipoInstitucion/one');
     res.json({
         status: 'ok',
         crud: 'read one'
@@ -329,7 +328,7 @@ router.get('/tipoinstitucion/one', (req, res) => {
 });
 // Create document
 router.post('/tipoinstitucion/create', (req, res) => {
-    console.log('/tablas/tipoinstitucion/create');
+    // console.log('/tablas/tipoinstitucion/create');
     let data = req.body;
     let tipoinstitucion = data.tipoinstitucion;
 
@@ -347,7 +346,7 @@ router.post('/tipoinstitucion/create', (req, res) => {
 });
 // Update document
 router.put('/tipoinstitucion/update', (req, res) => {
-    console.log('/tablas/tipoinstitucion/update');
+    // console.log('/tablas/tipoinstitucion/update');
     const data = req.body;
     const tipoInstitucion = data.tipoInstitucion;
     delete data.tipoInstitucion;
@@ -366,7 +365,7 @@ router.put('/tipoinstitucion/update', (req, res) => {
 });
 // Delete one document
 router.delete('/tipoinstitucion/delete', async (req, res) => {
-    console.log('/tablas/tipoinstitucion/delete');
+    // console.log('/tablas/tipoinstitucion/delete');
     const data = req.body;
     const tipoInstitucion = data.tipoInstitucion;
     data.activo = 'N'
@@ -383,7 +382,7 @@ router.delete('/tipoinstitucion/delete', async (req, res) => {
     });
 });
 router.get('/tipoinstitucion/lastCode',  (req, res) => {
-    console.log('/tablas/tipoinstitucion/lastCode');
+    // console.log('/tablas/tipoinstitucion/lastCode');
  
     let sql = "SELECT CAST(tipoinstitucion AS UNSIGNED) AS codigo FROM tipoinstitucion ORDER BY codigo DESC LIMIT 1";
     conn.query(sql, function(err, rows){
@@ -398,7 +397,7 @@ router.get('/tipoinstitucion/lastCode',  (req, res) => {
 });     // End TipoInstitucion
 // --- Cargos Religiosos --- //
 router.get('/cargoreligioso/all', (req, res) => {
-    console.log('tablas/cargorelioso/all');
+    // console.log('tablas/cargorelioso/all');
     let sql = `SELECT * FROM cargoreligioso ORDER BY nombreCargo`;                
     conn.query(sql, function(err, rows){
         // conn.release();
@@ -407,7 +406,7 @@ router.get('/cargoreligioso/all', (req, res) => {
     });
 });
 router.get('/cargoreligioso/min', (req, res) => {
-    console.log('tablas/cargoReligioso/min');
+    // console.log('tablas/cargoReligioso/min');
     let sql = `SELECT codCargo, nombreCargo FROM cargoreligioso WHERE activo='S' ORDER BY nombreCargo`;                
     conn.query(sql, function(err, rows){
         if(err) console.log('err => ', err);
@@ -417,7 +416,7 @@ router.get('/cargoreligioso/min', (req, res) => {
 });
 // Create document
 router.post('/cargoreligioso/create', (req, res) => {
-    console.log('/tablas/cargoreligioso/create');
+    // console.log('/tablas/cargoreligioso/create');
     let data = req.body;
     let codCargo = data.codCargo;
 
@@ -434,7 +433,7 @@ router.post('/cargoreligioso/create', (req, res) => {
 });
 // Update document
 router.put('/cargoreligioso/update', (req, res) => {
-    console.log('/tablas/cargoreligioso/update');
+    // console.log('/tablas/cargoreligioso/update');
     const data = req.body;
     const codCargo = data.codCargo;
     delete data.codCargo;
@@ -453,7 +452,7 @@ router.put('/cargoreligioso/update', (req, res) => {
 });
 // Delete one document
 router.delete('/cargoreligioso/delete', async (req, res) => {
-    console.log('/tablas/cargoreligioso/delete');
+    // console.log('/tablas/cargoreligioso/delete');
     const data = req.body;
     const codCargo = data.codCargo;
     data.activo = 'N';
@@ -470,7 +469,7 @@ router.delete('/cargoreligioso/delete', async (req, res) => {
     });
 });
 router.get('/cargoreligioso/lastCode',  (req, res) => {
-    console.log('/tablas/cargoreligioso/lastCode');
+    // console.log('/tablas/cargoreligioso/lastCode');
  
     let sql = "SELECT CAST(codCargo AS UNSIGNED) AS codigo FROM cargoreligioso ORDER BY codigo DESC LIMIT 1";
     conn.query(sql, function(err, rows){

@@ -9,7 +9,7 @@ moment.locale('es');
 
 // const currentUser = state.User_Name;
 router.get('/lastCode',  (req, res) => {
-    console.log('instituciones/lastCode');
+    // console.log('instituciones/lastCode');
  
     let sql = "SELECT CAST(codInstitucion AS UNSIGNED) AS codigo FROM instituciones ORDER BY codigo DESC LIMIT 1";
     conn.query(sql, function(err, rows){
@@ -22,7 +22,7 @@ router.get('/lastCode',  (req, res) => {
     });    
 });
 router.get('instituciones/:codInstitucion', (req, res) => {
-    console.log('/instituciones/:codInstitucion');
+    // console.log('/instituciones/:codInstitucion');
     console.log('req.params = ', req.params.codInstitucion);
     res.json({
         status: 'ok',
@@ -32,7 +32,7 @@ router.get('instituciones/:codInstitucion', (req, res) => {
 });
 // Get all 
 router.get('/all', async (req, res) => {
-    console.log('instituciones/all');
+    // console.log('instituciones/all');
     // let sql = `SELECT codInstitucion, nombreInstitucion
     //             FROM instituciones WHERE activo='S' ORDER BY nombreInstitucion`;
     let sql = `SELECT * , (SELECT count(*) FROM sellosinstitucion WHERE sellosinstitucion.codInstitucion = instituciones.codInstitucion) AS num_sellos
@@ -45,7 +45,7 @@ router.get('/all', async (req, res) => {
 
 });
 router.get('/instituciones_min', (req, res) => {
-    console.log('instituciones/instituciones_min');
+    // console.log('instituciones/instituciones_min');
 
     const sql = "SELECT codInstitucion, nombreInstitucion FROM instituciones WHERE activo = 'S' ORDER BY nombreInstitucion";
     conn.query(sql, function(err, rows){
@@ -55,7 +55,7 @@ router.get('/instituciones_min', (req, res) => {
     });
 });
 router.get('/all_rel', async (req, res) => {
-    console.log('instituciones/all_rel');
+    // console.log('instituciones/all_rel');
 
     let sql ='CALL Instituciones_all_rel()';
     conn.query(sql, function(err, rows){
@@ -100,7 +100,7 @@ router.get('/sello/:codInstitucion', async (req, res) => {
 
 // Create Record
 router.post('/create', async (req, res) => {
-    console.log('/instituciones/create');
+    // console.log('/instituciones/create');
     // const {username, fullname, role, password, mobile} = req.body;
 
     let data = req.body;
@@ -128,7 +128,7 @@ router.post('/create', async (req, res) => {
 });
 // Update document
 router.put('/update', (req, res) => {
-    console.log('/instituciones/update');
+    // console.log('/instituciones/update');
     const data = req.body;
     const codInstitucion = data.codInstitucion;
     delete data.codInstitucion;
@@ -148,7 +148,7 @@ router.put('/update', (req, res) => {
 });
 // Delete one document
 router.delete('/delete', async (req, res) => {
-    console.log('/instituciones/delete');
+    // console.log('/instituciones/delete');
     const data = req.body;
     const codInstitucion = data.codInstitucion;
     data.activo = 'N'
@@ -166,4 +166,3 @@ router.delete('/delete', async (req, res) => {
     }); 
 });
 module.exports = router;
-// End

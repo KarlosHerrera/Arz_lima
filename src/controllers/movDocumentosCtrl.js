@@ -48,7 +48,7 @@ router.post('/checkDoc',  (req, res) => {
 
 // Get all documents
 router.post('/all', (req, res) => {
-    console.log('movDocumentos/all');
+    // console.log('movDocumentos/all');
     let data = req.body;
     let desde = data.desde;
     let hasta = data.hasta;
@@ -79,7 +79,7 @@ router.post('/id', async (req, res) => {
 
 // Create document
 router.post('/create', (req, res) => {
-    console.log('/create');
+    // console.log('/create');
     // NuevoDocumento();
     let data = req.body;
     let nroDoc = data.docLegalizacion;
@@ -103,7 +103,7 @@ router.post('/create', (req, res) => {
 });
 // Update document
 router.put('/update', (req, res) => {
-    console.log('/update');
+    // console.log('/update');
     const data = req.body;
     const docLegalizacion = data.docLegalizacion;
     delete data.docLegalizacion;
@@ -125,7 +125,7 @@ router.put('/update', (req, res) => {
 });
 // Delete one document
 router.delete('/delete/', async (req, res) => {
-    console.log('/delete');
+    // console.log('/delete');
     // console.log(req.params);
     // const doc= req.params.docLegalizacion;
     const data = req.body;

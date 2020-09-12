@@ -8,7 +8,7 @@ moment.locale('es');
 
 // const currentUser = state.User_Name;
 router.get('/lastCode',  (req, res) => {
-    console.log('religiosos/lastCode');
+    // console.log('religiosos/lastCode');
  
     let sql = "SELECT CAST(codReligioso AS UNSIGNED) AS codigo FROM religiosos ORDER BY codigo DESC LIMIT 1";
     conn.query(sql, function(err, rows){
@@ -54,7 +54,7 @@ router.get('/all', (req, res) => {
 
 });
 router.get('/Religiosos_min', (req, res) => {
-    console.log('Religiosos/Religiosos_min');
+    // console.log('Religiosos/Religiosos_min');
 
     const sql = "SELECT codReligioso, apellidosNombres FROM religiosos WHERE activo = 'S' ORDER BY apellidosNombres";
     conn.query(sql, function(err, rows){
@@ -65,7 +65,7 @@ router.get('/Religiosos_min', (req, res) => {
     });
 });
 router.get('/all_rel', async (req, res) => {
-    console.log('religiosos/all_rel');
+    // console.log('religiosos/all_rel');
 
     let sql ='CALL Religiosos_all_rel()';
     conn.query(sql, function(err, rows){
@@ -93,7 +93,7 @@ router.post('/id', async (req, res) => {
 
 // Create document
 router.post('/create', async (req, res) => {
-    console.log('/religiosos/create');
+    // console.log('/religiosos/create');
     // const {docLegalizacion, fechaDoc, codInstitucion, nombreInstitucion} = req.body;
     let data = req.body;
     let codReligioso = data.codReligioso;
@@ -112,7 +112,7 @@ router.post('/create', async (req, res) => {
 });
 // Update document
 router.put('/update', (req, res) => {
-    console.log('/religiosos/update');
+    // console.log('/religiosos/update');
     const data = req.body;
     const codReligioso = data.codReligioso;
     delete data.codReligioso;
@@ -133,7 +133,7 @@ router.put('/update', (req, res) => {
 // Delete one document
 // router.delete('/:id', (req, res) => {
 router.delete('/delete', async (req, res) => {
-    console.log('/religiosos/delete');
+    // console.log('/religiosos/delete');
     const data = req.body;
     const codReligioso= data.codReligioso;
     data.activo = 'N'

@@ -29,7 +29,7 @@ router.get('/:codInstitucion', async (req, res) => {
 
 // Delete one 
 router.delete('/delete/', async (req, res) => {
-    console.log('/sellos/delete');
+    // console.log('/sellos/delete');
 
     const data = req.body;
     const codSello = data.codSello;
@@ -49,13 +49,13 @@ router.delete('/delete/', async (req, res) => {
 
 let ruta = require('./../assets/json/config_img.json');
 let pathImg  = path.join(__dirname, '../..', './public', ruta.serverSellos);
-console.log('multer.pathImg ==>', pathImg);
+// console.log('multer.pathImg ==>', pathImg);
 // let pathImg = ruta.serverSellos;
 // pathImg = '/dev/arzobispado-lima/public/'+ruta.serverSellos;
 
 let storage = multer.diskStorage({
   destination: function(req, file, callback){
-    console.log('multer.destination...path ==>> ', pathImg);
+    // console.log('multer.destination...path ==>> ', pathImg);
     callback(null, pathImg);
   },
   filename: function(req, file, callback){
@@ -68,7 +68,7 @@ let storage = multer.diskStorage({
 let upload = multer({ storage });
 // Enviando un form, con el archivo (imgSello, es el valor del input.name)
 router.post('/create/', upload.single('imgSello') , function(req, res){
-    console.log('/sellos/create');
+    // console.log('/sellos/create');
     let data = req.body;
 
     data.creado = moment().format('YYYY-MM-DD hh:mm:ss');
@@ -86,7 +86,7 @@ router.post('/create/', upload.single('imgSello') , function(req, res){
     // res.json({ status: true, msg: 'Ok.', file: req.imgSello});
 });
 router.get('/consecutivo/:codInstitucion', function(req, res){
-    console.log('/sellos/consecutivo/');
+    // console.log('/sellos/consecutivo/');
     let codInstitucion = req.params.codInstitucion;
     console.log('codInstitucion=', codInstitucion);
     let sql = 'SELECT count(*) AS ultConsecutivo FROM sellosinstitucion WHERE codInstitucion=? ORDER BY codSello;';

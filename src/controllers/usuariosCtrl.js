@@ -8,7 +8,7 @@ const  moment =require('moment');
 moment.locale('es');
 
 router.get('/all', (req, res) => {
-    console.log('/usuarios/all');
+    // console.log('/usuarios/all');
     let sql = `SELECT usuario, nombreUsuario, usuarios.codInstitucion, instituciones.nombreInstitucion, rolUsuario, usuarios.email
                 FROM usuarios 
                 LEFT JOIN instituciones ON instituciones.codInstitucion = usuarios.codInstitucion
@@ -21,7 +21,7 @@ router.get('/all', (req, res) => {
     });
 });
 router.get('/min', (req, res) => {
-    console.log('/usuarios/min');
+    // console.log('/usuarios/min');
 
     let sql = `SELECT usuario, nombreusuario FROM usuarios WHERE activo='S' ORDER BY usuario`;    
 
@@ -33,7 +33,7 @@ router.get('/min', (req, res) => {
 });
 // Create document
 router.post('/create', (req, res) => {
-    console.log('/usuarios/create');
+    // console.log('/usuarios/create');
     let data = req.body;
     let usuario = data.usuario;
 
@@ -50,7 +50,7 @@ router.post('/create', (req, res) => {
 });
 // Update document
 router.put('/update', (req, res) => {
-    console.log('/usuarios/update');
+    // console.log('/usuarios/update');
     const data = req.body;
     const usuario = data.usuario;
     delete data.usuario;
@@ -68,7 +68,7 @@ router.put('/update', (req, res) => {
 });
 // Delete document
 router.delete('/delete', async (req, res) => {
-    console.log('/usuarios/delete');
+    // console.log('/usuarios/delete');
     const data = req.body;
     const usuario = data.usuario;
     delete data.usuario;    
@@ -103,7 +103,7 @@ router.get('/usuario/:usuario', function(req, res){
 
 });
 router.get('/one/:usuario', function(req, res){
-    console.log(`/usuarios/one/?${req.params.usuario}`);
+    // console.log(`/usuarios/one/?${req.params.usuario}`);
     let usuario = req.params.usuario;
 
     let sql = "SELECT usuario, nombreUsuario, rolUsuario, codInstitucion, movil, email FROM usuarios WHERE usuario = ? AND activo = 'S'";
@@ -121,7 +121,7 @@ router.get('/one/:usuario', function(req, res){
 });
 
 router.get('/roles', (req, res) => {
-    console.log('/usuarios/roles');
+    // console.log('/usuarios/roles');
 
     let sql = `SELECT rolUsuario FROM rolesusuarios ORDER BY nivel`;    
     conn.query(sql, function(err, rows){ 
@@ -130,7 +130,7 @@ router.get('/roles', (req, res) => {
     });
 });
 router.post('/login', (req, res) => {
-    console.log('/usuarios/login');
+    // console.log('/usuarios/login');
     let data = req.body;
     let usuario = data.usuario;
     let clave = data.clave;
