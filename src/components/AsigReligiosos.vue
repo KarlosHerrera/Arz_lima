@@ -111,7 +111,6 @@
           </tbody>
         </table>          
       </div>        
-
     </div>
   </div>
   <asigna-cargo :datosAsignacion="rec" v-if='verAsignacionCargo' @close='verAsignacionCargo=false' @retorno_asignacion='retornoAsignacion'></asigna-cargo>
