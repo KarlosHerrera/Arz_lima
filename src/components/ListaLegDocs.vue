@@ -8,7 +8,7 @@
     <div class='col-3 d-flex justify-content-start align-items-center'>
       <button class='btn btn-sm btn_1 btn_new' @click='createItem'>Nuevo</button>
       <!-- <button class='btn btn-sm btn_1' @click='test2'>Test 2</button>  -->
-      <button class='btn btn-sm btn_1 btn_prt' @click='print_1' :disabled='listDocs.length == 0'>Reporte</button>
+      <button class='btn btn-sm btn_1 btn_prt' @click='print_2' :disabled='listDocs.length == 0'>Reporte</button>
     </div>
     <div class='col-5 d-flex justify-content-center'>
       <desde-hasta  :desde='desde' :hasta='hasta' @valor_fechas='aceptaFechas'></desde-hasta>
@@ -83,7 +83,7 @@ export default {
     routeDet: '/DetalleLegDocs',
     listDocuments: [],
     listDocs: [],
-    elemSearch: ['docLegalizacion','nombreInstitucion','apellidosNombres','nombreSacramento','ticket','refNombre'],
+    elemSearch: ['docLegalizacion','nombreInstitucion','apellidosNombres','nombreSacramento','ticket','refNumero','refNombre'],
     ascending: false,
     sortField: '',
     fechaHoy: moment(), //new Date(),
@@ -165,7 +165,7 @@ export default {
       // console.log(`aceptaFechas(${values.del}, ${values.al})`);
       this.load_DocLeg(values.del, values.al); 
     },
-    test2(){      
+    test2(){
       let new_1 =  {
         activo: "S",
         docLegalizacion: "1003",
@@ -205,23 +205,47 @@ export default {
       let periodo = moment(this.desde).format('DD/MM/YYYY')+'  -  '+ moment(this.hasta).format('DD/MM/YYYY');
       let usuario = 'Usuario: '+this.$store.state.User_Name;
       let doc = new jsPDF();
-      doc.setLanguage("en-US")
+      doc.setLanguage("en-US")  //
       doc.page = 1;
 
 
       // Generando Tabla
       let elem = this.$refs[tabla];
       let res = doc.autoTableHtmlToJson(elem);
-      let newHeader = res.columns;
+      let newHeader = res.columns;  // columnas
+      console.log('newHeader', newHeader,)
       newHeader.shift();  // delete first element
       newHeader.pop();    // delete last element
+      console.log('==================================================')
+      console.log('res.data =', res.data);
+      console.log('--------------------------------------------------')
       let newBody = res.data.map(function(ele){
-        // return ele.slice(0,1);   // delete first element/columna
+        // return ele.slice(0,1);   // delete first element/columna (#)
         return ele.shift();
-      })      
+      });     
+      // console.log('1. newBody =', newBody) 
       newBody = res.data.map(function(ele){
-        return ele.slice(0,-1);   // delete last element/columna
-      })
+        return ele.slice(0,-1);   // delete last element/columna (Opciones)
+      });
+// console.log('2. newBody =', newBody)       
+      // newBody = res.data.map(function(ele){
+      //   return ele.slice(0,-1);   // delete 
+      // })
+// console.log('3. newBody =', newBody)   
+      this.listDocs.forEach( (ele) => { 
+        console.log('ele =', ele)
+        // if(){
+
+
+
+
+        // }
+        
+        
+        // if( ele.activo == 'S') nTotPrecio += ele.precio; } 
+        
+        
+      });  
 
       // Totales (precio)
       let nTotPrecio = 0;
@@ -259,12 +283,13 @@ export default {
         },
         columnStyles: {
           1: {halign: 'center'},
-          2: {cellWidth: 46 },
-          3: {cellWidth: 50 },
+          2: {cellWidth: 40 },
+          3: {cellWidth: 30 },
+          5: {cellWidth: 30 },     
           6: {halign: 'right'}
         },
         head: [newHeader],    // Cabecera de la Tabla
-        body: newBody,        // Institucion','Religioso','Ticket','Beneficiario','Precio','Sacramento']
+        body: newBody,        // Cuerpo de la Tabla (Datos)
         // didDrawCell: (data) => {
         //   console.log(data.column)
         // },
@@ -289,6 +314,7 @@ export default {
         doc.setFontSize(8)
         doc.text('Pag. ' + String(i) + ' / ' + String(pageCount), 10, 290, null, null, "left");
       }
+
       // doc.addPage();
       // doc.setFillColor ( 100 , 100 , 240 ); 
       // doc.setDrawColor ( 100 , 100 , 0 );      
@@ -301,15 +327,126 @@ export default {
 
       // doc.save('Informe_Docs');  
       // window.open(doc.output('Informe_Docs'), '_blank');     
-    }
-  },
-  watch: {
+    },
+    print_2(){
+        // console.log('print_1()');
+        if ( this.listDocs.length == 0 ) return false;
+        let tabla = 'lst_Docs';
+        let fecha = moment().format('DD/MM/YYYY hh:mma');
+        let periodo = moment(this.desde).format('DD/MM/YYYY')+'  -  '+ moment(this.hasta).format('DD/MM/YYYY');
+        let usuario = 'Usuario: '+this.$store.state.User_Name;
+        let doc = new jsPDF();
+        doc.setLanguage("en-US")  //
+        doc.page = 1;
 
+
+        // Generando Tabla
+        let elem = this.$refs[tabla];
+        let res = doc.autoTableHtmlToJson(elem);
+        let newHeader = res.columns;  // columnas
+        newHeader.shift();  // delete first element
+
+        newHeader.pop();    // delete last element
+        console.log('res.data =', res.data);
+        let newBody = res.data.map(function(ele){
+          // return ele.slice(0,1);   // delete first element/columna (#)
+          return ele.shift();
+        })     
+        console.log('1. newBody =', newBody) 
+        newBody = res.data.map(function(ele){
+          return ele.slice(0,-1);   // delete last element/columna (Opciones)
+        })
+        console.log('2. newBody =', newBody)       
+        // newBody = res.data.map(function(ele){
+        //   return ele.slice(0,-1);   // delete 
+        // })
+        console.log('3. newBody =', newBody)       
+        // Totales (precio)
+        let nTotPrecio = 0;
+        this.listDocs.forEach( (ele) => { if( ele.activo == 'S') nTotPrecio += ele.precio; } );  
+        let items = this.listDocs.length;
+        nTotPrecio = numeral(nTotPrecio).format('0.00');
+        newBody.push([
+          {content: `Reg.  ${items}`, colSpan: 1, lineWidth: 0, styles: { fontStyle: 'bold', halign: 'left', lineWidth: 0, fillColor: [220, 220, 220] } },
+          {content: `T o t a l`, colSpan: 5, styles: { fontStyle: 'bold', halign: 'right', lineWidth: 0, fillColor: [220, 220, 220] } }, 
+          {content: `${nTotPrecio}`, colSpan: 1, styles: { fontStyle: 'bold', halign: 'right', lineWidth: 0, fillColor: [220, 220, 220] } },
+          {content: ' ', colSpan: 1, styles: { fontStyle: 'bold', halign: 'right', lineWidth:0,  fillColor: [220, 220, 220] } }
+
+          ]);  
+        //  ---------------
+        // console.log('newHeader', newHeader)
+        // console.log('newBody', newBody)
+        doc.autoTable({
+          theme: 'grid',
+          margin: {top: 18, left: 8, right: 8, bottom: 10},
+          styles: {fontSize: 8}, // margin: 3
+          tableWidth: 'auto',
+          headStyles: {
+            fontStyle: 'bold',  // normal
+            textColor: [0, 0, 0],
+            fillColor: [220, 220, 220], // lightgray 211
+            minCellHeight: 5,
+            columnStyles: {
+              2: {halign: 'center'},
+              6: {halign: 'right'}
+            },
+          },
+          bodyStyles: {
+            textColor: [0, 0, 0], // black
+
+          },
+          columnStyles: {
+            1: {halign: 'center'},
+            2: {cellWidth: 40 },
+            3: {cellWidth: 30 },
+            5: {cellWidth: 30 },     
+            6: {halign: 'right'}
+          },
+          head: [newHeader],    // Cabecera de la Tabla
+          body: newBody,        // Cuerpo de la Tabla (Datos)
+          // didDrawCell: (data) => {
+          //   console.log(data.column)
+          // },
+          });
+        // Agregando Cabecera/Pie de Pagina
+        let pageCount = doc.internal.getNumberOfPages();
+        doc.setFontSize(8)
+        for(var i = 1; i <= pageCount; i++) {
+          doc.setPage(i);   // Go to page i
+          // Cabecera
+          doc.setFontSize(11)
+          doc.text("Arzobispado de Lima", 8, 10)
+          doc.setFontSize(10)
+          doc.text("Legalización de Documentos", 85, 10)
+          doc.setFontSize(8)
+          doc.text(fecha, 175, 10)
+          doc.setFontSize(9)
+          doc.text(periodo, 90, 15)
+          doc.setFontSize(8)
+          doc.text(usuario, 200, 15,'right')
+          // Pie
+          doc.setFontSize(8)
+          doc.text('Pag. ' + String(i) + ' / ' + String(pageCount), 10, 290, null, null, "left");
+        }
+        // doc.addPage();
+        // doc.setFillColor ( 100 , 100 , 240 ); 
+        // doc.setDrawColor ( 100 , 100 , 0 );      
+        // doc.setLineWidth ( 1 );
+        // doc.roundedRect ( 20 , 30 , 20 , 10 , 3 , 3 , 'FD' );    
+
+        doc.autoPrint({variant: 'non-conform'});
+        doc.output('dataurlnewwindow', {filename: 'Informe_Docs.pdf'}); // Funciona, solucionar el nombre
+        // doc.output('save', 'Informe_Docs.pdf');  
+
+        // doc.save('Informe_Docs');  
+        // window.open(doc.output('Informe_Docs'), '_blank');     
+      }
+ 
   },
   mounted(){
     // console.log('ListaLegDocs.created()');
     this.setComponent()
-   }
+  }
 
 }
 </script>
