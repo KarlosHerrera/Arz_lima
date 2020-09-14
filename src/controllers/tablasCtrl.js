@@ -130,7 +130,7 @@ router.get('/jerarquias/lastCode',  (req, res) => {
 // --- Sacramentos --- //
 router.get('/sacramentos/all', (req, res) => {
     // console.log('tablas/sacramentos/all');
-    let sql = `SELECT * FROM sacramentos WHERE activo='S' ORDER BY nombreSacramento `;                
+    let sql = `SELECT * FROM sacramentos WHERE activo='S' ORDER BY nombreSacramento`;                
     conn.query(sql, function(err, rows){
         // conn.release();
         if(err) console.log('err => ', err);

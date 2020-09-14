@@ -33,10 +33,10 @@ router.get('/sellosfirmas', (req, res) => {
     // console.log('asignacionCargos/sellosfirmas');
 
     const sql = `SELECT asignacioncargos.codInstitucion, asignacioncargos.codReligioso, religiosos.apellidosNombres,
-    asignacioncargos.codCargo,cargoReligioso.nombreCargo, (SELECT count(*) FROM firmareligiosos WHERE firmareligiosos.codReligioso = asignacioncargos.codReligioso) AS num_firmas
+    asignacioncargos.codCargo,cargoreligioso.nombreCargo, (SELECT count(*) FROM firmareligiosos WHERE firmareligiosos.codReligioso = asignacioncargos.codReligioso) AS num_firmas
     FROM asignacioncargos
-    LEFT JOIN Religiosos ON asignacioncargos.codReligioso = Religiosos.codReligioso
-    LEFT JOIN cargoReligioso ON asignacioncargos.codCargo = cargoReligioso.codCargo
+    LEFT JOIN religiosos ON asignacioncargos.codReligioso = religiosos.codReligioso
+    LEFT JOIN cargoreligioso ON asignacioncargos.codCargo = cargoreligioso.codCargo
     WHERE asignacioncargos.activo='S' AND asignacioncargos.ejerciendoCargo='S'
     ORDER BY asignacioncargos.codInstitucion AND asignacioncargos.codCargo`;
 

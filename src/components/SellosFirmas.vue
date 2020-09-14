@@ -258,7 +258,7 @@ select > option:hover {
   height: 2rem;
 }
 .btnSellos, .btnFirmas {
-  width: 5rem;
+  width: 5.1rem;
 }
 .boton {
     width: 6rem;;

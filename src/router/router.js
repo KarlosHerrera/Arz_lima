@@ -172,7 +172,7 @@ router.beforeEach( async function(to, from, next){
   let isAuthorized = store.default.getters.getAuthorized;
   // console.log('getAuthorized: ', isAuthorized);
 
-console.log('from: ', from.path+' - to: '+to.path);
+// console.log('from: ', from.path+' - to: '+to.path);
 if (to.name !== 'Login' && !isAuthorized) next({ name: 'Login' })
 else next()
   // if( !from.name ) {
