@@ -8,7 +8,7 @@
     <div class='col-3 d-flex justify-content-start align-items-center'>
       <button class='btn btn-sm btn_1 btn_new' @click='createItem'>Nuevo</button>
       <!-- <button class='btn btn-sm btn_1' @click='test2'>Test 2</button>  -->
-      <button class='btn btn-sm btn_1 btn_prt' @click='print_2' :disabled='listDocs.length == 0'>Reporte</button>
+      <button class='btn btn-sm btn_1 btn_prt' @click='print_1' :disabled='listDocs.length == 0'>Reporte</button>
     </div>
     <div class='col-5 d-flex justify-content-center'>
       <desde-hasta  :desde='desde' :hasta='hasta' @valor_fechas='aceptaFechas'></desde-hasta>
@@ -29,6 +29,7 @@
           <th @click="sortTable('ticket', $event)">Comprobante<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'role')? 'arrow': 'noarrow']"></span></th>
           <th @click="sortTable('nombreReligioso', $event)">Religioso<span :class="sortArrow"></span></th>
           <th @click="sortTable('ticket', $event)">Nro.Eclesias.<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'role')? 'arrow': 'noarrow']"></span></th>       
+ <th class='align_right' @click="sortTable('precio', $event)">Precio<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'role')? 'arrow': 'noarrow']"></span></th>          
           <th @click="sortTable('nombreSacramento', $event)">Const./Otros<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'role')? 'arrow': 'noarrow']"></span></th>
           <th class='text-center' v-if='true'>Opciones</th>
         </tr>
@@ -44,6 +45,7 @@
           <td> {{ doc.ticket }} </td>
           <td class='text_overflow'> {{ doc.apellidosNombres }} </td>
           <td> {{ doc.refNumero }} </td>
+<td class='align_right'> {{ doc.precio | frmDecimal }} </td>
           <td> {{ doc.nombreSacramento }} </td>
           <td class=' d-flex justify-content-center align-items-center' v-if='true' >
             <button class='btn btn_actions btn_1' @click='updateItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Editar</button>
@@ -210,12 +212,16 @@ export default {
 
 
       // Generando Tabla
+
       let elem = this.$refs[tabla];
       let res = doc.autoTableHtmlToJson(elem);
       let newHeader = res.columns;  // columnas
+
       console.log('newHeader', newHeader,)
       newHeader.shift();  // delete first element
       newHeader.pop();    // delete last element
+      newHeader[0] = 'Nro.';
+      console.log('newHeader', newHeader)
       console.log('==================================================')
       console.log('res.data =', res.data);
       console.log('--------------------------------------------------')
@@ -253,7 +259,7 @@ export default {
       let items = this.listDocs.length;
       nTotPrecio = numeral(nTotPrecio).format('0.00');
       newBody.push([
-        {content: `Reg.  ${items}`, colSpan: 1, lineWidth: 0, styles: { fontStyle: 'bold', halign: 'left', lineWidth: 0, fillColor: [220, 220, 220] } },
+        {content: `Reg.  ${items}`, colSpan: 2, lineWidth: 0, styles: { fontStyle: 'bold', halign: 'left', lineWidth: 0, fillColor: [220, 220, 220] } },
         {content: `T o t a l`, colSpan: 5, styles: { fontStyle: 'bold', halign: 'right', lineWidth: 0, fillColor: [220, 220, 220] } }, 
         {content: `${nTotPrecio}`, colSpan: 1, styles: { fontStyle: 'bold', halign: 'right', lineWidth: 0, fillColor: [220, 220, 220] } },
         {content: ' ', colSpan: 1, styles: { fontStyle: 'bold', halign: 'right', lineWidth:0,  fillColor: [220, 220, 220] } }
@@ -264,7 +270,7 @@ export default {
       // console.log('newBody', newBody)
       doc.autoTable({
         theme: 'grid',
-        margin: {top: 18, left: 8, right: 8, bottom: 10},
+        margin: {top: 18, left: 8, right: 8, bottom: 12},
         styles: {fontSize: 8}, // margin: 3
         tableWidth: 'auto',
         headStyles: {
@@ -283,10 +289,10 @@ export default {
         },
         columnStyles: {
           1: {halign: 'center'},
-          2: {cellWidth: 40 },
-          3: {cellWidth: 30 },
+          2: {cellWidth: 30 },
+          3: {cellWidth: 25 },
           5: {cellWidth: 30 },     
-          6: {halign: 'right'}
+          7: {halign: 'right'}
         },
         head: [newHeader],    // Cabecera de la Tabla
         body: newBody,        // Cuerpo de la Tabla (Datos)
@@ -378,7 +384,7 @@ export default {
         // console.log('newBody', newBody)
         doc.autoTable({
           theme: 'grid',
-          margin: {top: 18, left: 8, right: 8, bottom: 10},
+          margin: {top: 18, left: 5, right: 5, bottom: 10},
           styles: {fontSize: 8}, // margin: 3
           tableWidth: 'auto',
           headStyles: {
@@ -397,7 +403,7 @@ export default {
           },
           columnStyles: {
             1: {halign: 'center'},
-            2: {cellWidth: 40 },
+            2: {cellWidth: 30 },
             3: {cellWidth: 30 },
             5: {cellWidth: 30 },     
             6: {halign: 'right'}

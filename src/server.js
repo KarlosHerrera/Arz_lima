@@ -43,7 +43,7 @@ const firmasCtrl = require('./controllers/firmasCtrl');
 const usuariosCtrl = require('./controllers/usuariosCtrl');
 
 // settings
-app.set('port', process.env.PORT || 3003);  // Configuracion de puerto (variables globales)
+app.set('port', process.env.PORT || 3000);  // Configuracion de puerto (variables globales)
 
 app.use('/', serveStatic(path.join(__dirname,'./../dist')));  // Carga 
 
