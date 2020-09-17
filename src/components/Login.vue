@@ -50,6 +50,7 @@
 </transition>    
 
 </template>
+
 <script>
 console.log('<< login.vue >>');    
 
@@ -210,18 +211,24 @@ export default {
 <style scoped src='@/assets/css/form.css'></style>
 <style scoped src="@/assets/css/crud.css"></style>
 <style scoped>
+.modal-mask {
+ height: 100%;  
+}
+.modal-wrapper {
+    height: 60%;  
+}
 .modal-container {
-    width: 40%;
-    height: 30%;
-    min-width: 450px;
+    width: 50%;
+    height: 40%;
+    /* min-width: 450px; */
 } 
 .modal-header {
-    height: 12%;
+    height: 10%;
     padding: 0.40rem 0.35rem;
 }
 .modal-body {
   /* width: 100%; */
-  height: 70%;
+  height: 75%;
   background-color: lightgray;
   margin: 0;
   padding: 0;
@@ -230,7 +237,7 @@ export default {
 .modal-footer {
     margin: 0;
     padding: 0;
-    height: 17%;  
+    height: 15%;  
 }
 #formLogin {
     width: 100%;
