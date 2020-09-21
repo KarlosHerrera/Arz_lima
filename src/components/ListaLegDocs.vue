@@ -226,12 +226,12 @@ export default {
       console.log('res.data =', res.data);
       console.log('--------------------------------------------------')
       let newBody = res.data.map(function(ele){
-        // return ele.slice(0,1);   // delete first element/columna (#)
+        // return ele.slice(0,1);   // delete first element/column (#)
         return ele.shift();
       });     
       // console.log('1. newBody =', newBody) 
       newBody = res.data.map(function(ele){
-        return ele.slice(0,-1);   // delete last element/columna (Opciones)
+        return ele.slice(0,-1);   // delete last element/column (Opciones)
       });
 // console.log('2. newBody =', newBody)       
       // newBody = res.data.map(function(ele){
@@ -241,15 +241,9 @@ export default {
       this.listDocs.forEach( (ele) => { 
         console.log('ele =', ele)
         // if(){
-
-
-
-
         // }
         
-        
         // if( ele.activo == 'S') nTotPrecio += ele.precio; } 
-        
         
       });  
 

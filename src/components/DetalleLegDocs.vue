@@ -607,6 +607,6 @@ select > option:hover {
   margin: 0 0.27rem;
 }
 .vdp-datepicker, .miEstilo {
-  background-color: rgb(185, 127, 127) !important;
+  /* background-color: rgb(185, 127, 127) !important; */
 }
 </style>
