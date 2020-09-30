@@ -1,7 +1,21 @@
 {
-    "host": "localhost",
-    "user": "root",
-    "password": "toor",
-    "database": "arz_lima",
-    "port": "3306"
+    "host": "bnpzge0ykq4oi3cjimgo-mysql.services.clever-cloud.com",
+    "user": "u2x6xg1dxnsz7ke4",
+    "password": "mrrIBZtyX7eftJzo7cEI",
+    "database": "bnpzge0ykq4oi3cjimgo",
+    "port": "3306",
+    "local": {
+        "host": "localhost",
+        "user": "root",
+        "password": "toor",
+        "database": "arz_lima",
+        "port": "3306"        
+    },
+    "remota": {
+        "host": "bnpzge0ykq4oi3cjimgo-mysql.services.clever-cloud.com",
+        "user": "u2x6xg1dxnsz7ke4",
+        "password": "mrrIBZtyX7eftJzo7cEI",
+        "database": "bnpzge0ykq4oi3cjimgo",
+        "port": "3306"        
+    }
 }

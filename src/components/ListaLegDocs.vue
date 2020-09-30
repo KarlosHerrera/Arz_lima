@@ -29,7 +29,7 @@
           <th @click="sortTable('ticket', $event)">Comprobante<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'role')? 'arrow': 'noarrow']"></span></th>
           <th @click="sortTable('nombreReligioso', $event)">Religioso<span :class="sortArrow"></span></th>
           <th @click="sortTable('ticket', $event)">Nro.Eclesias.<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'role')? 'arrow': 'noarrow']"></span></th>       
- <th class='align_right' @click="sortTable('precio', $event)">Precio<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'role')? 'arrow': 'noarrow']"></span></th>          
+          <th class='align_right' @click="sortTable('precio', $event)">Precio<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'role')? 'arrow': 'noarrow']"></span></th>          
           <th @click="sortTable('nombreSacramento', $event)">Const./Otros<span :class="[(ascending)? 'asc': 'dsc', (sortField == 'role')? 'arrow': 'noarrow']"></span></th>
           <th class='text-center' v-if='true'>Opciones</th>
         </tr>
@@ -45,7 +45,7 @@
           <td> {{ doc.ticket }} </td>
           <td class='text_overflow'> {{ doc.apellidosNombres }} </td>
           <td> {{ doc.refNumero }} </td>
-<td class='align_right'> {{ doc.precio | frmDecimal }} </td>
+          <td class='align_right'> {{ doc.precio | frmDecimal }} </td>
           <td> {{ doc.nombreSacramento }} </td>
           <td class=' d-flex justify-content-center align-items-center' v-if='true' >
             <button class='btn btn_actions btn_1' @click='updateItem(index)' :disabled="doc.activo=='N'" :class="{void_Btn: doc.activo=='N'}">Editar</button>
