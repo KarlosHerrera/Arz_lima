@@ -19,7 +19,7 @@
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "jspdf": "^1.5.3",
+    "jspdf": "^4.0.0",
     "jspdf-autotable": "^3.5.9",
     "moment": "^2.26.0",
     "morgan": "^1.10.0",
